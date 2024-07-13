@@ -3,6 +3,7 @@ import { Outlet, Link } from "react-router-dom";
 function Layout() {
   return (
     <>
+      // Navigate Bar part
       <nav>
         <div>
           <div className="logo">
