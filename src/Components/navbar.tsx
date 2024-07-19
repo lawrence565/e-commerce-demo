@@ -6,27 +6,33 @@ import { Link } from "react-router-dom";
 
 function NavBar(): JSX.Element {
   return (
-    <div className="nav-bar">
-      <div className="logo-container">
-        <img src={mainLogo} alt="The main logo of the website" />
+    <div className="nav-bar grid grid-cols-2 justify-center items-center">
+      <div className="logo-container ">
+        <img
+          className="h-12"
+          src={mainLogo}
+          alt="The main logo of the website"
+        />
       </div>
-      <div className="navbar">
-        <Link className="nav-item" to="/about">
+      <div className="flex justify-end">
+        <Link className="nav-item flex items-center mx-2" to="/about">
           關於我們
         </Link>
-        <Link className="nav-item" to="/store">
+        <Link className="nav-item flex items-center mx-2" to="/store">
           商店首頁
         </Link>
-        <Link className="nav-item" to="/personal">
+        <Link className="nav-item flex items-center mx-2" to="/personal">
           個人頁面
         </Link>
-      </div>
-      <div>
         <Link id="shopping-kart" to="/shoppingkart">
-          <img src={shoppingKartIcon} alt="Shopping Kart Icon" />
+          <img
+            className="w-12 h-12"
+            src={shoppingKartIcon}
+            alt="Shopping Kart Icon"
+          />
         </Link>
         <Link id="personal" to="/personal">
-          <img src={personalIcon} alt="Personal Icon " />
+          <img className="w-12 h-12" src={personalIcon} alt="Personal Icon " />
         </Link>
       </div>
     </div>
