@@ -3,22 +3,13 @@ import ornament from "../assets/ornament.png";
 import ratten_bag from "../assets/ratten-bag.png";
 import cork_art from "../assets/cork-art.png";
 import "../style/homepage.scss";
-import { useState } from "react";
-
-function Card(title: string, content: string, img: string): JSX.Element {
-  return (
-    <div className="img-container">
-      <img className="promote-img" src={img} alt="" />
-      <div className="goods-tag">
-        <h3 className="goods-name">{title}</h3>
-        <p className="goods-disc">{content}</p>
-      </div>
-    </div>
-  );
-}
+import { useState, useRef, useEffect } from "react";
+import Card from "./Card";
 
 function Carousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(300);
   const cards = [
     {
       title: "木製手機架",
@@ -42,27 +33,70 @@ function Carousel() {
     },
   ];
 
+  useEffect(() => {
+    // 獲取元素的寬度
+    const updateWidth = () => {
+      if (carouselRef.current) {
+        setWidth(carouselRef.current.getBoundingClientRect().width);
+      }
+    };
+    console.log(width);
+
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => {
+      window.removeEventListener("resize", updateWidth);
+    };
+  }, []);
+
   const updateCarousel = (newIndex: number) => {
     setCurrentIndex((newIndex + cards.length) % cards.length);
   };
 
   return (
     <>
-      <button
-        className="nav left"
-        onClick={() => updateCarousel(currentIndex - 1)}
-      >
-        &#10094;
-      </button>
-      {cards.map((product) => {
-        return Card(product.title, product.content, product.img);
-      })}
-      <button
-        className="nav right"
-        onClick={() => updateCarousel(currentIndex + 1)}
-      >
-        &#10095;
-      </button>
+      <div className="carousel flex items-center justify-center w-full my-16">
+        <button
+          className="arrow left"
+          onClick={() => updateCarousel(currentIndex - 1)}
+        >
+          &#10094;
+        </button>
+
+        <div className="carousel-slide mx-8">
+          {cards.map((product, index) => {
+            return (
+              <div
+                key={index}
+                className={`card ${
+                  index === currentIndex ? "active" : ""
+                } transition-all duration-800 ease-in-out`}
+                style={{ transform: `translateX(-${currentIndex * width}px)` }}
+                ref={carouselRef}
+              >
+                <Card
+                  title={product.title}
+                  content={product.content}
+                  img={product.img}
+                />
+              </div>
+            );
+          })}
+        </div>
+
+        <button
+          className="arrow right"
+          onClick={() => updateCarousel(currentIndex + 1)}
+        >
+          &#10095;
+        </button>
+        <div className="page-indicater flex items-center">
+          <div className="page1 dot"></div>
+          <div className="page2 dot"></div>
+          <div className="page3 dot"></div>
+          <div className="page4 dot"></div>
+        </div>
+      </div>
     </>
   );
 }

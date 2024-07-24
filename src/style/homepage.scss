@@ -1,6 +1,5 @@
 .img-container {
   position: relative;
-  margin: 2rem;
   height: 30vh;
   aspect-ratio: 16/9;
   max-width: 800px;
@@ -20,4 +19,27 @@
   max-width: 250px;
   position: absolute;
   top: 60%;
+}
+
+.carousel-slide {
+  height: 30vh;
+  aspect-ratio: 16/9;
+  max-width: 800px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.arrow {
+  width: 3vw;
+  aspect-ratio: 1/1;
+}
+
+.dot {
+  background-color: #d9d9d9;
+  border-radius: 50%;
+}
+
+.dot:active {
+  background-color: #404040;
 }

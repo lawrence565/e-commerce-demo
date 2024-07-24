@@ -1,11 +1,16 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .nav-item {
   text-decoration: none;
   display: flex;
   align-items: center;
   padding: 0 0.5rem;
   color: #a0937d;
+}
+
+.dot {
+  background-color: #d9d9d9;
+  border-radius: 50%;
+}
+
+.dot:active {
+  background-color: #404040;
 }
