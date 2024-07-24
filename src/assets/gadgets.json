@@ -2,61 +2,61 @@
   {
     "title": "手工皂",
     "content": "天然成分製成的手工皂，具有各種香氣和形狀",
-    "img": "./assets/gadgets/handmade_soap.webp"
+    "img": "../src/assets/gadgets/handmade_soap.webp"
   },
   {
     "title": "甘蔗環保杯",
     "content": "透過甘蔗纖維製造的生物可分解環保杯，降低造成環境污染",
-    "img": "./assets/gadgets/sugar_cane_cup.webp"
+    "img": "../src/assets/gadgets/sugar_cane_cup.webp"
   },
   {
     "title": "陶瓷器皿",
     "content": "手工製作的陶瓷碗、盤、杯子，具有藝術感和實用性。",
-    "img": "./assets/gadgets/tableware.webp"
+    "img": "../src/assets/gadgets/tableware.webp"
   },
   {
     "title": "手工皮具",
     "content": "手工縫製的皮包、錢包、皮帶等，具有耐用性和獨特的設計。",
-    "img": "./assets/gadgets/leather_wallet.webp"
+    "img": "../src/assets/gadgets/leather_wallet.webp"
   },
   {
     "title": "蠟燭",
     "content": "各種形狀和香味的手工蠟燭，常用天然大豆蠟製成。",
-    "img": "./assets/gadgets/handmade_cnadle.webp"
+    "img": "./src./assets/gadgets/handmade_cnadle.webp"
   },
   {
     "title": "手作筆記本",
     "content": "獨特封面的手工筆記本，使用高質量紙張和手工裝訂。",
-    "img": "./assets/gadgets/notebook.webp"
+    "img": "./src./assets/gadgets/notebook.webp"
   },
   {
     "title": "布藝品",
     "content": "各種手工縫製的布藝品，如靠枕、布袋、手帕等。",
-    "img": "./assets/gadgets/handmade_soap.webp"
+    "img": "../src/assets/gadgets/handmade_soap.webp"
   },
   {
     "title": "手工娃娃",
     "content": "使用布料或其他材料製作的可愛娃娃或動物玩偶。",
-    "img": "./assets/gadgets/handmade_soap.webp"
+    "img": "./src./assets/gadgets/handmade_soap.webp"
   },
   {
     "title": "手織圍巾",
     "content": "手工編織的圍巾、披肩，材質通常為羊毛或棉線。",
-    "img": "./assets/gadgets/handmade_soap.webp"
+    "img": "../src/assets/gadgets/handmade_soap.webp"
   },
   {
     "title": "植物盆栽",
     "content": "小巧可愛的植物盆栽，如多肉植物或空氣鳳梨。",
-    "img": "./assets/gadgets/potted_plant.webp"
+    "img": "./src./assets/gadgets/potted_plant.webp"
   },
   {
     "title": "明信片",
     "content": "藝術家設計的明信片，印有手繪插畫或攝影作品。",
-    "img": "./assets/gadgets/postcard.webp"
+    "img": "../src/assets/gadgets/postcard.webp"
   },
   {
     "title": "手工餅乾",
     "content": "手工製作的食品如餅乾、果醬、蜜餞，以有機小農生產的天然材料製成。",
-    "img": "./assets/gadgets/handmade_cookie.webp"
+    "img": "../src/assets/gadgets/handmade_cookie.webp"
   }
 ]

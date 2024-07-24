@@ -1,6 +1,7 @@
 import Carousel from "./Components/Carousel.tsx";
 import ProductCard from "./Components/Product-card.tsx";
 import "./style/homepage.scss";
+import gadgets from "./assets/gadgets.json";
 
 function Homepage(): JSX.Element {
   return (
@@ -15,7 +16,16 @@ function Homepage(): JSX.Element {
           <div className="gadgets">
             <h2>隨身用品</h2>
             <div>
-              <ProductCard imgURL="" productTitle="" productContent="" />
+              {gadgets.map((gadget, index: number) => {
+                return (
+                  <ProductCard
+                    key={index}
+                    imgURL={gadget.img}
+                    productTitle={gadget.title}
+                    productContent={gadget.content}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>
