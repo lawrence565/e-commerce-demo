@@ -5,11 +5,11 @@ function ProductCard(props: {
 }) {
   return (
     <>
-      <div className="product">
+      <div className="product w-[200px] m-2 h-fit">
         <div className="product-img-container">
-          <img src={props.imgURL} />
+          <img className="rounded-lg" src={props.imgURL} />
         </div>
-        <h3 className="product-title text-3xl">{props.productTitle}</h3>
+        <h3 className="product-title text-xl">{props.productTitle}</h3>
         <p className="product-content text-sm">{props.productContent}</p>
       </div>
     </>

@@ -1,7 +1,6 @@
 import Carousel from "./Components/Carousel.tsx";
-import ProductCard from "./Components/Product-card.tsx";
+import ProductRecomanned from "./Components/ProductRecommand.tsx";
 import "./style/homepage.scss";
-import gadgets from "./assets/gadgets.json";
 
 function Homepage(): JSX.Element {
   return (
@@ -11,22 +10,14 @@ function Homepage(): JSX.Element {
           <Carousel />
         </div>
 
-        <div className="product-recommand max-w-[1200px]">
-          <h1 className="text-2xl">產品推薦</h1>
-          <div className="gadgets">
-            <h2>隨身用品</h2>
-            <div>
-              {gadgets.map((gadget, index: number) => {
-                return (
-                  <ProductCard
-                    key={index}
-                    imgURL={gadget.img}
-                    productTitle={gadget.title}
-                    productContent={gadget.content}
-                  />
-                );
-              })}
-            </div>
+        <div className="product-recommand  flex flex-col justify-center items-center">
+          <div className="max-w-[1200px]">
+            <h1 className="text-3xl my-4 text-midBrown font-semibold">
+              產品推薦
+            </h1>
+            <ProductRecomanned key="0" title="隨身用品" items="gadgets" />
+            <ProductRecomanned key="1" title="手工家具" items="furnitures" />
+            <ProductRecomanned key="2" title="手作飾品" items="gadgets" />
           </div>
         </div>
       </div>

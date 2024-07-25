@@ -22,32 +22,32 @@
   {
     "title": "蠟燭",
     "content": "各種形狀和香味的手工蠟燭，常用天然大豆蠟製成。",
-    "img": "./src./assets/gadgets/handmade_cnadle.webp"
+    "img": "../src/assets/gadgets/handmade_candle.webp"
   },
   {
     "title": "手作筆記本",
     "content": "獨特封面的手工筆記本，使用高質量紙張和手工裝訂。",
-    "img": "./src./assets/gadgets/notebook.webp"
+    "img": "../src/assets/gadgets/notebook.webp"
   },
   {
     "title": "布藝品",
     "content": "各種手工縫製的布藝品，如靠枕、布袋、手帕等。",
-    "img": "../src/assets/gadgets/handmade_soap.webp"
+    "img": "../src/assets/gadgets/pillow.webp"
   },
   {
     "title": "手工娃娃",
     "content": "使用布料或其他材料製作的可愛娃娃或動物玩偶。",
-    "img": "./src./assets/gadgets/handmade_soap.webp"
+    "img": "../src/assets/gadgets/handmade_doll.webp"
   },
   {
-    "title": "手織圍巾",
-    "content": "手工編織的圍巾、披肩，材質通常為羊毛或棉線。",
-    "img": "../src/assets/gadgets/handmade_soap.webp"
+    "title": "柑橘精油",
+    "content": "使用小農有機柑橘經過傳統工法萃取的芳香精油",
+    "img": "../src/assets/gadgets/citrus_essential_oil.webp"
   },
   {
     "title": "植物盆栽",
     "content": "小巧可愛的植物盆栽，如多肉植物或空氣鳳梨。",
-    "img": "./src./assets/gadgets/potted_plant.webp"
+    "img": "../src/assets/gadgets/potted_plant.webp"
   },
   {
     "title": "明信片",

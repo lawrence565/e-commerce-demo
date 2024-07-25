@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        "mid-brown": "#a0937d",
+        midBrown: "#a0937d",
       },
     },
   },
