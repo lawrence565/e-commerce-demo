@@ -1,9 +1,15 @@
 import ProductCard from "./Product-card.tsx";
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import gadgets from "../assets/gadgets.json";
-import furnitures from "../assets/furniture.json";
+import furnitures from "../assets/furnitures.json";
+import decorations from "../assets/decorations.json";
 
-function ProductRecomanned(props: { title: string; items: string }) {
+function ProductRecomanned(props: {
+  title: string;
+  items: string;
+  url: string;
+}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [width, setWidth] = useState(300);
   const productCarouselRef = useRef<HTMLDivElement>(null);
@@ -39,7 +45,7 @@ function ProductRecomanned(props: { title: string; items: string }) {
   } else if (props.items === "furnitures") {
     products = furnitures;
   } else if (props.items === "decorations") {
-    products = furnitures;
+    products = decorations;
   }
 
   return (
@@ -59,9 +65,12 @@ function ProductRecomanned(props: { title: string; items: string }) {
           >
             {products.map((product, index: number) => {
               return (
-                <div className="product-card" ref={productCarouselRef}>
+                <div
+                  key={index}
+                  className="product-card"
+                  ref={productCarouselRef}
+                >
                   <ProductCard
-                    key={index}
                     imgURL={product.img}
                     productTitle={product.title}
                     productContent={product.content}
@@ -75,6 +84,9 @@ function ProductRecomanned(props: { title: string; items: string }) {
           &#10095;
         </button>
       </div>
+      <Link to={`${props.url}`}>
+        <p className="underline text-end mx-12 cursor-pointer">查看更多</p>
+      </Link>
     </div>
   );
 }

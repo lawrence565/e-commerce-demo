@@ -17,6 +17,12 @@ function App() {
             <Route path="about" element={<About />} />
             <Route path="personal" element={<Personal />} />
           </Route>
+          <Route path="/products" element={<Layout />}>
+            <Route index element={<Store />} />
+            <Route path="gadgets" element={<Store />} />
+            <Route path="furnitures" element={<About />} />
+            <Route path="decorations" element={<Personal />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>

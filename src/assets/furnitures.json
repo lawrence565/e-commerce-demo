@@ -1,0 +1,62 @@
+[
+  {
+    "title": "藤編椅",
+    "content": "由藤條手工編織而成的椅子，設計簡約且透氣，適合室內外使用。",
+    "img": "../src/assets/furnitures/Wicker_Chair.webp"
+  },
+  {
+    "title": "實木茶几",
+    "content": "由高品質實木製作的小型茶几，具有自然的木紋和堅固的結構。",
+    "img": "../src/assets/furnitures/Woodmade_Table.webp"
+  },
+  {
+    "title": "手工書架",
+    "content": "精心手工製作的書架，通常由再生木材或金屬製成，設計獨特。",
+    "img": "../src/assets/furnitures/Handmade_Bookshelf.webp"
+  },
+  {
+    "title": "布藝沙發",
+    "content": "使用高品質布料手工製作的沙發，提供舒適的坐感和多種顏色選擇。",
+    "img": "../src/assets/furnitures/Fabric_Sofa.webp"
+  },
+  {
+    "title": "木製衣架",
+    "content": "由天然木材製作的衣架，設計簡約，適合掛放衣物和帽子。",
+    "img": "../src/assets/furnitures/Wooden_Coat_Rack.webp"
+  },
+  {
+    "title": "編織地毯",
+    "content": "由天然纖維手工編織而成的地毯，具有獨特的圖案和溫暖的質感。",
+    "img": "../src/assets/furnitures/Woven_Rug.webp"
+  },
+  {
+    "title": "手工燈罩",
+    "content": "使用天然材料如紙、布或藤條製作的燈罩，設計獨特且富有藝術感。",
+    "img": "../src/assets/furnitures/Handmade_Lampshade.webp"
+  },
+  {
+    "title": "復古書桌",
+    "content": "具有復古設計的書桌，通常使用再生木材和古銅色金屬配件。",
+    "img": "../src/assets/furnitures/Vintage_Desk.webp"
+  },
+  {
+    "title": "木製掛鉤",
+    "content": "由天然木材製作的掛鉤，設計簡約，適合用於掛放衣物、包包等物品。這些掛鉤既實用又具有裝飾性。",
+    "img": "../src/assets/furnitures/Wooden_Wall_Hooks.webp"
+  },
+  {
+    "title": "藤編收納籃",
+    "content": "由藤條編織而成的收納籃，適合存放各種物品，且具有裝飾性。",
+    "img": "../src/assets/furnitures/Wicker_Storage_Basket.webp"
+  },
+  {
+    "title": "手工書桌燈",
+    "content": "使用木材和金屬手工製作的書桌燈，設計獨特且具有工業風格。",
+    "img": "../src/assets/furnitures/Handcrafted_Desk_Lamp.webp"
+  },
+  {
+    "title": "木製小櫃",
+    "content": "由實木製作的小型邊桌，設計簡約，適合作為床頭櫃或沙發旁的茶几。",
+    "img": "../src/assets/furnitures/Wooden_Side_Table.webp"
+  }
+]
