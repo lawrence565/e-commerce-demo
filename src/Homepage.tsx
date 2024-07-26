@@ -32,22 +32,32 @@ function Homepage(): JSX.Element {
             />
             <ProductRecomanned
               key="2"
-              title="手作飾品"
+              title="裝飾擺設"
               items="decorations"
               url="/products/decorations"
             />
           </div>
 
-          <div className="flex flex-col justify- items-center">
-            <Link to="/Store">
+          <div>
+            <Link
+              to="/Store"
+              className="flex flex-col justify-center items-center"
+            >
               <h1 className="text-midBrown font-semibold text-lg">查看更多</h1>
               <img src={down_arrow} className="text-midBrown w-8" />
             </Link>
           </div>
+        </div>
 
-          <div className="customer-review">
+        <div className="customer-review bg-midBrown w-full my-8">
+          <div className="flex items-center justify-center">
             <ReviewCarousel />
           </div>
+        </div>
+
+        <div className="store-introduce">
+          <h1 className="">商家介紹</h1>
+          <div className="store-card-container"></div>
         </div>
       </div>
     </>
