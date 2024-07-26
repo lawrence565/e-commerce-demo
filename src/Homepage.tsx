@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Carousel from "./Components/Carousel.tsx";
 import ProductRecomanned from "./Components/ProductRecommand.tsx";
+import ReviewCarousel from "./Components/ReviewCarousel.tsx";
 import down_arrow from "./assets/down_arrow.svg";
 import "./style/homepage.scss";
 
@@ -44,7 +45,9 @@ function Homepage(): JSX.Element {
             </Link>
           </div>
 
-          <div className=""></div>
+          <div className="customer-review">
+            <ReviewCarousel />
+          </div>
         </div>
       </div>
     </>
