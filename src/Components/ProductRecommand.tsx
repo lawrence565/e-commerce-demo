@@ -49,10 +49,10 @@ function ProductRecomanned(props: {
   }
 
   return (
-    <div className="gadgets text-midBrown my-4">
-      <h2 className="text-xl">{props.title}</h2>
+    <div className="text-midBrown my-4">
+      <h2 className="text-2xl my-4">{props.title}</h2>
       <hr className="text-midBrown" />
-      <div className="product-carousel flex items-center m-8">
+      <div className="product-carousel flex items-center m-8 mb-0">
         <button className="text-black arrow previous" onClick={previous}>
           &#10094;
         </button>
@@ -84,9 +84,13 @@ function ProductRecomanned(props: {
           &#10095;
         </button>
       </div>
-      <Link to={`${props.url}`}>
-        <p className="underline text-end mx-12 cursor-pointer">查看更多</p>
-      </Link>
+      <div className="mb-6 mx-16 flex flex-end w-full">
+        <div className="w-fit">
+          <Link to={`${props.url}`}>
+            <p className="underline cursor-pointer">查看更多</p>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

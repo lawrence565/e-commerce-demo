@@ -6,7 +6,7 @@ function ReviewCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [width, setWidth] = useState(300);
   const reviewCarouselRef = useRef<HTMLDivElement>(null);
-  const totalPage: number = 5;
+  const totalPage: number = 10;
 
   useEffect(() => {
     const updateWidth = () => {
@@ -45,7 +45,7 @@ function ReviewCarousel() {
       >
         <div
           id="review-carousel"
-          className="flex justify-start transition-all duration-700 ease-in-out"
+          className="flex justify-start transition-all duration-600 ease-in-out"
           style={{ transform: `translateX(-${currentIndex * width}px)` }}
         >
           {reviews.map((review, index: number) => {
@@ -61,10 +61,12 @@ function ReviewCarousel() {
                 </div>
                 <div className="customer-review w-3/5 flex-3">
                   <div className="customer-title h-2/5">
-                    <h1 className="customer-title text-xl">{review.name}</h1>
+                    <h1 className="customer-title text-3xl pb-4">
+                      {review.name}
+                    </h1>
                   </div>
                   <div className="customer-content h-3/5 w-full align-middle">
-                    <p>{review.comment}</p>
+                    <p className="text-xl">{review.comment}</p>
                   </div>
                 </div>
               </div>

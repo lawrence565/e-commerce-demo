@@ -2,7 +2,9 @@ import { Link } from "react-router-dom";
 import Carousel from "./Components/Carousel.tsx";
 import ProductRecomanned from "./Components/ProductRecommand.tsx";
 import ReviewCarousel from "./Components/ReviewCarousel.tsx";
+import StoreCard from "./Components/StoreCard.tsx";
 import down_arrow from "./assets/down_arrow.svg";
+import Stores from "./assets/stores.json";
 import "./style/homepage.scss";
 
 function Homepage(): JSX.Element {
@@ -55,9 +57,20 @@ function Homepage(): JSX.Element {
           </div>
         </div>
 
-        <div className="store-introduce">
-          <h1 className="">商家介紹</h1>
-          <div className="store-card-container"></div>
+        <div className="store-introduce m-8">
+          <h1 className="text-midBrown text-2xl mx-8">商家介紹</h1>
+          <div className="store-card-container flex justify-center items-start">
+            {Stores.map((store, index) => {
+              return (
+                <StoreCard
+                  key={index}
+                  name={store.name}
+                  description={store.description}
+                  img={store.img}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
     </>
