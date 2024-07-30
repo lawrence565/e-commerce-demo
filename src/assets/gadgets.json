@@ -1,72 +1,84 @@
 [
   {
     "title": "手工皂",
+    "name": "handmade_soap",
     "content": "天然成分製成的手工皂，具有各種香氣和形狀",
     "img": "../src/assets/gadgets/handmade_soap.webp",
     "price": 1599
   },
   {
     "title": "甘蔗環保杯",
+    "name": "sugar_cane_cup",
     "content": "透過甘蔗纖維製造的生物可分解環保杯，降低造成環境污染",
     "img": "../src/assets/gadgets/sugar_cane_cup.webp",
     "price": 1599
   },
   {
     "title": "陶瓷器皿",
+    "name": "tableware",
     "content": "手工製作的陶瓷碗、盤、杯子，具有藝術感和實用性。",
     "img": "../src/assets/gadgets/tableware.webp",
     "price": 1599
   },
   {
     "title": "手工皮具",
+    "name": "leather_wallet",
     "content": "手工縫製的皮包、錢包、皮帶等，具有耐用性和獨特的設計。",
     "img": "../src/assets/gadgets/leather_wallet.webp",
     "price": 1599
   },
   {
     "title": "蠟燭",
+    "name": "handmade_candle",
     "content": "各種形狀和香味的手工蠟燭，常用天然大豆蠟製成。",
     "img": "../src/assets/gadgets/handmade_candle.webp",
     "price": 1599
   },
   {
     "title": "手作筆記本",
+    "name": "notebook",
     "content": "獨特封面的手工筆記本，使用高質量紙張和手工裝訂。",
     "img": "../src/assets/gadgets/notebook.webp",
     "price": 1599
   },
   {
     "title": "布藝品",
+    "name": "pillow",
     "content": "各種手工縫製的布藝品，如靠枕、布袋、手帕等。",
     "img": "../src/assets/gadgets/pillow.webp",
     "price": 1599
   },
   {
     "title": "手工娃娃",
+    "name": "handmade_doll",
     "content": "使用布料或其他材料製作的可愛娃娃或動物玩偶。",
     "img": "../src/assets/gadgets/handmade_doll.webp",
     "price": 1599
   },
   {
     "title": "柑橘精油",
+    "name": "citrus_essential_oil",
     "content": "使用小農有機柑橘經過傳統工法萃取的芳香精油",
     "img": "../src/assets/gadgets/citrus_essential_oil.webp",
     "price": 1599
   },
   {
     "title": "植物盆栽",
+    "name": "potted_plant",
     "content": "小巧可愛的植物盆栽，如多肉植物或空氣鳳梨。",
     "img": "../src/assets/gadgets/potted_plant.webp",
     "price": 1599
   },
   {
     "title": "明信片",
+    "name": "postcard",
     "content": "藝術家設計的明信片，印有手繪插畫或攝影作品。",
     "img": "../src/assets/gadgets/postcard.webp",
     "price": 1599
   },
   {
     "title": "手工餅乾",
+    "name": "handmade_cookie",
     "content": "手工製作的食品如餅乾、果醬、蜜餞，以有機小農生產的天然材料製成。",
     "img": "../src/assets/gadgets/handmade_cookie.webp",
     "price": 1599

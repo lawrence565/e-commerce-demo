@@ -2,9 +2,11 @@ import gadgets from "../assets/gadgets.json";
 import furnitures from "../assets/furnitures.json";
 import decorations from "../assets/decorations.json";
 import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 interface Product {
   title: string;
+  name: string;
   price: number;
   img: string;
 }
@@ -31,25 +33,24 @@ function StoreDisplay(props: { type: string }) {
 
   if (props.type === "gadgets" || props.type === "index") {
     products = gadgets;
-    console.log("gadgets");
   } else if (props.type === "furnitures") {
     products = furnitures;
-    console.log("furnitures");
   } else if (props.type === "decorations") {
     products = decorations;
-    console.log("decorations");
   }
 
   const display = products.map((product) => {
     return (
       <div className="mx-6 my-2 cursor-pointer">
-        <div className="w-[12dvw] max-w-[250px] rounded-md overflow-hidden border-midBrown border-[5px] aspect-4/3">
-          <img src={product.img} />
-        </div>
-        <div className="">
-          <h1 className="text-xl">{product.title}</h1>
-          <h2 className="text-lg italic font-bold text-end">{`$ ${product.price}`}</h2>
-        </div>
+        <Link to={`/stores/${product.name}`}>
+          <div className="w-[12dvw] max-w-[250px] rounded-md overflow-hidden border-midBrown border-[5px] aspect-4/3">
+            <img src={product.img} />
+          </div>
+          <div className="">
+            <h1 className="text-xl">{product.title}</h1>
+            <h2 className="text-lg italic font-bold text-end">{`$ ${product.price}`}</h2>
+          </div>
+        </Link>
       </div>
     );
   });
@@ -81,7 +82,7 @@ function StoreDisplay(props: { type: string }) {
   };
 
   return (
-    <div>
+    <div className="h-fit">
       <div
         className={`grid grid-cols-3 justify-center content-start`}
         style={{ minHeight: displayHeight }}

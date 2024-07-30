@@ -1,13 +1,13 @@
-import "./style/StoreStyle.scss";
+import "../style/StoreStyle.scss";
 import { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import StoreDisplay from "../components/ProductDisplay";
+import StoreDisplay from "../components/StoretDisplay";
 
 function Store() {
   let [currentType, setCurrentType] = useState("gadgets");
   let [displayHeight, setDisplayheight] = useState("55vh");
   let displayRef = useRef<HTMLDivElement>(null);
-  const { catagory } = useParams();
+  const { category } = useParams();
 
   const toGadgets = () => {
     setCurrentType("gadgets");
@@ -19,13 +19,15 @@ function Store() {
     setCurrentType("decorations");
   };
 
-  if (catagory === "gadgets" || catagory === "index") {
-    setCurrentType("gadgets");
-  } else if (catagory === "furnitures") {
-    setCurrentType("furnitures");
-  } else if (catagory === "decorations") {
-    setCurrentType("decorations");
-  }
+  useEffect(() => {
+    if (category === "gadgets" || !category) {
+      setCurrentType("gadgets");
+    } else if (category === "furnitures") {
+      setCurrentType("furnitures");
+    } else if (category === "decorations") {
+      setCurrentType("decorations");
+    }
+  }, [category]);
 
   useEffect(() => {
     const setHeight = () => {
@@ -36,13 +38,13 @@ function Store() {
       }
     };
     setHeight();
-  });
+  }, []);
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="max-w-[1200px] min-h-[70dvh] my-16 flex">
+    <div className="flex justify-center items-center min-h-[70dvh]">
+      <div className="max-w-[1200px] min-h-[50dvh] my-16 flex">
         <div
-          id="catagory-indicator-conponents"
+          id="category-indicator-conponents"
           className={`h-[${displayHeight}] w-[15dvw] bg-midBrown rounded-lg p-8 mx-4`}
         >
           <div className="text-white">
@@ -51,7 +53,7 @@ function Store() {
           </div>
           <div className="flex flex-col my-8 justify-center">
             <div
-              className={`catagory-indicator ${
+              className={`category-indicator ${
                 currentType === "gadgets" ? "thisType" : ""
               }`}
               onClick={toGadgets}
@@ -59,7 +61,7 @@ function Store() {
               隨身用品
             </div>
             <div
-              className={`catagory-indicator ${
+              className={`category-indicator ${
                 currentType === "furnitures" ? "thisType" : ""
               }`}
               onClick={toFurnitures}
@@ -67,7 +69,7 @@ function Store() {
               手工家具
             </div>
             <div
-              className={`catagory-indicator ${
+              className={`category-indicator ${
                 currentType === "decorations" ? "thisType" : ""
               }`}
               onClick={toDecorations}
@@ -76,8 +78,8 @@ function Store() {
             </div>
           </div>
         </div>
-        <div id="store-display" ref={displayRef}>
-          <StoreDisplay type={currentType} />
+        <div id="store-display" className="h-fit" ref={displayRef}>
+          <StoreDisplay type={currentType} key="1" />
         </div>
       </div>
     </div>
