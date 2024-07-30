@@ -8,12 +8,14 @@ function NavBar() {
   return (
     <div className="flex justify-center border-b-2 border-[#a0937d]">
       <div className="nav-bar grid grid-cols-2 w-full max-w-[1200px] ">
-        <div className="logo-container ">
-          <img
-            className="h-12"
-            src={mainLogo}
-            alt="The main logo of the website"
-          />
+        <div className="logo-container">
+          <Link to="/">
+            <img
+              className="h-12"
+              src={mainLogo}
+              alt="The main logo of the website"
+            />
+          </Link>
         </div>
         <div className="flex justify-end ">
           <Link className="nav-item " to="/about">

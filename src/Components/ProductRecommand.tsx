@@ -1,4 +1,3 @@
-import ProductCard from "./Product-card.tsx";
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import gadgets from "../assets/gadgets.json";
@@ -70,11 +69,13 @@ function ProductRecomanned(props: {
                   className="product-card"
                   ref={productCarouselRef}
                 >
-                  <ProductCard
-                    imgURL={product.img}
-                    productTitle={product.title}
-                    productContent={product.content}
-                  />
+                  <div className="product w-[200px] m-2 h-fit">
+                    <div className="product-img-container">
+                      <img className="rounded-lg" src={product.img} />
+                    </div>
+                    <h3 className="product-title text-xl">{product.title}</h3>
+                    <p className="product-content text-sm">{product.content}</p>
+                  </div>
                 </div>
               );
             })}

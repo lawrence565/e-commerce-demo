@@ -9,7 +9,7 @@ import "../style/Footer.scss";
 function Footer() {
   return (
     <div className="flex justify-center items-center bg-midBrown h-[28dvh] py-8">
-      <div className="bg-midBrown max-w-[1200px] flex items-center">
+      <div className="bg-midBrown max-w-[1200px] my-4 flex items-center">
         <div id="store-info" className="w-fit p-4">
           <div className="logo-container w-fit">
             <img
@@ -17,7 +17,10 @@ function Footer() {
               className="min-w-[250px] max-w-[300px] w-[22dvw]"
             />
           </div>
-          <div id="social-logo" className="flex w-[25dvw] justify-between">
+          <div
+            id="social-logo"
+            className="flex w-[25dvw] justify-between max-w-[300px]"
+          >
             <div className="icon-container" id="facebook">
               <a href="https://www.facebook.com/facebook/?brand_redir=103274306376166">
                 <img src={facebook} />
@@ -39,7 +42,7 @@ function Footer() {
               </a>
             </div>
           </div>
-          <div id="store-contact">
+          <div id="store-contact" className="mx-4">
             <p id="address" className="text-sm text-white">
               地址：台北市中正區重慶南路一段122號
             </p>

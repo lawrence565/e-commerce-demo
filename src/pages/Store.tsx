@@ -1,33 +1,49 @@
 import "./style/StoreStyle.scss";
-import StoreDisplay from "./Components/ProductDisplay";
+import { useState, useRef, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import StoreDisplay from "../components/ProductDisplay";
 
-function Store(props: { type: string }) {
-  let currentType: string = "gadgets";
+function Store() {
+  let [currentType, setCurrentType] = useState("gadgets");
+  let [displayHeight, setDisplayheight] = useState("55vh");
+  let displayRef = useRef<HTMLDivElement>(null);
+  const { catagory } = useParams();
 
   const toGadgets = () => {
-    currentType = "gadgets";
+    setCurrentType("gadgets");
   };
   const toFurnitures = () => {
-    currentType = "furnitures";
+    setCurrentType("furnitures");
   };
   const toDecorations = () => {
-    currentType = "decorations";
+    setCurrentType("decorations");
   };
 
-  if (props.type === "gadgets" || props.type === "index") {
-    currentType = "gadgets";
-  } else if (props.type === "furnitures") {
-    currentType = "furnitures";
-  } else if (props.type === "decorations") {
-    currentType = "decorations";
+  if (catagory === "gadgets" || catagory === "index") {
+    setCurrentType("gadgets");
+  } else if (catagory === "furnitures") {
+    setCurrentType("furnitures");
+  } else if (catagory === "decorations") {
+    setCurrentType("decorations");
   }
+
+  useEffect(() => {
+    const setHeight = () => {
+      if (displayRef.current) {
+        setDisplayheight(
+          displayRef.current.getBoundingClientRect().height.toString() + "px"
+        );
+      }
+    };
+    setHeight();
+  });
 
   return (
     <div className="flex justify-center items-center">
       <div className="max-w-[1200px] min-h-[70dvh] my-16 flex">
         <div
           id="catagory-indicator-conponents"
-          className="h-[55dvh] w-[15dvw] bg-midBrown rounded-lg p-8 mx-4"
+          className={`h-[${displayHeight}] w-[15dvw] bg-midBrown rounded-lg p-8 mx-4`}
         >
           <div className="text-white">
             <h1 className="font-bold text-2xl">商品類別</h1>
@@ -60,7 +76,7 @@ function Store(props: { type: string }) {
             </div>
           </div>
         </div>
-        <div className="store-display">
+        <div id="store-display" ref={displayRef}>
           <StoreDisplay type={currentType} />
         </div>
       </div>

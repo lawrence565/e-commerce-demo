@@ -4,7 +4,6 @@ import ratten_bag from "../assets/ratten-bag.png";
 import cork_art from "../assets/cork-art.png";
 import "../style/HomepageStyle.scss";
 import { useState, useRef, useEffect } from "react";
-import Card from "./Card";
 
 function Carousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -75,11 +74,13 @@ function Carousel() {
                   }}
                   ref={carouselRef}
                 >
-                  <Card
-                    title={product.title}
-                    content={product.content}
-                    img={product.img}
-                  />
+                  <div className="img-container rounded-lg overflow-hidden">
+                    <img className="promote-img " src={product.img} alt="" />
+                    <div className="goods-tag">
+                      <h3 className="goods-name">{product.title}</h3>
+                      <p className="goods-disc">{product.content}</p>
+                    </div>
+                  </div>
                 </div>
               );
             })}

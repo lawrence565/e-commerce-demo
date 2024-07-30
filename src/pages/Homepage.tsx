@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
-import Carousel from "./Components/Carousel.tsx";
-import ProductRecomanned from "./Components/ProductRecommand.tsx";
-import ReviewCarousel from "./Components/ReviewCarousel.tsx";
-import RecommandCard from "./Components/RecommandCard.tsx";
+import Carousel from "../components/Carousel.tsx";
+import ProductRecomanned from "../components/ProductRecommand.tsx";
+import ReviewCarousel from "../components/ReviewCarousel.tsx";
 import down_arrow from "./assets/down_arrow.svg";
-import Stores from "./assets/stores.json";
+import Stores from "../assets/stores.json";
 import "./style/HomepageStyle.scss";
 
 function Homepage(): JSX.Element {
@@ -16,7 +15,7 @@ function Homepage(): JSX.Element {
         </div>
 
         <div className="product-recommand  flex flex-col justify-center items-center">
-          <div className="max-w-[1200px]">
+          <div className="max-w-[1200px] lg:max-w-[1400px]">
             <h1 className="text-3xl my-4 text-midBrown font-semibold">
               產品推薦
             </h1>
@@ -60,14 +59,15 @@ function Homepage(): JSX.Element {
         <div className="store-introduce m-8">
           <h1 className="text-midBrown text-2xl mx-8">商家介紹</h1>
           <div className="store-card-container flex justify-center items-start">
-            {Stores.map((store, index) => {
+            {Stores.map((store) => {
               return (
-                <RecommandCard
-                  key={index}
-                  name={store.name}
-                  description={store.description}
-                  img={store.img}
-                />
+                <div className="bg-midbrown max-w-[300px] w-[20dvw] m-4">
+                  <h1 className="text-[1.3rem]">{store.name}</h1>
+                  <div className="store-img-container aspect-[4/3] overflow-hidden rounded-md my-2">
+                    <img src={store.img} />
+                  </div>
+                  <p className="text-base">{store.description}</p>
+                </div>
               );
             })}
           </div>

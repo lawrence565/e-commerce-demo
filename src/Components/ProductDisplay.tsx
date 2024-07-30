@@ -1,4 +1,3 @@
-import StoreProductCard from "./StoreProductCard";
 import gadgets from "../assets/gadgets.json";
 import furnitures from "../assets/furnitures.json";
 import decorations from "../assets/decorations.json";
@@ -41,14 +40,19 @@ function StoreDisplay(props: { type: string }) {
     console.log("decorations");
   }
 
-  const display = products.map((product, index) => (
-    <StoreProductCard
-      key={index}
-      productName={product.title}
-      productPrice={product.price}
-      img={product.img}
-    />
-  ));
+  const display = products.map((product) => {
+    return (
+      <div className="mx-6 my-2 cursor-pointer">
+        <div className="w-[12dvw] max-w-[250px] rounded-md overflow-hidden border-midBrown border-[5px] aspect-4/3">
+          <img src={product.img} />
+        </div>
+        <div className="">
+          <h1 className="text-xl">{product.title}</h1>
+          <h2 className="text-lg italic font-bold text-end">{`$ ${product.price}`}</h2>
+        </div>
+      </div>
+    );
+  });
 
   const totalPages = display.length / 9 + 1;
 
