@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 import Carousel from "./Components/Carousel.tsx";
 import ProductRecomanned from "./Components/ProductRecommand.tsx";
 import ReviewCarousel from "./Components/ReviewCarousel.tsx";
-import StoreCard from "./Components/StoreCard.tsx";
+import RecommandCard from "./Components/RecommandCard.tsx";
 import down_arrow from "./assets/down_arrow.svg";
 import Stores from "./assets/stores.json";
-import "./style/homepage.scss";
+import "./style/HomepageStyle.scss";
 
 function Homepage(): JSX.Element {
   return (
@@ -24,19 +24,19 @@ function Homepage(): JSX.Element {
               key="0"
               title="隨身用品"
               items="gadgets"
-              url="/products/gadgets"
+              url="/stores/gadgets"
             />
             <ProductRecomanned
               key="1"
               title="手工家具"
               items="furnitures"
-              url="/products/furnitures"
+              url="/stores/furnitures"
             />
             <ProductRecomanned
               key="2"
               title="裝飾擺設"
               items="decorations"
-              url="/products/decorations"
+              url="/stores/decorations"
             />
           </div>
 
@@ -62,7 +62,7 @@ function Homepage(): JSX.Element {
           <div className="store-card-container flex justify-center items-start">
             {Stores.map((store, index) => {
               return (
-                <StoreCard
+                <RecommandCard
                   key={index}
                   name={store.name}
                   description={store.description}

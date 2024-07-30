@@ -2,7 +2,7 @@ import phone_stand from "../assets/phone-stand.png";
 import ornament from "../assets/ornament.png";
 import ratten_bag from "../assets/ratten-bag.png";
 import cork_art from "../assets/cork-art.png";
-import "../style/homepage.scss";
+import "../style/HomepageStyle.scss";
 import { useState, useRef, useEffect } from "react";
 import Card from "./Card";
 

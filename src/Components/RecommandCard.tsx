@@ -1,4 +1,8 @@
-function StoreCard(props: { name: string; img: string; description: string }) {
+function RecommandCard(props: {
+  name: string;
+  img: string;
+  description: string;
+}) {
   return (
     <div className="class-midbrown max-w-[300px] w-[20dvw] m-4">
       <h1 className="text-[1.3rem]">{props.name}</h1>
@@ -10,4 +14,4 @@ function StoreCard(props: { name: string; img: string; description: string }) {
   );
 }
 
-export default StoreCard;
+export default RecommandCard;

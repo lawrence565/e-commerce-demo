@@ -4,7 +4,7 @@ import instagram from "../assets/social_logo/instagram.svg";
 import twitter from "../assets/social_logo/twitter.svg";
 import line from "../assets/social_logo/line.svg";
 import { Link } from "react-router-dom";
-import "../style/footer.scss";
+import "../style/Footer.scss";
 
 function Footer() {
   return (
@@ -51,16 +51,16 @@ function Footer() {
         <div className="text-white flex mx-4 w-3/5 p-4">
           <div id="usual-links" className="text-white flex flex-col mx-4">
             <h1 className="text-xl font-semibold mb-2">常用連結</h1>
-            <Link to="/Store" className="text-base">
+            <Link to="/stores" className="text-base">
               商店首頁
             </Link>
-            <Link to="/products/gadgets" className="text-base">
+            <Link to="/stores/gadgets" className="text-base">
               隨身用品
             </Link>
-            <Link to="/products/furnitures" className="text-base">
+            <Link to="/stores/furnitures" className="text-base">
               手工家具
             </Link>
-            <Link to="/products/decorations" className="text-base">
+            <Link to="/stores/decorations" className="text-base">
               裝飾擺設
             </Link>
           </div>

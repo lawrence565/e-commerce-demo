@@ -2,61 +2,73 @@
   {
     "title": "手工漆器碗",
     "content": "手工製作的漆器碗，精心手繪上傳統圖案，顏色鮮豔，適合作為裝飾品或盛放小物。",
-    "img": "../src/assets/decorations/Lacquer_Bowl.webp"
+    "img": "../src/assets/decorations/Lacquer_Bowl.webp",
+    "price": 1599
   },
   {
     "title": "刺繡壁掛",
     "content": "使用傳統刺繡技術製作的壁掛，圖案靈感來自當地文化和傳統故事，適合裝飾客廳或臥室。",
-    "img": "../src/assets/decorations/Embroidered_Wall_Hanging.webp"
+    "img": "../src/assets/decorations/Embroidered_Wall_Hanging.webp",
+    "price": 1599
   },
   {
     "title": "陶瓷茶壺",
     "content": "手工製作的陶瓷茶壺，設計靈感來自古代茶文化，具有濃厚的文化氛圍。",
-    "img": "../src/assets/decorations/Ceramic_Teapot.webp"
+    "img": "../src/assets/decorations/Ceramic_Teapot.webp",
+    "price": 1599
   },
   {
     "title": "竹編燈籠",
     "content": "由竹子手工編織而成的燈籠，設計優雅，適合作為戶外或室內的裝飾燈。",
-    "img": "../src/assets/decorations/Bamboo_Lantern.webp"
+    "img": "../src/assets/decorations/Bamboo_Lantern.webp",
+    "price": 1599
   },
   {
     "title": "藍染布",
     "content": "使用傳統藍染技術製作的布料，可以用來製作桌布、窗簾或掛毯，富有民族風情。",
-    "img": "../src/assets/decorations/Indigo_dyed_Fabric.webp"
+    "img": "../src/assets/decorations/Indigo_dyed_Fabric.webp",
+    "price": 1599
   },
   {
     "title": "木雕面具",
     "content": "手工雕刻的木質面具，靈感來自於傳統儀式和節慶活動，適合用於牆面裝飾。",
-    "img": "../src/assets/decorations/Wooden_Carved_Mask.webp"
+    "img": "../src/assets/decorations/Wooden_Carved_Mask.webp",
+    "price": 1599
   },
   {
     "title": "手繪陶瓷盤",
     "content": "手工製作並手繪的陶瓷盤，每個盤子都有獨特的設計和圖案，展示藝術和文化。",
-    "img": "../src/assets/decorations/Hand_painted_Ceramic_Plate.webp"
+    "img": "../src/assets/decorations/Hand_painted_Ceramic_Plate.webp",
+    "price": 1599
   },
   {
     "title": "刺繡靠墊",
     "content": "使用傳統刺繡技術製作的靠墊，圖案充滿文化元素，為家居增添溫暖。",
-    "img": "../src/assets/decorations/Embroidered_Cushion.webp"
+    "img": "../src/assets/decorations/Embroidered_Cushion.webp",
+    "price": 1599
   },
   {
     "title": "石雕書檔",
     "content": "由天然石材雕刻而成的書檔，具有古典美感，適合用於書架裝飾。",
-    "img": "../src/assets/decorations/Stone_Carved_Bookends.webp"
+    "img": "../src/assets/decorations/Stone_Carved_Bookends.webp",
+    "price": 1599
   },
   {
     "title": "手工編織籃子",
     "content": "由天然材料手工編織而成的籃子，設計簡約，適合用於存放雜物或裝飾。",
-    "img": "../src/assets/decorations/Handwoven_Basket.webp"
+    "img": "../src/assets/decorations/Handwoven_Basket.webp",
+    "price": 1599
   },
   {
     "title": "銅製花瓶",
     "content": "手工製作的銅製花瓶，設計靈感來自傳統藝術，適合用於插花或裝飾。",
-    "img": "../src/assets/decorations/Copper_Vase.webp"
+    "img": "../src/assets/decorations/Copper_Vase.webp",
+    "price": 1599
   },
   {
     "title": "民族風壁毯",
     "content": "使用傳統織布技術製作的壁毯，圖案充滿民族特色，適合用於大型牆面裝飾。",
-    "img": "../src/assets/decorations/Ethnic_Wall_Tapestry.webp"
+    "img": "../src/assets/decorations/Ethnic_Wall_Tapestry.webp",
+    "price": 1599
   }
 ]

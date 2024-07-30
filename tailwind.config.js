@@ -6,6 +6,9 @@ export default {
       colors: {
         midBrown: "#a0937d",
       },
+      aspectRatio: {
+        "4/3": "4 / 3",
+      },
     },
   },
   plugins: [],

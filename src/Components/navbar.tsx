@@ -1,7 +1,7 @@
 import mainLogo from "../assets/main-logo.svg";
 import shoppingKartIcon from "../assets/shopping-kart-icon.svg";
 import personalIcon from "../assets/personal-icon.svg";
-import "../style/navbarStyle.scss";
+import "../style/NavbarStyle.scss";
 import { Link } from "react-router-dom";
 
 function NavBar() {
@@ -19,7 +19,7 @@ function NavBar() {
           <Link className="nav-item " to="/about">
             關於我們
           </Link>
-          <Link className="nav-item" to="/store">
+          <Link className="nav-item" to="/stores">
             商店首頁
           </Link>
           <Link className="nav-item" to="/personal">
