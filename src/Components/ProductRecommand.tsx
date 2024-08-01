@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import gadgets from "../assets/gadgets.json";
-import furnitures from "../assets/furnitures.json";
-import decorations from "../assets/decorations.json";
+import gadgets from "../assets/products/gadgets.json";
+import furnitures from "../assets/products/furnitures.json";
+import decorations from "../assets/products/decorations.json";
 
 function ProductRecomanned(props: {
   title: string;

@@ -1,5 +1,5 @@
 import mainLogo from "../assets/main-logo.svg";
-import shoppingKartIcon from "../assets/shopping-kart-icon.svg";
+import shoppingCartIcon from "../assets/shopping-cart-icon.svg";
 import personalIcon from "../assets/personal-icon.svg";
 import "../style/NavbarStyle.scss";
 import { Link } from "react-router-dom";
@@ -29,13 +29,13 @@ function NavBar() {
           </Link>
           <Link
             className="flex items-center mx-1"
-            id="shopping-kart"
-            to="/shoppingkart"
+            id="shopping-cart"
+            to="/shoppingcart"
           >
             <img
               className="w-8 h-8"
-              src={shoppingKartIcon}
-              alt="Shopping Kart Icon"
+              src={shoppingCartIcon}
+              alt="Shopping Cart Icon"
             />
           </Link>
           <Link className="flex items-center mx-1" id="personal" to="/personal">

@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useState } from "react";
-import gadgets from "../assets/gadgets.json";
-import furnitures from "../assets/furnitures.json";
-import decorations from "../assets/decorations.json";
+import gadgets from "../assets/products/gadgets.json";
+import furnitures from "../assets/products/furnitures.json";
+import decorations from "../assets/products/decorations.json";
 
 type Product = {
   title: string;
@@ -45,8 +45,8 @@ function ProductPage() {
   };
 
   return (
-    <div className="min-h-[70dvh] max-w[1200px] flex flex-col justify-center items-center">
-      <div id="product" className="flex justify-center items-center h-fit">
+    <div className="min-h-[70dvh] max-w[1200px] my-8 flex flex-col justify-center items-center">
+      <div id="product" className="flex justify-center items-center h-fit mb-8">
         <div
           id="product-img"
           className="aspect-square h-[40dvh] rounded-2xl overflow-hidden mx-8 "
@@ -57,14 +57,41 @@ function ProductPage() {
           <div className="flex-[4] h-full">
             <h1 className="text-4xl mx-4 mb-6 font-bold">{product?.title}</h1>
             <hr className="text-midBrown" />
-            <h3 className="text-lg m-4">商品簡介：</h3>
+            <h3 className="text-2xl font-semibold m-4">商品簡介：</h3>
             <p className="m-4">{product?.content}</p>
           </div>
+          <div className="font-bold text-4xl mr-8 mb-8 text-end">{`$ ${product?.price}`}</div>
           <div
-            id="amount&price"
-            className="flex-1 flex items-end justify-between"
+            id="amount&buy"
+            className="flex-1 w-[40dvh] flex items-cneter justify-between mb-4"
           >
             <div className="mx-4">
+              <div
+                id="amount"
+                className="w-fit ml-4 flex rounded-md border-[1px] border-midBrown"
+              >
+                <div className="w-8 flex justify-center items-centerp-2 text-midBrown cursor-pointer">
+                  <button
+                    onClick={minus}
+                    disabled={amount === 1}
+                    className="h-full w-full"
+                  >
+                    &#10094;
+                  </button>
+                </div>
+                <div className="w-12 flex justify-center items-center p-2 bg-midBrown text-white">
+                  {amount}
+                </div>
+                <div className="w-8 flex justify-center items-centerp-2 text-midBrown cursor-pointer">
+                  <button
+                    onClick={add}
+                    disabled={amount === 20}
+                    className="h-full w-full"
+                  >
+                    &#10095;
+                  </button>
+                </div>
+              </div>
               <div
                 className={`text-red-500 text-sm ${
                   amount === 20 ? "" : "invisible"
@@ -72,68 +99,43 @@ function ProductPage() {
               >
                 已達到購買上限
               </div>
-              <div
-                id="amount"
-                className="w-fit flex rounded-md border-[1px] border-midBrown"
-              >
-                <div
-                  onClick={minus}
-                  className="w-6 flex justify-center items-centerp-2 text-midBrown cursor-pointer"
-                >
-                  <button disabled={amount === 1}>&#10094;</button>
-                </div>
-                <div className="w-10 flex justify-center items-center p-2 bg-midBrown text-white">
-                  {amount}
-                </div>
-                <div
-                  onClick={add}
-                  className="w-6 flex justify-center items-centerp-2 text-midBrown cursor-pointer"
-                >
-                  <button disabled={amount === 20}>&#10095;</button>
-                </div>
-              </div>
             </div>
-            <div className="font-bold text-4xl">{`$ ${product?.price}`}</div>
+            <div id="pay-or-kart" className="flex text-lg font-semibold h-fit">
+              <button className="bg-midBrown text-white px-4 py-2 mx-2 rounded-md">
+                加入購物車
+              </button>
+              <button className="bg-white text-midBrown px-4 py-2 mx-2 rounded-md border-midBrown border-[2px] ">
+                立即購買
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      <div id="info" className="w-full flex justify-center items-center px-8">
-        <div id="product-info">
-          <h1>商品相關資訊</h1>
-          <div>
-            <h3>商品數量</h3>
+      <div id="info" className="w-full flex justify-center items-start m-8">
+        <div id="product-info" className="w-[40dvh] mx-4">
+          <h1 className="text-xl font-bold">商品相關資訊</h1>
+          <div className="py-2">
+            <h3 className="text-lg font-semibold">商品數量</h3>
             <p>每個產品內含一張木雕面具</p>
           </div>
-          <div>
-            <h3>商品保養</h3>
-            <p>
-              由於商品為木製產品，因此需要放置於陰暗乾燥處，避免產品出現損壞等情況
-            </p>
-          </div>
-          <div>
-            <h3>商品維修</h3>
-            <p>
-              由於商品是透過藝術家手工雕刻，若是產生嚴重損壞無法維修，只能夠重新製作一份，敬請見諒
-            </p>
-          </div>
         </div>
-        <div id="buyer-info">
-          <h1>購買須知</h1>
-          <div>
-            <h3>個人資料保護</h3>
+        <div id="buyer-info" className="w-[40dvh] mx-4">
+          <h1 className="text-xl  font-bold">購買須知</h1>
+          <div className="py-2">
+            <h3 className="text-lg font-semibold">個人資料保護</h3>
             <p>
               為保障個資安全，您所訂購的商品之出貨標籤上，我們將會遮蔽部份姓名。如造成您的收貨困擾，請見諒。
             </p>
           </div>
-          <div>
-            <h3>配送時間</h3>
+          <div className="py-2">
+            <h3 className="text-lg font-semibold">配送時間</h3>
             <p>
               由訂購完成當日起，商品會於3-5個工作天內配送至您指定的收貨地址。
             </p>
           </div>
-          <div>
-            <h3>退貨辦理</h3>
+          <div className="py-2">
+            <h3 className="text-lg font-semibold">退貨辦理</h3>
             <p>
               商品配送到府後，請儘速檢視商品。若有商品缺漏、或運送過程中有損毀等情形，請於收貨24小時內透過官方Line聯絡客服，由客服人員確認並協助您進行處理。
             </p>

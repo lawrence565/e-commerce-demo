@@ -1,6 +1,6 @@
-import gadgets from "../assets/gadgets.json";
-import furnitures from "../assets/furnitures.json";
-import decorations from "../assets/decorations.json";
+import gadgets from "../assets/products/gadgets.json";
+import furnitures from "../assets/products/furnitures.json";
+import decorations from "../assets/products/decorations.json";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
@@ -42,7 +42,7 @@ function StoreDisplay(props: { type: string }) {
   const display = products.map((product) => {
     return (
       <div className="mx-6 my-2 cursor-pointer">
-        <Link to={`/stores/${product.name}`}>
+        <Link to={`/stores/${props.type}/${product.name}`}>
           <div className="w-[12dvw] max-w-[250px] rounded-md overflow-hidden border-midBrown border-[5px] aspect-4/3">
             <img src={product.img} />
           </div>
