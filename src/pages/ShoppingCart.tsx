@@ -2,6 +2,7 @@ import gadgets from "../assets/products/gadgets.json";
 import decorations from "../assets/products/decorations.json";
 import furnitures from "../assets/products/furnitures.json";
 import { useState, useRef, useEffect } from "react";
+import "../style/CartStyle.scss";
 
 type Product = {
   id: number;
@@ -135,26 +136,34 @@ function ShopppingKart() {
         </div>
         <div
           id="subtotal"
-          className="flex-[1] rounded-lg bg-midBrown p-6 h-fit"
+          className="flex-[1] max-w-[20dvw] rounded-lg bg-midBrown p-6 h-fit"
         >
-          <h1 className="font-bold text-2xl text-white">購買明細</h1>
+          <h1 className="font-semibold text-3xl text-white mb-4 max-w-[15dvw] ml-2">
+            購買明細
+          </h1>
           <hr />
-          <div className="subtotal">
-            <h3>商品原價：</h3>
-            <h3>{`${subtotal}`}</h3>
-          </div>
-          <div className="subtotal">
-            <h3>折扣：</h3>
-            <h3>{`- ${discount}`}</h3>
-          </div>
-          <div className="subtotal">
-            <h3>優惠券：</h3>
-            <h3>{`- ${coupon}`}</h3>
+          <div className="flex flex-col justify-center items-center my-4">
+            <div className="subtotal">
+              <h3>商品原價：</h3>
+              <h3>{`${subtotal}`}</h3>
+            </div>
+            <div className="subtotal">
+              <h3>折扣：</h3>
+              <h3>{`- ${discount}`}</h3>
+            </div>
+            <div className="subtotal">
+              <h3>優惠券：</h3>
+              <h3>{`- ${coupon}`}</h3>
+            </div>
           </div>
           <hr />
-          <div>
-            <h1>結帳金額：</h1>
-            <h1>{subtotal - coupon - discount}</h1>
+          <div className="flex justify-center w-9/10 m-2">
+            <div className="flex text-white w-full justify-between max-w-[350px]">
+              <h1 className="font-semibold text-2xl">結帳金額：</h1>
+              <h1 className="text-end text-2xl">
+                {subtotal - coupon - discount}
+              </h1>
+            </div>
           </div>
         </div>
       </div>
