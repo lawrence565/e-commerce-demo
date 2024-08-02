@@ -74,8 +74,12 @@ function Carousel() {
                   }}
                   ref={carouselRef}
                 >
-                  <div className="img-container rounded-lg overflow-hidden">
-                    <img className="promote-img " src={product.img} alt="" />
+                  <div className="img-container rounded-lg">
+                    <img
+                      className="promote-img "
+                      src={product.img}
+                      alt={product.content}
+                    />
                     <div className="goods-tag">
                       <h3 className="goods-name">{product.title}</h3>
                       <p className="goods-disc">{product.content}</p>

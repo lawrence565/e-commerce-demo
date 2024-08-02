@@ -1,6 +1,7 @@
 import gadgets from "../assets/products/gadgets.json";
 import decorations from "../assets/products/decorations.json";
 import furnitures from "../assets/products/furnitures.json";
+import coupons from "../assets/coupon.json";
 import { useState, useRef, useEffect } from "react";
 import "../style/CartStyle.scss";
 
@@ -50,11 +51,11 @@ function Card(props: {
   }, [amount, product, updateSubtotal]);
 
   return (
-    <div className="flex w-full border-b-2 border-midBrown max-w-[40dvw]">
-      <div className="w-[10dvw] aspect-4/3 overflow-hidden rounded-md m-2">
+    <div className="flex w-full border-b-2 border-midBrown min-w-[600px] max-w-[40dvw] p-4">
+      <div className="w-[10dvw] aspect-4/3 overflow-hidden rounded-md">
         <img src={product?.img} />
       </div>
-      <div className="flex justify-between items-center w-full max-w-[30dvw] mr-8 ml-4 ">
+      <div className="flex justify-between items-center w-full min-w-[400px] max-w-[500px] mr-8 ml-4 ">
         <div className="h-fit">
           <h3 className="font-semibold text-2xl mb-4">{product?.title}</h3>
           <p className="text-lg">{`$ ${product?.price}`}</p>
@@ -87,9 +88,7 @@ function Card(props: {
             </div>
           </div>
           <div
-            className={`text-red-500 text-sm ${
-              amount === 20 ? "" : "invisible"
-            }`}
+            className={`text-red-500 text-sm ${amount === 20 ? "" : "hidden"}`}
           >
             已達到購買上限
           </div>
@@ -117,11 +116,11 @@ function ShopppingKart() {
   };
 
   return (
-    <div className="flex justify-center my-8 w-full">
-      <div className="flex justify-center my-8 max-w-[1200px] w-full">
+    <div className="flex flex-col items-center justify-start my-8 w-full min-h-[70dvh]">
+      <div className="flex justify-between my-8 max-w-[1200px] w-full">
         <div
           id="items"
-          className="flex-[3] max-w-[40dvw] flex flex-col justify-center mr-8"
+          className="flex-[3] ml-4 min-w-[600px] max-w-[40dvw] flex flex-col justify-center mr-8"
         >
           <h1 className="text-4xl font-bold text-midBrown  mb-8">購買品項</h1>
           {inKart.map((item, index) => (
@@ -136,7 +135,7 @@ function ShopppingKart() {
         </div>
         <div
           id="subtotal"
-          className="flex-[1] max-w-[20dvw] rounded-lg bg-midBrown p-6 h-fit"
+          className="flex-[1] min-w-[300px] max-w-[20dvw] rounded-lg bg-midBrown p-6 m-4 h-fit "
         >
           <h1 className="font-semibold text-3xl text-white mb-4 max-w-[15dvw] ml-2">
             購買明細
@@ -165,6 +164,47 @@ function ShopppingKart() {
               </h1>
             </div>
           </div>
+          <div className="w-3/5 h-fit bg-white p-2 ml-[20%] mt-4 text-end rounded-md flex justify-center">
+            <button className="w-full h-full font-bold text-midBrown">
+              結帳
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="coupon" className="w-full max-w-[1200px]">
+        <div className="w-fit rounded-lg overflow-hidden  border-[2px] border-midBrown">
+          <input
+            className="w-[200px] p-2 bg-gray-300"
+            placeholder="請輸入優惠碼"
+          />
+          <button className="bg-midBrown text-white px-4 py-2">套用</button>
+          <button className="bg-white text-midBrown px-4 py-2">取消</button>
+        </div>
+
+        <div id="avaliable">
+          <table>
+            <tr className="w-full">
+              <thead className="w-full bg-midBrown">
+                <th className="w-2/5">名稱</th>
+                <th className="mx-2">折扣</th>
+                <th className="mx-2">到期</th>
+              </thead>
+            </tr>
+            <tr>
+              <tbody>
+                {coupons.map((coupon) => {
+                  return (
+                    <tr>
+                      <td>{coupon.name}</td>
+                      <td>{coupon.discount}</td>
+                      <td>{coupon.expirement}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </tr>
+          </table>
         </div>
       </div>
     </div>
