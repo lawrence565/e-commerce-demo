@@ -173,7 +173,7 @@ function ShopppingKart() {
       </div>
 
       <div id="coupon" className="w-full max-w-[1200px]">
-        <div className="w-fit rounded-lg overflow-hidden  border-[2px] border-midBrown">
+        <div className="m-4 w-fit rounded-lg overflow-hidden  border-[2px] border-midBrown">
           <input
             className="w-[200px] p-2 bg-gray-300"
             placeholder="請輸入優惠碼"
@@ -182,28 +182,34 @@ function ShopppingKart() {
           <button className="bg-white text-midBrown px-4 py-2">取消</button>
         </div>
 
-        <div id="avaliable">
-          <table>
-            <tr className="w-full">
-              <thead className="w-full bg-midBrown">
-                <th className="w-2/5">名稱</th>
-                <th className="mx-2">折扣</th>
-                <th className="mx-2">到期</th>
-              </thead>
-            </tr>
-            <tr>
-              <tbody>
-                {coupons.map((coupon) => {
-                  return (
-                    <tr>
-                      <td>{coupon.name}</td>
-                      <td>{coupon.discount}</td>
-                      <td>{coupon.expirement}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </tr>
+        <div id="avaliable" className="m-4">
+          <table className="min-w-[500px] w-[60dvw] max-w-[800px]">
+            <thead className="w-full bg-midBrown">
+              <tr className="w-full text-white my-4">
+                <th className="w-2/5 text-lg font-semibold">名稱</th>
+                <th className="w-1/5 text-lg font-semibold">折扣</th>
+                <th className="w-1/5 text-lg font-semibold">到期日</th>
+                <th className="w-fit text-lg font-semibold">選擇</th>
+              </tr>
+            </thead>
+            <tbody>
+              {coupons.map((coupon) => {
+                return (
+                  <tr className="w-full text-center h-fit mb-2">
+                    <td className="w-2/5 text-start text-lg pl-2">
+                      {coupon.name}
+                    </td>
+                    <td className="w-1/5 text-lg">{coupon.discount}</td>
+                    <td className="w-1/5 text-lg">{coupon.expirement}</td>
+                    <td className="w-fit">
+                      <button className="px-2 rounded-md border-[1px] border-midBrown">
+                        選擇
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
           </table>
         </div>
       </div>
