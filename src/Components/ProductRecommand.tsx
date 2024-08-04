@@ -4,6 +4,15 @@ import gadgets from "../assets/products/gadgets.json";
 import furnitures from "../assets/products/furnitures.json";
 import decorations from "../assets/products/decorations.json";
 
+type Product = {
+  id: number;
+  title: string;
+  name: string;
+  content: string;
+  img: string;
+  price: number;
+};
+
 function ProductRecomanned(props: {
   title: string;
   items: string;
@@ -14,7 +23,7 @@ function ProductRecomanned(props: {
   const productCarouselRef = useRef<HTMLDivElement>(null);
   const cardPerPage: number = 4;
   const totalPage: number = gadgets.length / cardPerPage;
-  let products: Array<any> = [];
+  let products: Product[] = [];
 
   useEffect(() => {
     const updateWidth = () => {
@@ -49,7 +58,7 @@ function ProductRecomanned(props: {
 
   return (
     <div className="text-midBrown my-4">
-      <h2 className="text-2xl my-4">{props.title}</h2>
+      <h2 className="text-2xl my-4 font-semibold">{props.title}</h2>
       <hr className="text-midBrown" />
       <div className="product-carousel flex items-center m-8 mb-0">
         <button className="text-black arrow previous" onClick={previous}>
@@ -64,19 +73,19 @@ function ProductRecomanned(props: {
           >
             {products.map((product, index: number) => {
               return (
-                <div
-                  key={index}
-                  className="product-card"
-                  ref={productCarouselRef}
-                >
-                  <div className="product w-[200px] m-2 h-fit">
-                    <div className="product-img-container">
-                      <img className="rounded-lg" src={product.img} />
+                <Link to={`${props.url}/${product.name}`} key={index}>
+                  <div className="product-card" ref={productCarouselRef}>
+                    <div className="product w-[200px] m-2 h-fit">
+                      <div className="product-img-container">
+                        <img className="rounded-lg" src={product.img} />
+                      </div>
+                      <h3 className="product-title text-xl">{product.title}</h3>
+                      <p className="product-content text-sm">
+                        {product.content}
+                      </p>
                     </div>
-                    <h3 className="product-title text-xl">{product.title}</h3>
-                    <p className="product-content text-sm">{product.content}</p>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>
@@ -85,7 +94,7 @@ function ProductRecomanned(props: {
           &#10095;
         </button>
       </div>
-      <div className="mb-6 mx-16 flex flex-end w-full">
+      <div className="mb-6 mx-16 flex justify-end">
         <div className="w-fit">
           <Link to={`${props.url}`}>
             <p className="underline cursor-pointer">查看更多</p>

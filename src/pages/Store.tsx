@@ -79,7 +79,7 @@ function Store() {
           </div>
         </div>
         <div id="store-display" className="h-fit" ref={displayRef}>
-          <StoreDisplay type={currentType} key="1" />
+          <StoreDisplay type={currentType} key={category} />
         </div>
       </div>
     </div>

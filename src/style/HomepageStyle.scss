@@ -1,9 +1,8 @@
 .img-container {
   position: relative;
   overflow: hidden;
-  width: 60dvh;
+  width: 60dvw;
   aspect-ratio: 16/9;
-  max-width: 1100px;
   object-fit: cover;
 }
 
@@ -23,9 +22,8 @@
 }
 
 .carousel-slide {
-  width: 60dvh;
+  width: 60dvw;
   aspect-ratio: 16/9;
-  max-width: 1100px;
   overflow: hidden;
   display: flex;
   align-items: center;

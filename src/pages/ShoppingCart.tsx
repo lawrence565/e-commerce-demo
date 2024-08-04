@@ -51,11 +51,11 @@ function Card(props: {
   }, [amount, product, updateSubtotal]);
 
   return (
-    <div className="flex w-full border-b-2 border-midBrown min-w-[600px] max-w-[40dvw] p-4">
-      <div className="w-[10dvw] aspect-4/3 overflow-hidden rounded-md">
+    <div className="flex w-full border-b-2 border-midBrown min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] p-4">
+      <div className="md:w-[10dvw] lg:w-[15dvw] h-fit aspect-4/3 overflow-hidden rounded-md">
         <img src={product?.img} />
       </div>
-      <div className="flex justify-between items-center w-full min-w-[400px] max-w-[500px] mr-8 ml-4 ">
+      <div className="flex justify-between items-center w-full min-w-[400px] md:max-w-[500px] lg:max-w-[800px] mr-8 ml-4 ">
         <div className="h-fit">
           <h3 className="font-semibold text-2xl mb-4">{product?.title}</h3>
           <p className="text-lg">{`$ ${product?.price}`}</p>
@@ -120,7 +120,7 @@ function ShopppingKart() {
       <div className="flex justify-between my-8 max-w-[1200px] w-full">
         <div
           id="items"
-          className="flex-[3] ml-4 min-w-[600px] max-w-[40dvw] flex flex-col justify-center mr-8"
+          className="flex-[3] ml-4 min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] flex flex-col justify-center mr-8"
         >
           <h1 className="text-4xl font-bold text-midBrown  mb-8">購買品項</h1>
           {inKart.map((item, index) => (
@@ -185,22 +185,22 @@ function ShopppingKart() {
         <div id="avaliable" className="m-4">
           <table className="min-w-[500px] w-[60dvw] max-w-[800px]">
             <thead className="w-full bg-midBrown">
-              <tr className="w-full text-white my-4">
-                <th className="w-2/5 text-lg font-semibold">名稱</th>
-                <th className="w-1/5 text-lg font-semibold">折扣</th>
-                <th className="w-1/5 text-lg font-semibold">到期日</th>
-                <th className="w-fit text-lg font-semibold">選擇</th>
+              <tr className="w-full text-white">
+                <th className="w-2/5 text-lg font-semibold py-[2px]">名稱</th>
+                <th className="w-1/5 text-lg font-semibold py-[2px]">折扣</th>
+                <th className="w-1/5 text-lg font-semibold py-[2px]">到期日</th>
+                <th className="w-fit text-lg font-semibold py-[2px]">選擇</th>
               </tr>
             </thead>
             <tbody>
               {coupons.map((coupon) => {
                 return (
                   <tr className="w-full text-center h-fit mb-2">
-                    <td className="w-2/5 text-start text-lg pl-2">
+                    <td className="w-2/5 text-start text-lg pl-2 py-2">
                       {coupon.name}
                     </td>
-                    <td className="w-1/5 text-lg">{coupon.discount}</td>
-                    <td className="w-1/5 text-lg">{coupon.expirement}</td>
+                    <td className="w-1/5 text-lg py-2">{coupon.discount}</td>
+                    <td className="w-1/5 text-lg py-2">{coupon.expirement}</td>
                     <td className="w-fit">
                       <button className="px-2 rounded-md border-[1px] border-midBrown">
                         選擇

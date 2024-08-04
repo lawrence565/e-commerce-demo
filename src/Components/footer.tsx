@@ -8,7 +8,7 @@ import "../style/Footer.scss";
 
 function Footer() {
   return (
-    <div className="flex justify-center items-center bg-midBrown h-[25dvh] w-full">
+    <div className="flex justify-center items-center bg-midBrown h-fit w-full">
       <div className="max-w-[1200px] w-full">
         <div className="bg-midBrown w-100% my-4 flex items-center justify-center">
           <div id="store-info" className="flex-1 p-4 max-w-[450px]">

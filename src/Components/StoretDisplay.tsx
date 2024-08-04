@@ -39,9 +39,9 @@ function StoreDisplay(props: { type: string }) {
     products = decorations;
   }
 
-  const display = products.map((product) => {
+  const display = products.map((product, index) => {
     return (
-      <div className="mx-6 my-2 cursor-pointer">
+      <div className="mx-6 my-2 cursor-pointer" key={index}>
         <Link to={`/stores/${props.type}/${product.name}`}>
           <div className="w-[12dvw] max-w-[250px] rounded-md overflow-hidden border-midBrown border-[5px] aspect-4/3">
             <img src={product.img} />

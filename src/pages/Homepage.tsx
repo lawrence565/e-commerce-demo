@@ -52,16 +52,19 @@ function Homepage(): JSX.Element {
 
         <div className="customer-review bg-midBrown w-full my-8">
           <div className="flex items-center justify-center">
-            <ReviewCarousel />
+            <ReviewCarousel key="0" />
           </div>
         </div>
 
         <div className="store-introduce m-8">
           <h1 className="text-midBrown text-2xl mx-8">商家介紹</h1>
           <div className="store-card-container flex justify-center items-start">
-            {Stores.map((store) => {
+            {Stores.map((store, index: number) => {
               return (
-                <div className="bg-midbrown max-w-[300px] w-[20dvw] m-4">
+                <div
+                  className="bg-midbrown max-w-[300px] w-[20dvw] m-4"
+                  key={index}
+                >
                   <h1 className="text-[1.3rem]">{store.name}</h1>
                   <div className="store-img-container aspect-[4/3] overflow-hidden rounded-md my-2">
                     <img src={store.img} />
