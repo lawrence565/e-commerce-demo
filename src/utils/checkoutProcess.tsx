@@ -1,6 +1,3 @@
-import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
-
 function CheckoutProcess(props: { step: number }) {
   const step = props.step;
   return (

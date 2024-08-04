@@ -107,7 +107,6 @@ function ShopppingKart() {
   ];
   const subtotals = useRef<number[]>(new Array(inKart.length).fill(0));
   const [subtotal, setSubtotal] = useState(0);
-  const [step, setStep] = useState(1);
 
   const coupon = 100,
     discount = 300;
@@ -119,7 +118,7 @@ function ShopppingKart() {
 
   return (
     <div className="flex flex-col items-center justify-start my-8 w-full min-h-[70dvh]">
-      <CheckoutProcess step={step} />
+      <CheckoutProcess step={1} />
       <div className="flex justify-between my-8 max-w-[1200px] w-full">
         <div
           id="items"
