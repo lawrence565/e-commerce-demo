@@ -3,7 +3,7 @@ import Carousel from "../components/Carousel.tsx";
 import ProductRecomanned from "../components/ProductRecommand.tsx";
 import ReviewCarousel from "../components/ReviewCarousel.tsx";
 import down_arrow from "../assets/down_arrow.svg";
-import Stores from "../assets/Stores/stores.json";
+import Stores from "../assets/stores.json";
 import "../style/HomepageStyle.scss";
 
 function Homepage(): JSX.Element {
