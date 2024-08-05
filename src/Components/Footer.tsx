@@ -4,7 +4,7 @@ import instagram from "../assets/social_logo/instagram.svg";
 import twitter from "../assets/social_logo/twitter.svg";
 import line from "../assets/social_logo/line.svg";
 import { Link } from "react-router-dom";
-import "../style/Footer.scss";
+import "../style/FooterStyle.scss";
 
 function Footer() {
   return (
