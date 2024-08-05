@@ -2,7 +2,7 @@ import gadgets from "../assets/products/gadgets.json";
 import decorations from "../assets/products/decorations.json";
 import furnitures from "../assets/products/furnitures.json";
 import coupons from "../assets/coupon.json";
-import CheckoutProcess from "../utils/CheckoutProcess.tsx";
+// import CheckoutProcess from "../utils/CheckoutProcess.tsx";
 import { useState, useRef, useEffect } from "react";
 import "../style/CartStyle.scss";
 
@@ -118,7 +118,7 @@ function ShopppingKart() {
 
   return (
     <div className="flex flex-col items-center justify-start my-8 w-full min-h-[70dvh]">
-      <CheckoutProcess step={1} />
+      {/* <CheckoutProcess step={1} /> */}
       <div className="flex justify-between my-8 max-w-[1200px] w-full">
         <div
           id="items"
