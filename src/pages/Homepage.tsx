@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import Carousel from "../components/Carousel.tsx";
-import ProductRecomanned from "../components/ProductRecommand.tsx";
-import ReviewCarousel from "../components/ReviewCarousel.tsx";
+import Carousel from "../Components/Carousel.tsx";
+import ProductRecomanned from "../Components/ProductRecommand.tsx";
+import ReviewCarousel from "../Components/ReviewCarousel.tsx";
 import down_arrow from "../assets/down_arrow.svg";
 import Stores from "../assets/stores.json";
 import "../style/HomepageStyle.scss";

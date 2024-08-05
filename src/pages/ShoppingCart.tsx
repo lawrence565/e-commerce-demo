@@ -2,7 +2,7 @@ import gadgets from "../assets/products/gadgets.json";
 import decorations from "../assets/products/decorations.json";
 import furnitures from "../assets/products/furnitures.json";
 import coupons from "../assets/coupon.json";
-import CheckoutProcess from "../utils/checkoutProcess";
+import CheckoutProcess from "../utils/CheckoutProcess";
 import { useState, useRef, useEffect } from "react";
 import "../style/CartStyle.scss";
 
