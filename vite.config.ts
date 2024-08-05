@@ -12,4 +12,9 @@ export default defineConfig({
     outDir: "dist",
     assetsDir: "assets",
   },
+  resolve: {
+    alias: {
+      "@": "/src",
+    },
+  },
 });
