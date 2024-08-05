@@ -20,6 +20,9 @@ jobs:
         with:
           node-version: 16
 
+      - name: Clean npm cache
+        run: npm cache clean --force
+
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
 
