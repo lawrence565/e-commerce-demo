@@ -4,6 +4,7 @@ import react from "@vitejs/plugin-react";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: process.env.VITE_BASE_URL,
   css: {
     postcss: "./postcss.config.js",
   },
@@ -11,5 +12,4 @@ export default defineConfig({
     outDir: "dist",
     assetsDir: "assets",
   },
-  base: "/e-commerce-demo",
 });
