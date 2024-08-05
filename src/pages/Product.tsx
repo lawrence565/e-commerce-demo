@@ -51,7 +51,7 @@ function ProductPage() {
           id="product-img"
           className="aspect-square h-[40dvh] rounded-2xl overflow-hidden mx-8 "
         >
-          {/* <img src={`../${product?.img}`} /> */}
+          <img src={`../${product?.img}`} />
         </div>
         <div id="product-desc" className="mx-8 h-[40dvh] flex flex-col">
           <div className="flex-[4] h-full">

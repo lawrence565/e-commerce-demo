@@ -44,7 +44,7 @@ function StoreDisplay(props: { type: string }) {
       <div className="mx-6 my-2 cursor-pointer" key={index}>
         <Link to={`/stores/${props.type}/${product.name}`}>
           <div className="w-[12dvw] max-w-[250px] rounded-md overflow-hidden border-midBrown border-[5px] aspect-4/3">
-            {/* <img src={product.img} /> */}
+            <img src={product.img} />
           </div>
           <div className="">
             <h1 className="text-xl">{product.title}</h1>

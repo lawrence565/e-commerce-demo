@@ -77,7 +77,7 @@ function ProductRecomanned(props: {
                   <div className="product-card" ref={productCarouselRef}>
                     <div className="product w-[200px] m-2 h-fit">
                       <div className="product-img-container">
-                        {/* <img className="rounded-lg" src={product.img} /> */}
+                        <img className="rounded-lg" src={product.img} />
                       </div>
                       <h3 className="product-title text-xl">{product.title}</h3>
                       <p className="product-content text-sm">
