@@ -1,7 +1,7 @@
 import "../style/StoreStyle.scss";
 import { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import StoreDisplay from "../components/StoretDisplay";
+import StoreDisplay from "../Components/StoretDisplay";
 
 function Store() {
   let [currentType, setCurrentType] = useState("gadgets");
