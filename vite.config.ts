@@ -11,5 +11,5 @@ export default defineConfig({
     outDir: "dist",
     assetsDir: "assets",
   },
-  base: "/e-commerce-demo/",
+  // base: "/e-commerce-demo/",
 });
