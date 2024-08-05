@@ -54,7 +54,7 @@ function Card(props: {
   return (
     <div className="flex w-full border-b-2 border-midBrown min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] p-4">
       <div className="md:w-[10dvw] lg:w-[15dvw] h-fit aspect-4/3 overflow-hidden rounded-md">
-        <img src={product?.img} />
+        {/* <img src={product?.img} /> */}
       </div>
       <div className="flex justify-between items-center w-full min-w-[400px] md:max-w-[500px] lg:max-w-[800px] mr-8 ml-4 ">
         <div className="h-fit">
