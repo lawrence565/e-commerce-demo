@@ -1,7 +1,7 @@
 import mainLogo from "../assets/main-logo.svg";
 import shoppingCartIcon from "../assets/shopping-cart-icon.svg";
 import personalIcon from "../assets/personal-icon.svg";
-import "../style/NavbarStyle.scss";
+import "../style/navbarStyle_tmp.scss";
 import { Link } from "react-router-dom";
 
 function NavBar() {
