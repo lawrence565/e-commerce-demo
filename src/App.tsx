@@ -6,12 +6,14 @@ import Product from "./pages/Product.tsx";
 import About from "./pages/About.tsx";
 import Personal from "./pages/Personal.tsx";
 import ShopppingCart from "./pages/ShoppingCart.tsx";
+import ScrollToTop from "./utils/ScrollToTop.tsx";
 import "./style/App.css";
 
 function App() {
   return (
     <>
       <HashRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Homepage />} />

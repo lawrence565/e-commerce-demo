@@ -21,6 +21,11 @@ type kartItem = {
   amount: number;
 };
 
+// type applyCoupon = {
+//   id: number;
+//   coupon: number;
+// };
+
 function Card(props: {
   item: kartItem;
   updateSubtotal: (subtotal: number) => void;
@@ -109,7 +114,7 @@ function ShopppingKart() {
   const [subtotal, setSubtotal] = useState(0);
 
   const coupon = 100,
-    discount = 300;
+    discount = 0;
 
   const updateSubtotal = (index: number, newSubtotal: number) => {
     subtotals.current[index] = newSubtotal;
@@ -146,15 +151,15 @@ function ShopppingKart() {
           <div className="flex flex-col justify-center items-center my-4">
             <div className="subtotal">
               <h3>商品原價：</h3>
-              <h3>{`${subtotal}`}</h3>
+              <h3>{`NT$ ${subtotal}`}</h3>
             </div>
             <div className="subtotal">
               <h3>折扣：</h3>
-              <h3>{`- ${discount}`}</h3>
+              <h3>{`- NT$ ${discount}`}</h3>
             </div>
             <div className="subtotal">
               <h3>優惠券：</h3>
-              <h3>{`- ${coupon}`}</h3>
+              <h3>{`- NT$ ${coupon}`}</h3>
             </div>
           </div>
           <hr />
@@ -185,7 +190,7 @@ function ShopppingKart() {
         </div>
 
         <div id="avaliable" className="m-4">
-          <table className="min-w-[500px] w-[60dvw] max-w-[800px]">
+          <table className="w-full max-w-[800px]">
             <thead className="w-full bg-midBrown">
               <tr className="w-full text-white">
                 <th className="w-2/5 text-lg font-semibold py-[2px]">名稱</th>

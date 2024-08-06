@@ -71,6 +71,10 @@ function StoreDisplay(props: { type: string }) {
     };
   }, []);
 
+  useEffect(() => {
+    setPageIndex(0);
+  }, [products]);
+
   const pages = paginate(display, 9); // 把 products 中的產品分為 9 個
 
   const handlePreviousPage = () => {

@@ -48,6 +48,8 @@ function ProductRecomanned(props: {
     setCurrentIndex((prevIndex: number) => (prevIndex + 1) % totalPage);
   };
 
+  const scrollToTop = () => {};
+
   if (props.items === "gadgets") {
     products = gadgets;
   } else if (props.items === "furnitures") {
@@ -58,9 +60,9 @@ function ProductRecomanned(props: {
 
   return (
     <div className="text-midBrown my-4">
-      <h2 className="text-2xl my-4 font-semibold">{props.title}</h2>
+      <h2 className="text-2xl -4 font-semibold">{props.title}</h2>
       <hr className="text-midBrown" />
-      <div className="product-carousel flex items-center m-8 mb-0">
+      <div className="product-carousel flex items-center my-8 mb-0">
         <button className="text-black arrow previous" onClick={previous}>
           &#10094;
         </button>
@@ -75,7 +77,7 @@ function ProductRecomanned(props: {
               return (
                 <Link to={`${props.url}/${product.name}`} key={index}>
                   <div className="product-card" ref={productCarouselRef}>
-                    <div className="product w-[200px] m-2 h-fit">
+                    <div className="product w-[15dvw] m-2 h-fit">
                       <div className="product-img-container">
                         <img className="rounded-lg" src={product.img} />
                       </div>
@@ -96,7 +98,7 @@ function ProductRecomanned(props: {
       </div>
       <div className="mb-6 mx-16 flex justify-end">
         <div className="w-fit">
-          <Link to={`${props.url}`}>
+          <Link to={`${props.url}`} onClick={scrollToTop}>
             <p className="underline cursor-pointer">查看更多</p>
           </Link>
         </div>

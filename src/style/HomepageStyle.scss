@@ -2,6 +2,7 @@
   position: relative;
   overflow: hidden;
   width: 60dvw;
+  max-width: 1200px;
   aspect-ratio: 16/9;
   object-fit: cover;
 }
@@ -23,6 +24,7 @@
 
 .carousel-slide {
   width: 60dvw;
+  max-width: 1200px;
   aspect-ratio: 16/9;
   overflow: hidden;
   display: flex;
@@ -36,7 +38,9 @@
 
 .dot {
   width: 0.5vw;
+  max-width: 10px;
   height: 0.5vw;
+  max-height: 10px;
   margin: 0.25vw;
   background-color: #d9d9d9;
   border-radius: 50%;
