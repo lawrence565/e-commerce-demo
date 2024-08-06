@@ -2,6 +2,7 @@ import gadgets from "../assets/products/gadgets.json";
 import decorations from "../assets/products/decorations.json";
 import furnitures from "../assets/products/furnitures.json";
 import coupons from "../assets/coupon.json";
+import couponlist from "../assets/couponsList.json";
 // import CheckoutProcess from "../utils/CheckoutProcess.tsx";
 import { useState, useRef, useEffect } from "react";
 import "../style/CartStyle.scss";
@@ -112,6 +113,9 @@ function ShopppingKart() {
   ];
   const subtotals = useRef<number[]>(new Array(inKart.length).fill(0));
   const [subtotal, setSubtotal] = useState(0);
+  const [applyCouponCode, setApplyCouponCode] = useState("請輸入優惠碼");
+  const [applied, setApplied] = useState(false);
+  const appliedCoupon: string[] = [];
 
   const coupon = 100,
     discount = 0;
@@ -121,6 +125,24 @@ function ShopppingKart() {
     setSubtotal(subtotals.current.reduce((acc, curr) => acc + curr, 0));
   };
 
+  function applyCoupon(couponCode: string) {
+    setApplyCouponCode(couponCode);
+    setApplied(true);
+  }
+
+  function checkCoupon(couponCode: string) {
+    const coupon = couponlist.find((coupon) => coupon.code === couponCode);
+    if (coupon) {
+      const existed = appliedCoupon.some((coupon) => coupon === couponCode);
+      if (!existed) {
+        appliedCoupon.push(coupon?.name);
+      }
+      alert("已套用優惠券");
+    } else {
+      alert("優惠券不存在");
+    }
+  }
+
   return (
     <div className="flex flex-col items-center justify-start my-8 w-full min-h-[70dvh]">
       {/* <CheckoutProcess step={1} /> */}
@@ -129,7 +151,7 @@ function ShopppingKart() {
           id="items"
           className="flex-[3] ml-4 min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] flex flex-col justify-center mr-8"
         >
-          <h1 className="text-4xl font-bold text-midBrown  mb-8">購買品項</h1>
+          <h1 className="text-4xl font-bold text-midBrown mb-8">購買品項</h1>
           {inKart.map((item, index) => (
             <Card
               key={item.id}
@@ -182,10 +204,17 @@ function ShopppingKart() {
       <div id="coupon" className="w-full max-w-[1200px]">
         <div className="m-4 w-fit rounded-lg overflow-hidden  border-[2px] border-midBrown">
           <input
-            className="w-[200px] p-2 bg-gray-300"
-            placeholder="請輸入優惠碼"
+            className={`w-[200px] p-2 bg-gray-300 ${
+              applied ? "placeholder:text-black" : ""
+            }`}
+            placeholder={applyCouponCode}
           />
-          <button className="bg-midBrown text-white px-4 py-2">套用</button>
+          <button
+            className="bg-midBrown text-white px-4 py-2"
+            onClick={() => checkCoupon}
+          >
+            套用
+          </button>
           <button className="bg-white text-midBrown px-4 py-2">取消</button>
         </div>
 
@@ -209,7 +238,10 @@ function ShopppingKart() {
                     <td className="w-1/5 text-lg py-2">{coupon.discount}</td>
                     <td className="w-1/5 text-lg py-2">{coupon.expirement}</td>
                     <td className="w-fit">
-                      <button className="px-2 rounded-md border-[1px] border-midBrown">
+                      <button
+                        className="px-2 rounded-md border-[1px] border-midBrown"
+                        onClick={() => applyCoupon(coupon.code)}
+                      >
                         選擇
                       </button>
                     </td>

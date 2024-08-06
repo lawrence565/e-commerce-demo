@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "新用戶註冊禮",
+    "discount": 300,
+    "code": "newuser300",
+    "expirement": "2024/10/30"
+  },
+  {
+    "id": 2,
+    "name": "除舊佈新",
+    "discount": 150,
+    "code": "cleanoutold150",
+    "expirement": "2024/10/30"
+  },
+  {
+    "id": 3,
+    "name": "每月優惠",
+    "discount": 100,
+    "code": "monthly100",
+    "expirement": "2024/10/30"
+  },
+  {
+    "id": 4,
+    "name": "魔術大空間",
+    "discount": 200,
+    "code": "magic200",
+    "expirement": "2024/12/31"
+  },
+  {
+    "id": 2,
+    "name": "老手玩家",
+    "discount": 500,
+    "code": "senior500",
+    "expirement": "2024/12/31"
+  }
+]
