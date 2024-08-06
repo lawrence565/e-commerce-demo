@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, HashRouter } from "react-router-dom";
 import Layout from "./Layout.tsx";
 import Homepage from "./pages/Homepage.tsx";
 import Store from "./pages/Store.tsx";
@@ -11,7 +11,7 @@ import "./style/App.css";
 function App() {
   return (
     <>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Homepage />} />
@@ -24,7 +24,7 @@ function App() {
             <Route path="shoppingcart" element={<ShopppingCart />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </>
   );
 }
