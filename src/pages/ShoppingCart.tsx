@@ -136,6 +136,7 @@ function ShopppingKart() {
       const existed = appliedCoupon.some((coupon) => coupon === couponCode);
       if (!existed) {
         appliedCoupon.push(coupon?.name);
+        console.log(appliedCoupon);
       }
       alert("已套用優惠券");
     } else {
