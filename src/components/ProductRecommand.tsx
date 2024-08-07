@@ -77,7 +77,7 @@ function ProductRecomanned(props: {
               return (
                 <Link to={`${props.url}/${product.name}`} key={index}>
                   <div className="product-card" ref={productCarouselRef}>
-                    <div className="product w-[15dvw] m-2 h-fit">
+                    <div className="product lg:w-[250px] m-2 h-fit">
                       <div className="product-img-container">
                         <img className="rounded-lg" src={product.img} />
                       </div>
