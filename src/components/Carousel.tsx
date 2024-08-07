@@ -11,21 +11,25 @@ function Carousel() {
   const [width, setWidth] = useState(300);
   const cards = [
     {
+      id: 1,
       title: "木製手機架",
       content: "使用台東漂流木結合原住民雕刻文化打造的特色手機架",
       img: phone_stand,
     },
     {
+      id: 2,
       title: "裝飾品",
       content: "精美的裝飾品，適合擺放在任何地方。",
       img: ornament,
     },
     {
+      id: 3,
       title: "籐包",
       content: "手工製作的籐包，既時尚又實用。",
       img: ratten_bag,
     },
     {
+      id: 4,
       title: "軟木藝術品",
       content: "獨特的軟木藝術品，增添藝術氣息。",
       img: cork_art,
@@ -61,7 +65,7 @@ function Carousel() {
             &#10094;
           </button>
 
-          <div className="carousel-slide mx-8">
+          <div className="carousel-slide mx-8" ref={carouselRef}>
             {cards.map((product, index) => {
               return (
                 <div

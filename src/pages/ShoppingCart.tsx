@@ -2,7 +2,7 @@ import gadgets from "../assets/products/gadgets.json";
 import decorations from "../assets/products/decorations.json";
 import furnitures from "../assets/products/furnitures.json";
 import coupons from "../assets/coupon.json";
-import couponlist from "../assets/couponsList.json";
+import couponList from "../assets/couponsList.json";
 // import CheckoutProcess from "../utils/CheckoutProcess.tsx";
 import { useState, useRef, useEffect } from "react";
 import "../style/CartStyle.scss";
@@ -20,6 +20,15 @@ type kartItem = {
   id: number;
   type: string;
   amount: number;
+};
+
+type Coupon = {
+  id: number;
+  name: string;
+  discount: number;
+  code: string;
+  expirement: string;
+  applied: boolean;
 };
 
 // type applyCoupon = {
@@ -113,32 +122,75 @@ function ShopppingKart() {
   ];
   const subtotals = useRef<number[]>(new Array(inKart.length).fill(0));
   const [subtotal, setSubtotal] = useState(0);
-  const [applyCouponCode, setApplyCouponCode] = useState("請輸入優惠碼");
-  const [applied, setApplied] = useState(false);
-  const appliedCoupon: string[] = [];
+  const [applyCouponCode, setApplyCouponCode] =
+    useState<string>("請輸入優惠碼");
+  const [typed, setTyped] = useState(false);
+  const [appliedCoupon, setAppliedCoupon] = useState<number[]>([]);
+  const [couponDiscount, setCouponDiscount] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [avaliableCoupons, setAvaliableCoupons] = useState<Coupon[]>(
+    coupons.map((coupon) => ({
+      ...coupon,
+      applied: false,
+    }))
+  );
 
-  const coupon = 100,
-    discount = 0;
+  useEffect(() => {
+    if (subtotal > 5000) {
+      setDiscount(500);
+    } else {
+      setDiscount(0);
+    }
+  }, [subtotal]);
 
   const updateSubtotal = (index: number, newSubtotal: number) => {
     subtotals.current[index] = newSubtotal;
     setSubtotal(subtotals.current.reduce((acc, curr) => acc + curr, 0));
   };
 
-  function applyCoupon(couponCode: string) {
+  function typeCoupon(couponCode: string) {
     setApplyCouponCode(couponCode);
-    setApplied(true);
+    setTyped(true);
+  }
+
+  function cancelTyped() {
+    setTyped(false);
+    setApplyCouponCode("請輸入優惠碼");
+  }
+
+  function cancelApplied(couponId: number) {
+    const appliedOneIndex = avaliableCoupons.findIndex(
+      (coupon) => coupon.id === couponId
+    );
+    if (appliedOneIndex !== -1) {
+      const appliedOne = avaliableCoupons[appliedOneIndex];
+      setAppliedCoupon((prev) => prev.filter((id) => id !== appliedOne.id));
+      setCouponDiscount((prev) => prev - appliedOne.discount);
+      setAvaliableCoupons((prevCoupons) => {
+        return prevCoupons.map((coupon) =>
+          coupon.id === couponId ? { ...coupon, applied: false } : coupon
+        );
+      });
+      alert("已移除優惠券");
+    }
   }
 
   function checkCoupon(couponCode: string) {
-    const coupon = couponlist.find((coupon) => coupon.code === couponCode);
-    if (coupon) {
-      const existed = appliedCoupon.some((coupon) => coupon === couponCode);
-      if (!existed) {
-        appliedCoupon.push(coupon?.name);
-        console.log(appliedCoupon);
+    const foundCoupon = couponList.find((coupon) => coupon.code === couponCode);
+    if (foundCoupon) {
+      const alreadyExisted = appliedCoupon.includes(foundCoupon.id);
+      if (!alreadyExisted) {
+        setAppliedCoupon((prev) => [...prev, foundCoupon.id]);
+        setCouponDiscount((prev) => prev + foundCoupon.discount);
+        setAvaliableCoupons((prevCoupons) => {
+          return prevCoupons.map((coupon) =>
+            coupon.code === couponCode ? { ...coupon, applied: true } : coupon
+          );
+        });
+        alert("已套用優惠券");
+      } else {
+        alert("優惠券已存在");
       }
-      alert("已套用優惠券");
     } else {
       alert("優惠券不存在");
     }
@@ -182,7 +234,31 @@ function ShopppingKart() {
             </div>
             <div className="subtotal">
               <h3>優惠券：</h3>
-              <h3>{`- NT$ ${coupon}`}</h3>
+              <h3>{`- NT$ ${couponDiscount}`}</h3>
+            </div>
+            <div className="w-4/5 mx-4">
+              {appliedCoupon.map((couponId, index) => {
+                const applied = couponList.find(
+                  (coupon) => coupon.id === couponId
+                );
+                if (applied) {
+                  return (
+                    <div className="w-full flex text-white justify-between">
+                      <p key={index}>{applied.name}</p>
+                      <div className="flex">
+                        <p key={index + appliedCoupon.length}>
+                          {`- ${applied.discount}`}
+                        </p>
+                        <div className="ml-4 bg-white text-midBrown rounded-lg p-[2px]">
+                          <button onClick={() => cancelApplied(applied.id)}>
+                            ✗
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+              })}
             </div>
           </div>
           <hr />
@@ -190,7 +266,7 @@ function ShopppingKart() {
             <div className="flex text-white w-full justify-between max-w-[350px]">
               <h1 className="font-semibold text-2xl">結帳金額：</h1>
               <h1 className="text-end text-2xl">
-                {subtotal - coupon - discount}
+                {subtotal - couponDiscount - discount}
               </h1>
             </div>
           </div>
@@ -205,18 +281,23 @@ function ShopppingKart() {
       <div id="coupon" className="w-full max-w-[1200px]">
         <div className="m-4 w-fit rounded-lg overflow-hidden  border-[2px] border-midBrown">
           <input
-            className={`w-[200px] p-2 bg-gray-300 ${
-              applied ? "placeholder:text-black" : ""
+            className={`w-[200px] p-2 bg-gray-200 ${
+              typed ? "placeholder:text-black" : ""
             }`}
             placeholder={applyCouponCode}
           />
           <button
             className="bg-midBrown text-white px-4 py-2"
-            onClick={() => checkCoupon}
+            onClick={() => checkCoupon(applyCouponCode)}
           >
             套用
           </button>
-          <button className="bg-white text-midBrown px-4 py-2">取消</button>
+          <button
+            className="bg-white text-midBrown px-4 py-2"
+            onClick={cancelTyped}
+          >
+            取消
+          </button>
         </div>
 
         <div id="avaliable" className="m-4">
@@ -230,24 +311,28 @@ function ShopppingKart() {
               </tr>
             </thead>
             <tbody>
-              {coupons.map((coupon) => {
-                return (
-                  <tr className="w-full text-center h-fit mb-2">
-                    <td className="w-2/5 text-start text-lg pl-2 py-2">
-                      {coupon.name}
-                    </td>
-                    <td className="w-1/5 text-lg py-2">{coupon.discount}</td>
-                    <td className="w-1/5 text-lg py-2">{coupon.expirement}</td>
-                    <td className="w-fit">
-                      <button
-                        className="px-2 rounded-md border-[1px] border-midBrown"
-                        onClick={() => applyCoupon(coupon.code)}
-                      >
-                        選擇
-                      </button>
-                    </td>
-                  </tr>
-                );
+              {avaliableCoupons.map((coupon, index) => {
+                if (!coupon.applied) {
+                  return (
+                    <tr className="w-full text-center h-fit mb-2" key={index}>
+                      <td className="w-2/5 text-start text-lg pl-2 py-2">
+                        {coupon.name}
+                      </td>
+                      <td className="w-1/5 text-lg py-2">{coupon.discount}</td>
+                      <td className="w-1/5 text-lg py-2">
+                        {coupon.expirement}
+                      </td>
+                      <td className="w-fit">
+                        <button
+                          className="px-2 rounded-md border-[1px] border-midBrown"
+                          onClick={() => typeCoupon(coupon.code)}
+                        >
+                          選擇
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                }
               })}
             </tbody>
           </table>
