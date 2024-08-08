@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 function NavBar() {
   return (
     <div className="flex justify-center border-b-2 border-[#a0937d]">
-      <div className="nav-bar grid grid-cols-2 w-full max-w-[1200px] ">
+      <div className="nav-bar grid grid-cols-2 w-full max-w-[1200px] my-2">
         <div className="logo-container">
           <Link to="/">
             <img
@@ -18,7 +18,7 @@ function NavBar() {
           </Link>
         </div>
         <div className="flex justify-end ">
-          <Link className="nav-item " to="/about">
+          <Link className="nav-item" to="/about">
             關於我們
           </Link>
           <Link className="nav-item" to="/stores">
