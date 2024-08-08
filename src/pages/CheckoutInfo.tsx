@@ -48,6 +48,8 @@ function CheckoutInfo() {
     setAddressData(taiwanData);
   }, []);
 
+  console.log({ paymentInfo });
+
   return (
     <>
       <div className="flex justify-center my-8 ">
