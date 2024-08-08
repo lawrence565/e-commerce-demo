@@ -3,8 +3,9 @@ import decorations from "../assets/products/decorations.json";
 import furnitures from "../assets/products/furnitures.json";
 import coupons from "../assets/coupon.json";
 import couponList from "../assets/couponsList.json";
-// import CheckoutProcess from "../utils/CheckoutProcess.tsx";
+import CheckoutProcess from "../utils/checkoutProcess";
 import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "../style/CartStyle.scss";
 
 type Product = {
@@ -198,7 +199,7 @@ function ShopppingKart() {
 
   return (
     <div className="flex flex-col items-center justify-start my-8 w-full min-h-[70dvh]">
-      {/* <CheckoutProcess step={1} /> */}
+      {<CheckoutProcess step={1} />}
       <div className="flex justify-between my-8 max-w-[1200px] w-full">
         <div
           id="items"
@@ -271,9 +272,11 @@ function ShopppingKart() {
             </div>
           </div>
           <div className="w-3/5 h-fit bg-white p-2 ml-[20%] mt-4 text-end rounded-md flex justify-center">
-            <button className="w-full h-full font-bold text-midBrown">
-              結帳
-            </button>
+            <Link to="/checkout">
+              <button className="w-full h-full font-bold text-midBrown">
+                結帳
+              </button>
+            </Link>
           </div>
         </div>
       </div>

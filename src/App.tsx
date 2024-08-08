@@ -1,12 +1,13 @@
 import { Routes, Route, HashRouter } from "react-router-dom";
-import Layout from "./Layout.tsx";
-import Homepage from "./pages/Homepage.tsx";
-import Store from "./pages/Store.tsx";
-import Product from "./pages/Product.tsx";
-import About from "./pages/About.tsx";
-import Personal from "./pages/Personal.tsx";
-import ShopppingCart from "./pages/ShoppingCart.tsx";
-import ScrollToTop from "./utils/ScrollToTop.tsx";
+import Layout from "./Layout";
+import Homepage from "./pages/Homepage";
+import Store from "./pages/Store";
+import Product from "./pages/Product";
+import About from "./pages/About";
+import Personal from "./pages/Personal";
+import ShopppingCart from "./pages/ShoppingCart";
+import CheckoutInfo from "./pages/CheckoutInfo";
+import ScrollToTop from "./utils/ScrollToTop";
 import "./style/App.css";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
             </Route>
             <Route path="stores/:category/:productName" element={<Product />} />
             <Route path="shoppingcart" element={<ShopppingCart />} />
+            <Route path="checkout" element={<CheckoutInfo />} />
           </Route>
         </Routes>
       </HashRouter>
