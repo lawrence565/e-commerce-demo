@@ -1,8 +1,6 @@
-import gadgets from "../assets/products/gadgets.json";
-import furnitures from "../assets/products/furnitures.json";
-import decorations from "../assets/products/decorations.json";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { getCategory } from "../api/productApi";
 
 interface Product {
   title: string;
@@ -32,11 +30,17 @@ function StoreDisplay(props: { type: string }) {
   const [displayHeight, setdisplayHeight] = useState(500);
 
   if (props.type === "gadgets" || props.type === "index") {
-    products = gadgets;
+    getCategory("gadget").then((data) => {
+      products = data;
+    });
   } else if (props.type === "furnitures") {
-    products = furnitures;
+    getCategory("furniture").then((data) => {
+      products = data;
+    });
   } else if (props.type === "decorations") {
-    products = decorations;
+    getCategory("decoration").then((data) => {
+      products = data;
+    });
   }
 
   const display = products.map((product, index) => {
