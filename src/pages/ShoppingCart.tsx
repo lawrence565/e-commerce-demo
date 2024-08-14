@@ -1,25 +1,23 @@
-import gadgets from "../assets/products/gadgets.json";
-import decorations from "../assets/products/decorations.json";
-import furnitures from "../assets/products/furnitures.json";
 import coupons from "../assets/coupon.json";
 import couponList from "../assets/couponsList.json";
 import CheckoutProcess from "../utils/checkoutProcess";
+import { getSingleProduct } from "../api/productApi";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../style/CartStyle.scss";
 
-type Product = {
+interface Product {
   id: number;
-  name: string;
-  img: string;
-  price: number;
-  content: string;
   title: string;
-};
+  name: string;
+  category: string;
+  price: number;
+  discription: string;
+}
 
 type kartItem = {
   id: number;
-  type: string;
+  category: string;
   amount: number;
 };
 
@@ -44,14 +42,24 @@ function Card(props: {
   const item = props.item;
   const updateSubtotal = props.updateSubtotal;
   const [amount, setAmount] = useState(item.amount);
-  const data: { [key: string]: Product[] } = {
-    gadgets,
-    furnitures,
-    decorations,
-  };
+  const [product, setProduct] = useState<Product | null>(null);
 
-  const products = data[item.type];
-  let product = products?.find((product) => product.id === item.id);
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const fetchedProduct = await getSingleProduct(
+        item.category,
+        item.id
+      ).then((data) => {
+        return data;
+      });
+      if (fetchedProduct) {
+        setProduct(fetchedProduct);
+      }
+    };
+
+    fetchProduct();
+    console.log(product);
+  }, [item]);
 
   const add = () => {
     const newAmount = amount + 1;
@@ -65,12 +73,12 @@ function Card(props: {
 
   useEffect(() => {
     updateSubtotal(amount * (product?.price ?? 0));
-  }, [amount, product, updateSubtotal]);
+  }, [item, amount, updateSubtotal]);
 
   return (
     <div className="flex w-full border-b-2 border-midBrown min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] p-4">
       <div className="md:w-[10dvw] lg:w-[15dvw] h-fit aspect-4/3 overflow-hidden rounded-md">
-        <img src={product?.img} />
+        <img src={`/${product?.category}s/${product?.name}.webp`} />
       </div>
       <div className="flex justify-between items-center w-full min-w-[400px] md:max-w-[500px] lg:max-w-[800px] mr-8 ml-4 ">
         <div className="h-fit">
@@ -117,9 +125,9 @@ function Card(props: {
 
 function ShopppingKart() {
   const inKart: kartItem[] = [
-    { id: 2, type: "gadgets", amount: 3 },
-    { id: 3, type: "furnitures", amount: 2 },
-    { id: 6, type: "gadgets", amount: 5 },
+    { id: 2, category: "gadget", amount: 3 },
+    { id: 27, category: "furniture", amount: 2 },
+    { id: 6, category: "gadget", amount: 5 },
   ];
   const subtotals = useRef<number[]>(new Array(inKart.length).fill(0));
   const [subtotal, setSubtotal] = useState(0);

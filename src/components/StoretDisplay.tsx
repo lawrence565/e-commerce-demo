@@ -1,14 +1,14 @@
-import gadgets from "../assets/products/gadgets.json";
-import furnitures from "../assets/products/furnitures.json";
-import decorations from "../assets/products/decorations.json";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { getProducts } from "../api/productApi";
 
 interface Product {
+  id: number;
   title: string;
   name: string;
+  category: string;
   price: number;
-  img: string;
+  discription: string;
 }
 
 function paginate(
@@ -26,25 +26,17 @@ function paginate(
 }
 
 function StoreDisplay(props: { type: string }) {
-  let products: Product[] = [];
   const displayRef = useRef<HTMLDivElement>(null);
   const [pageIndex, setPageIndex] = useState(0);
   const [displayHeight, setdisplayHeight] = useState(500);
-
-  if (props.type === "gadgets" || props.type === "index") {
-    products = gadgets;
-  } else if (props.type === "furnitures") {
-    products = furnitures;
-  } else if (props.type === "decorations") {
-    products = decorations;
-  }
+  const [products, setProducts] = useState<Product[]>([]);
 
   const display = products.map((product, index) => {
     return (
       <div className="mx-6 my-2 cursor-pointer" key={index}>
         <Link to={`/stores/${props.type}/${product.name}`}>
           <div className="w-[12dvw] max-w-[250px] rounded-md overflow-hidden border-midBrown border-[5px] aspect-4/3">
-            <img src={product.img} />
+            <img src={`/${props.type}/${product.name}.webp`} />
           </div>
           <div className="">
             <h1 className="text-xl">{product.title}</h1>
@@ -58,6 +50,20 @@ function StoreDisplay(props: { type: string }) {
   const totalPages = display.length / 9 + 1;
 
   useEffect(() => {
+    (async () => {
+      let items;
+      if (props.type === "gadgets") {
+        items = await getProducts("gadget");
+      } else if (props.type === "furnitures") {
+        items = await getProducts("furniture");
+      } else if (props.type === "decorations") {
+        items = await getProducts("decoration");
+      }
+      setProducts(items ?? []);
+    })();
+  }, []);
+
+  useEffect(() => {
     const updateHeight = () => {
       if (displayRef.current) {
         setdisplayHeight(displayRef.current.getBoundingClientRect().height);
@@ -65,11 +71,12 @@ function StoreDisplay(props: { type: string }) {
     };
 
     updateHeight();
+
     window.addEventListener("resize", updateHeight);
     return () => {
       window.removeEventListener("resize", updateHeight);
     };
-  }, []);
+  }, [products]);
 
   useEffect(() => {
     setPageIndex(0);
