@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 function NavBar() {
   return (
-    <div className="flex justify-center border-b-2 border-[#a0937d]">
+    <div className="flex justify-center border-b-2 border-[#a0937d] h-[5dvh]">
       <div className="nav-bar grid grid-cols-2 w-full max-w-[1200px] my-2">
         <div className="logo-container">
           <Link to="/">

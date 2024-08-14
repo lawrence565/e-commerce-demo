@@ -1,4 +1,5 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
+import products from "../assets/products.json";
 
 type CartItem = {
   id: number;
@@ -6,39 +7,77 @@ type CartItem = {
 };
 
 interface Product {
+  id: number;
   title: string;
   name: string;
+  category: string;
   price: number;
-  img: string;
+  discription: string;
 }
 
-const baseURL = "http://localhost:8080";
-const apiPath = "/api";
+interface Responce {
+  status: string;
+  data: Product[];
+}
+
+const baseURL = process.env.VITE_APP_BASE_URL ?? "http://localhost:8080";
+const apiPath = process.env.VITE_APP_API_PATH ?? "api";
 
 const axiosInstance = axios.create({
   baseURL: `${baseURL}/${apiPath}/`,
 });
 
 // get product
-export const getProduct = async (category: string, product: string) => {
-  const data: Product[] = await axiosInstance
-    .get<Product[]>(`getProduct/${category}/${product}`)
-    .then((data) => {
-      return data.data;
+export const getSingleProduct = async (category: string, id: number) => {
+  try {
+    const data: Responce = await axiosInstance
+      .get<Responce>(`getProduct/${category}/${id}`)
+      .then((responce) => {
+        return responce.data;
+      });
+    return data.data[0];
+  } catch (e) {
+    let data: Product;
+    const responce = products.find((product) => {
+      product.id === id;
     });
-  return data;
+    if (responce) {
+      data = responce;
+      return data;
+    }
+  }
+};
+
+export const getProducts = async (category: string) => {
+  try {
+    const data: Responce = await axiosInstance
+      .get<Responce>(`getProduct/${category}`)
+      .then((data) => {
+        return data.data;
+      });
+    return data.data;
+  } catch (e) {
+    const data = products.filter((product) => {
+      product.category === category;
+    });
+    return data;
+  }
 };
 
 export const getCategory = async (category: string): Promise<Product[]> => {
   let resData: Product[] = [];
-  await axiosInstance
-    .get<Product[]>(`getProduct/${category}`)
-    .then((data) => {
-      resData = data.data;
-    })
-    .catch((e) => {
-      console.log(e);
-    });
+  try {
+    await axiosInstance
+      .get<Product[]>(`getProduct/${category}`)
+      .then((data) => {
+        resData = data.data;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  } catch (e) {
+    console.log("Here's something wrong " + e);
+  }
   return resData;
 };
 

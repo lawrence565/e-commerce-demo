@@ -1,0 +1,290 @@
+[
+  {
+    "id": 1,
+    "category": "gadget",
+    "name": "handmade_soap",
+    "discription": "天然成分製成的手工皂，具有各種香氣和形狀",
+    "price": 1599,
+    "title": "手工皂"
+  },
+  {
+    "id": 2,
+    "category": "gadget",
+    "name": "sugar_cane_cup",
+    "discription": "透過甘蔗纖維製造的生物可分解環保杯，降低造成環境污染",
+    "price": 1599,
+    "title": "甘蔗環保杯"
+  },
+  {
+    "id": 3,
+    "category": "gadget",
+    "name": "tableware",
+    "discription": "手工製作的陶瓷碗、盤、杯子，具有藝術感和實用性。",
+    "price": 1599,
+    "title": "陶瓷器皿"
+  },
+  {
+    "id": 4,
+    "category": "gadget",
+    "name": "leather_wallet",
+    "discription": "手工縫製的皮包、錢包、皮帶等，具有耐用性和獨特的設計。",
+    "price": 1599,
+    "title": "手工皮具"
+  },
+  {
+    "id": 5,
+    "category": "gadget",
+    "name": "handmade_candle",
+    "discription": "各種形狀和香味的手工蠟燭，常用天然大豆蠟製成。",
+    "price": 1599,
+    "title": "蠟燭"
+  },
+  {
+    "id": 6,
+    "category": "gadget",
+    "name": "notebook",
+    "discription": "獨特封面的手工筆記本，使用高質量紙張和手工裝訂。",
+    "price": 1599,
+    "title": "手作筆記本"
+  },
+  {
+    "id": 7,
+    "category": "gadget",
+    "name": "pillow",
+    "discription": "各種手工縫製的布藝品，如靠枕、布袋、手帕等。",
+    "price": 1599,
+    "title": "布藝品"
+  },
+  {
+    "id": 8,
+    "category": "gadget",
+    "name": "handmade_doll",
+    "discription": "使用布料或其他材料製作的可愛娃娃或動物玩偶。",
+    "price": 1599,
+    "title": "手工娃娃"
+  },
+  {
+    "id": 9,
+    "category": "gadget",
+    "name": "citrus_essential_oil",
+    "discription": "使用小農有機柑橘經過傳統工法萃取的芳香精油",
+    "price": 1599,
+    "title": "柑橘精油"
+  },
+  {
+    "id": 10,
+    "category": "gadget",
+    "name": "potted_plant",
+    "discription": "小巧可愛的植物盆栽，如多肉植物或空氣鳳梨。",
+    "price": 1599,
+    "title": "植物盆栽"
+  },
+  {
+    "id": 11,
+    "category": "gadget",
+    "name": "postcard",
+    "discription": "藝術家設計的明信片，印有手繪插畫或攝影作品。",
+    "price": 1599,
+    "title": "明信片"
+  },
+  {
+    "id": 12,
+    "category": "gadget",
+    "name": "handmade_cookie",
+    "discription": "手工製作的食品如餅乾、果醬、蜜餞，以有機小農生產的天然材料製成。",
+    "price": 1599,
+    "title": "手工餅乾"
+  },
+  {
+    "id": 13,
+    "category": "decoration",
+    "name": "Lacquer_Bowl",
+    "discription": "手工製作的漆器碗，精心手繪上傳統圖案，顏色鮮豔，適合作為裝飾品或盛放小物。",
+    "price": 1599,
+    "title": "手工漆器碗"
+  },
+  {
+    "id": 14,
+    "category": "decoration",
+    "name": "Embroidered_Wall_Hanging",
+    "discription": "使用傳統刺繡技術製作的壁掛，圖案靈感來自當地文化和傳統故事，適合裝飾客廳或臥室。",
+    "price": 1599,
+    "title": "刺繡壁掛"
+  },
+  {
+    "id": 15,
+    "category": "decoration",
+    "name": "Ceramic_Teapot",
+    "discription": "手工製作的陶瓷茶壺，設計靈感來自古代茶文化，具有濃厚的文化氛圍。",
+    "price": 1599,
+    "title": "陶瓷茶壺"
+  },
+  {
+    "id": 16,
+    "category": "decoration",
+    "name": "Bamboo_Lantern",
+    "discription": "由竹子手工編織而成的燈籠，設計優雅，適合作為戶外或室內的裝飾燈。",
+    "price": 1599,
+    "title": "竹編燈籠"
+  },
+  {
+    "id": 17,
+    "category": "decoration",
+    "name": "Indigo_dyed_Fabric",
+    "discription": "使用傳統藍染技術製作的布料，可以用來製作桌布、窗簾或掛毯，富有民族風情。",
+    "price": 1599,
+    "title": "藍染布"
+  },
+  {
+    "id": 18,
+    "category": "decoration",
+    "name": "Wooden_Carved_Mask",
+    "discription": "手工雕刻的木質面具，靈感來自於傳統儀式和節慶活動，適合用於牆面裝飾。",
+    "price": 1599,
+    "title": "木雕面具"
+  },
+  {
+    "id": 19,
+    "category": "decoration",
+    "name": "Hand_painted_Ceramic_Plate",
+    "discription": "手工製作並手繪的陶瓷盤，每個盤子都有獨特的設計和圖案，展示藝術和文化。",
+    "price": 1599,
+    "title": "手繪陶瓷盤"
+  },
+  {
+    "id": 20,
+    "category": "decoration",
+    "name": "Embroidered_Cushion",
+    "discription": "使用傳統刺繡技術製作的靠墊，圖案充滿文化元素，為家居增添溫暖。",
+    "price": 1599,
+    "title": "刺繡靠墊"
+  },
+  {
+    "id": 21,
+    "category": "decoration",
+    "name": "Stone_Carved_Bookends",
+    "discription": "由天然石材雕刻而成的書檔，具有古典美感，適合用於書架裝飾。",
+    "price": 1599,
+    "title": "石雕書檔"
+  },
+  {
+    "id": 22,
+    "category": "decoration",
+    "name": "Handwoven_Basket",
+    "discription": "由天然材料手工編織而成的籃子，設計簡約，適合用於存放雜物或裝飾。",
+    "price": 1599,
+    "title": "手工編織籃子"
+  },
+  {
+    "id": 23,
+    "category": "decoration",
+    "name": "Copper_Vase",
+    "discription": "手工製作的銅製花瓶，設計靈感來自傳統藝術，適合用於插花或裝飾。",
+    "price": 1599,
+    "title": "銅製花瓶"
+  },
+  {
+    "id": 24,
+    "category": "decoration",
+    "name": "Ethnic_Wall_Tapestry",
+    "discription": "使用傳統織布技術製作的壁毯，圖案充滿民族特色，適合用於大型牆面裝飾。",
+    "price": 1599,
+    "title": "民族風壁毯"
+  },
+  {
+    "id": 25,
+    "category": "furniture",
+    "name": "Wicker_Chair",
+    "discription": "由藤條手工編織而成的椅子，設計簡約且透氣，適合室內外使用。",
+    "price": 1599,
+    "title": "藤編椅"
+  },
+  {
+    "id": 26,
+    "category": "furniture",
+    "name": "Woodmade_Table",
+    "discription": "由高品質實木製作的小型茶几，具有自然的木紋和堅固的結構。",
+    "price": 1599,
+    "title": "實木茶几"
+  },
+  {
+    "id": 27,
+    "category": "furniture",
+    "name": "Handmade_Bookshelf",
+    "discription": "精心手工製作的書架，通常由再生木材或金屬製成，設計獨特。",
+    "price": 1599,
+    "title": "手工書架"
+  },
+  {
+    "id": 28,
+    "category": "furniture",
+    "name": "Fabric_Sofa",
+    "discription": "使用高品質布料手工製作的沙發，提供舒適的坐感和多種顏色選擇。",
+    "price": 1599,
+    "title": "布藝沙發"
+  },
+  {
+    "id": 29,
+    "category": "furniture",
+    "name": "Wooden_Coat_Rack",
+    "discription": "由天然木材製作的衣架，設計簡約，適合掛放衣物和帽子。",
+    "price": 1599,
+    "title": "木製衣架"
+  },
+  {
+    "id": 30,
+    "category": "furniture",
+    "name": "Woven_Rug",
+    "discription": "由天然纖維手工編織而成的地毯，具有獨特的圖案和溫暖的質感。",
+    "price": 1599,
+    "title": "編織地毯"
+  },
+  {
+    "id": 31,
+    "category": "furniture",
+    "name": "Handmade_Lampshade",
+    "discription": "使用天然材料如紙、布或藤條製作的燈罩，設計獨特且富有藝術感。",
+    "price": 1599,
+    "title": "手工燈罩"
+  },
+  {
+    "id": 32,
+    "category": "furniture",
+    "name": "Vintage_Desk",
+    "discription": "具有復古設計的書桌，通常使用再生木材和古銅色金屬配件。",
+    "price": 1599,
+    "title": "復古書桌"
+  },
+  {
+    "id": 33,
+    "category": "furniture",
+    "name": "Wooden_Wall_Hooks",
+    "discription": "由天然木材製作的掛鉤，設計簡約，既實用又具有裝飾性。",
+    "price": 1599,
+    "title": "木製掛鉤"
+  },
+  {
+    "id": 34,
+    "category": "furniture",
+    "name": "Wicker_Storage_Basket",
+    "discription": "由藤條編織而成的收納籃，適合存放各種物品，且具有裝飾性。",
+    "price": 1599,
+    "title": "藤編收納籃"
+  },
+  {
+    "id": 35,
+    "category": "furniture",
+    "name": "Handcrafted_Desk_Lamp",
+    "discription": "使用木材和金屬手工製作的書桌燈，設計獨特且具有工業風格。",
+    "price": 1599,
+    "title": "手工書桌燈"
+  },
+  {
+    "id": 36,
+    "category": "furniture",
+    "name": "Wooden_Side_Table",
+    "discription": "由實木製作的小型邊桌，設計簡約，適合作為床頭櫃或茶几。",
+    "price": 1599,
+    "title": "木製小櫃"
+  }
+]

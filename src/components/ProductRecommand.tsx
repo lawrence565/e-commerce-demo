@@ -1,17 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import gadgets from "../assets/products/gadgets.json";
-import furnitures from "../assets/products/furnitures.json";
-import decorations from "../assets/products/decorations.json";
+import { getProducts } from "../api/productApi";
 
-type Product = {
+interface Product {
   id: number;
   title: string;
   name: string;
-  content: string;
-  img: string;
+  category: string;
   price: number;
-};
+  discription: string;
+}
 
 function ProductRecomanned(props: {
   title: string;
@@ -20,23 +18,24 @@ function ProductRecomanned(props: {
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [width, setWidth] = useState(300);
+  const [products, setProducts] = useState<Product[]>([]);
   const productCarouselRef = useRef<HTMLDivElement>(null);
-  const cardPerPage: number = 4;
-  const totalPage: number = gadgets.length / cardPerPage;
-  let products: Product[] = [];
-
   useEffect(() => {
-    const updateWidth = () => {
-      if (productCarouselRef.current) {
-        setWidth(productCarouselRef.current.getBoundingClientRect().width * 4);
+    (async () => {
+      let items;
+      if (props.items === "gadgets") {
+        items = await getProducts("gadget");
+      } else if (props.items === "furnitures") {
+        items = await getProducts("furniture");
+      } else if (props.items === "decorations") {
+        items = await getProducts("decoration");
       }
-    };
-    updateWidth();
-    window.addEventListener("resize", updateWidth);
-    return () => {
-      window.removeEventListener("resize", updateWidth);
-    };
-  }, []);
+      setProducts(items ?? []);
+    })();
+  }, [props.items]);
+
+  const cardPerPage: number = 4;
+  const totalPage: number = Math.ceil(products.length / cardPerPage);
 
   const previous = () => {
     setCurrentIndex(
@@ -50,13 +49,19 @@ function ProductRecomanned(props: {
 
   const scrollToTop = () => {};
 
-  if (props.items === "gadgets") {
-    products = gadgets;
-  } else if (props.items === "furnitures") {
-    products = furnitures;
-  } else if (props.items === "decorations") {
-    products = decorations;
-  }
+  useEffect(() => {
+    const updateWidth = () => {
+      if (productCarouselRef.current) {
+        setWidth(productCarouselRef.current.getBoundingClientRect().width * 4);
+      }
+    };
+    updateWidth();
+
+    window.addEventListener("resize", updateWidth);
+    return () => {
+      window.removeEventListener("resize", updateWidth);
+    };
+  }, [products]);
 
   return (
     <div className="text-midBrown my-4">
@@ -79,11 +84,14 @@ function ProductRecomanned(props: {
                   <div className="product-card" ref={productCarouselRef}>
                     <div className="product lg:w-[250px] m-2 h-fit">
                       <div className="product-img-container">
-                        <img className="rounded-lg" src={product.img} />
+                        <img
+                          className="rounded-lg"
+                          src={`/${props.items}/${product.name}.webp`}
+                        />
                       </div>
                       <h3 className="product-title text-xl">{product.title}</h3>
                       <p className="product-content text-sm">
-                        {product.content}
+                        {product.discription}
                       </p>
                     </div>
                   </div>
