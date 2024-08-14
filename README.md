@@ -2,7 +2,7 @@
 
 Demo 網址：https://lawrence565.github.io/e-commerce-demo/
 
-![e-commerce-demo](https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F596f6b2d-210d-48f7-81d5-35f35637581e%2F05dc48bd-33d9-4e09-96c7-2e6917ad50fb%2FFooter.png?table=block&id=3a131c31-7337-453c-b3d1-31c038fdacf8&spaceId=596f6b2d-210d-48f7-81d5-35f35637581e&width=2000&userId=3a3881eb-2001-47bc-83d4-953775e76061&cache=v2)
+![e-commerce-demo](/public/Cover.png)
 
 ## 專案簡介
 
