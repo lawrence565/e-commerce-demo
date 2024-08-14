@@ -20,8 +20,8 @@ interface Responce {
   data: Product[];
 }
 
-const baseURL = process.env.VITE_APP_BASE_URL ?? "http://localhost:8080";
-const apiPath = process.env.VITE_APP_API_PATH ?? "api";
+const baseURL = "http://localhost:8080";
+const apiPath = "api";
 
 const axiosInstance = axios.create({
   baseURL: `${baseURL}/${apiPath}/`,
@@ -39,7 +39,7 @@ export const getSingleProduct = async (category: string, id: number) => {
   } catch (e) {
     let data: Product;
     const responce = products.find((product) => {
-      product.id === id;
+      return product.id === id;
     });
     if (responce) {
       data = responce;
@@ -55,41 +55,18 @@ export const getProducts = async (category: string) => {
       .then((data) => {
         return data.data;
       });
+    console.log("Success fetching");
+
     return data.data;
   } catch (e) {
-    const data = products.filter((product) => {
-      product.category === category;
+    console.log("Start loading local file");
+    const data: Product[] = products.filter((product) => {
+      return product.category === category;
     });
+    console.log(data);
+
     return data;
   }
-};
-
-export const getCategory = async (category: string): Promise<Product[]> => {
-  let resData: Product[] = [];
-  try {
-    await axiosInstance
-      .get<Product[]>(`getProduct/${category}`)
-      .then((data) => {
-        resData = data.data;
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  } catch (e) {
-    console.log("Here's something wrong " + e);
-  }
-  return resData;
-};
-
-export const getAllProduct = async () => {
-  await axiosInstance
-    .get<Product[]>(`getProduct/all`)
-    .then((data) => {
-      return data.data;
-    })
-    .catch((e) => {
-      console.log(e);
-    });
 };
 
 // Cart

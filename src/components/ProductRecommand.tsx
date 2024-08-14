@@ -30,6 +30,8 @@ function ProductRecomanned(props: {
       } else if (props.items === "decorations") {
         items = await getProducts("decoration");
       }
+      console.log(items);
+
       setProducts(items ?? []);
     })();
   }, [props.items]);
