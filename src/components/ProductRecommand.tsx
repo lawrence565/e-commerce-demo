@@ -86,7 +86,7 @@ function ProductRecomanned(props: {
                       <div className="product-img-container">
                         <img
                           className="rounded-lg"
-                          src={`/${product.category}s/${product.name}.webp`}
+                          src={`./${product.category}s/${product.name}.webp`}
                         />
                       </div>
                       <h3 className="product-title text-xl">{product.title}</h3>
