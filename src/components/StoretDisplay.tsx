@@ -34,7 +34,7 @@ function StoreDisplay(props: { type: string }) {
   const display = products.map((product, index) => {
     return (
       <div className="mx-6 my-2 cursor-pointer" key={index}>
-        <Link to={`/stores/${props.type}/${product.name}`}>
+        <Link to={`/stores/${product.category}/${product.id}`}>
           <div className="w-[12dvw] max-w-[250px] rounded-md overflow-hidden border-midBrown border-[5px] aspect-4/3">
             <img src={`/${props.type}/${product.name}.webp`} />
           </div>

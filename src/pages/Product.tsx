@@ -1,25 +1,32 @@
-import { useParams } from "react-router-dom";
-import { useState } from "react";
-import gadgets from "../assets/products/gadgets.json";
-import furnitures from "../assets/products/furnitures.json";
-import decorations from "../assets/products/decorations.json";
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getSingleProduct, postCart } from "../api/productApi";
+import products from "../assets/products.json";
 
-type Product = {
+interface Product {
+  id: number;
   title: string;
   name: string;
-  content: string;
-  img: string;
+  category: string;
   price: number;
+  discription: string;
+}
+
+type CartItem = {
+  id: number;
+  quantity: number;
 };
 
 function ProductPage() {
-  const { category, productName } = useParams<{
+  const { category, itemId } = useParams<{
     category: string;
-    productName: string;
+    itemId: string;
   }>();
   const [amount, setAmount] = useState(1);
+  const [product, setProduct] = useState<Product>();
+  const navigate = useNavigate();
 
-  if (!category || !productName) {
+  if (!category || !itemId) {
     return (
       <div className="h-[100dvh] w-[100dvw] font-bold bg-midBrown text-white">
         Invalid product or category
@@ -27,14 +34,49 @@ function ProductPage() {
     );
   }
 
-  const data: { [key: string]: Product[] } = {
-    gadgets,
-    furnitures,
-    decorations,
+  useEffect(() => {
+    (async () => {
+      try {
+        if (itemId) {
+          const data = await getSingleProduct(category, parseInt(itemId));
+          console.log(data);
+
+          if (data) {
+            setProduct(data);
+          }
+        }
+      } catch (e) {
+        console.log("Here's some problem: " + e);
+        const data = products.find((product) => {
+          return product.id === parseInt(itemId);
+        });
+        setProduct(data);
+      }
+    })();
+  }, [category, itemId]);
+
+  const addToCart = async () => {
+    if (product) {
+      const cartItem: CartItem = { id: product.id, quantity: amount };
+      try {
+        await postCart(cartItem);
+      } catch (e) {
+        console.log("Here's some problem: " + e);
+      }
+    }
   };
 
-  const products = data[category];
-  let product = products?.find((item) => item.name === productName);
+  const buyNow = async () => {
+    if (product) {
+      const cartItem: CartItem = { id: product.id, quantity: amount };
+      try {
+        await postCart(cartItem);
+        navigate("/shoppingcart");
+      } catch (e) {
+        console.log("Here's some problem: " + e);
+      }
+    }
+  };
 
   const add = () => {
     setAmount(amount + 1);
@@ -51,14 +93,14 @@ function ProductPage() {
           id="product-img"
           className="aspect-square h-[40dvh] rounded-2xl overflow-hidden mx-8 "
         >
-          <img src={`${product?.img}`} />
+          <img src={`/${product?.category}s/${product?.name}.webp`} />
         </div>
         <div id="product-desc" className="mx-8 h-[40dvh] flex flex-col">
           <div className="flex-[4] h-full">
             <h1 className="text-4xl mx-4 mb-6 font-bold">{product?.title}</h1>
             <hr className="text-midBrown" />
             <h3 className="text-2xl font-semibold m-4">商品簡介：</h3>
-            <p className="m-4">{product?.content}</p>
+            <p className="m-4">{product?.discription}</p>
           </div>
           <div className="font-bold text-4xl mr-8 mb-8 text-end">{`$ ${product?.price}`}</div>
           <div
@@ -101,10 +143,16 @@ function ProductPage() {
               </div>
             </div>
             <div id="pay-or-kart" className="flex text-lg font-semibold h-fit">
-              <button className="bg-midBrown text-white px-4 py-2 mx-2 rounded-md">
+              <button
+                className="bg-midBrown text-white px-4 py-2 mx-2 rounded-md"
+                onClick={addToCart}
+              >
                 加入購物車
               </button>
-              <button className="bg-white text-midBrown px-4 py-2 mx-2 rounded-md border-midBrown border-[2px] ">
+              <button
+                className="bg-white text-midBrown px-4 py-2 mx-2 rounded-md border-midBrown border-[2px]"
+                onClick={buyNow}
+              >
                 立即購買
               </button>
             </div>
@@ -117,7 +165,7 @@ function ProductPage() {
           <h1 className="text-xl font-bold">商品相關資訊</h1>
           <div className="py-2">
             <h3 className="text-lg font-semibold">商品數量</h3>
-            <p>每個產品內含一張木雕面具</p>
+            <p>每個產品內含一份</p>
           </div>
         </div>
         <div id="buyer-info" className="w-[40dvh] mx-4">
