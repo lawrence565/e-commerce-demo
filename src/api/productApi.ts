@@ -55,16 +55,11 @@ export const getProducts = async (category: string) => {
       .then((data) => {
         return data.data;
       });
-    console.log("Success fetching");
-
     return data.data;
   } catch (e) {
-    console.log("Start loading local file");
     const data: Product[] = products.filter((product) => {
       return product.category === category;
     });
-    console.log(data);
-
     return data;
   }
 };
