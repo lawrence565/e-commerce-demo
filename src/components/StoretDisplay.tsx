@@ -61,7 +61,7 @@ function StoreDisplay(props: { type: string }) {
       }
       setProducts(items ?? []);
     })();
-  }, []);
+  }, [props.type]);
 
   useEffect(() => {
     const updateHeight = () => {
