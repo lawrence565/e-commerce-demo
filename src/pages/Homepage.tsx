@@ -51,7 +51,7 @@ function Homepage(): JSX.Element {
         </div>
 
         <div className="customer-review bg-midBrown w-full my-8">
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center max-w-[1200px]:">
             <ReviewCarousel key="0" />
           </div>
         </div>

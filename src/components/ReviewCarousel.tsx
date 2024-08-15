@@ -53,7 +53,7 @@ function ReviewCarousel() {
               <div
                 key={index}
                 className="customer-review my-8 flex items-center justify-center text-white"
-                style={{ width: "60vw", height: "20dvh" }}
+                style={{ width: "50vw", height: "20dvh" }}
                 ref={reviewCarouselRef}
               >
                 <div className="customer-img-container w-[100px] h-[100px] rounded-[50%] border-midBrown overflow-hidden object-cover mx-8 flex-2">

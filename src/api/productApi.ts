@@ -35,6 +35,8 @@ export const getSingleProduct = async (category: string, id: number) => {
       .then((responce) => {
         return responce.data;
       });
+    console.log(data);
+
     return data.data[0];
   } catch (e) {
     let data: Product;
@@ -69,7 +71,7 @@ export const getCart = async () => {
   return await axiosInstance.get(`cart`);
 };
 
-export const postCart = async (data: CartItem[]) => {
+export const postCart = async (data: CartItem) => {
   return await axiosInstance.post(`cart`, data);
 };
 
