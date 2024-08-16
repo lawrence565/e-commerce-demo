@@ -1,7 +1,7 @@
 import coupons from "../assets/coupon.json";
 import couponList from "../assets/couponsList.json";
 import CheckoutProcess from "../utils/checkoutProcess";
-import { getSingleProduct } from "../api/productApi";
+import { getSingleProduct, getCart } from "../api/productApi";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../style/CartStyle.scss";
@@ -15,10 +15,10 @@ interface Product {
   discription: string;
 }
 
-type kartItem = {
-  id: number;
+type CartItem = {
+  productId: number;
   category: string;
-  amount: number;
+  quantity: number;
 };
 
 type Coupon = {
@@ -36,19 +36,19 @@ type Coupon = {
 // };
 
 function Card(props: {
-  item: kartItem;
+  item: CartItem;
   updateSubtotal: (subtotal: number) => void;
 }): JSX.Element {
   const item = props.item;
   const updateSubtotal = props.updateSubtotal;
-  const [amount, setAmount] = useState(item.amount);
+  const [amount, setAmount] = useState(item.quantity);
   const [product, setProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
       const fetchedProduct = await getSingleProduct(
         item.category,
-        item.id
+        item.productId
       ).then((data) => {
         return data;
       });
@@ -56,9 +56,7 @@ function Card(props: {
         setProduct(fetchedProduct);
       }
     };
-
     fetchProduct();
-    console.log(product);
   }, [item]);
 
   const add = () => {
@@ -73,7 +71,7 @@ function Card(props: {
 
   useEffect(() => {
     updateSubtotal(amount * (product?.price ?? 0));
-  }, [item, amount, updateSubtotal]);
+  }, [item, amount, product, updateSubtotal]);
 
   return (
     <div className="flex w-full border-b-2 border-midBrown min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] p-4">
@@ -124,12 +122,12 @@ function Card(props: {
 }
 
 function ShopppingKart() {
-  const inKart: kartItem[] = [
-    { id: 2, category: "gadget", amount: 3 },
-    { id: 27, category: "furniture", amount: 2 },
-    { id: 6, category: "gadget", amount: 5 },
+  const defaultCartItem: CartItem[] = [
+    { productId: 2, category: "gadget", quantity: 3 },
+    { productId: 27, category: "furniture", quantity: 2 },
+    { productId: 6, category: "gadget", quantity: 5 },
   ];
-  const subtotals = useRef<number[]>(new Array(inKart.length).fill(0));
+  const subtotals = useRef<number[]>(new Array(defaultCartItem.length).fill(0));
   const [subtotal, setSubtotal] = useState(0);
   const [applyCouponCode, setApplyCouponCode] =
     useState<string>("請輸入優惠碼");
@@ -143,6 +141,7 @@ function ShopppingKart() {
       applied: false,
     }))
   );
+  const [CartItem, setCartitem] = useState<CartItem[]>([]);
 
   useEffect(() => {
     if (subtotal > 5000) {
@@ -151,6 +150,19 @@ function ShopppingKart() {
       setDiscount(0);
     }
   }, [subtotal]);
+
+  useEffect(() => {
+    const getItem = async () => {
+      try {
+        const cart: CartItem[] = await getCart();
+
+        setCartitem(cart);
+      } catch (e) {
+        setCartitem(defaultCartItem);
+      }
+    };
+    getItem();
+  }, []);
 
   const updateSubtotal = (index: number, newSubtotal: number) => {
     subtotals.current[index] = newSubtotal;
@@ -214,9 +226,9 @@ function ShopppingKart() {
           className="flex-[3] ml-4 min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] flex flex-col justify-center mr-8"
         >
           <h1 className="text-4xl font-bold text-midBrown mb-8">購買品項</h1>
-          {inKart.map((item, index) => (
+          {CartItem.map((item, index) => (
             <Card
-              key={item.id}
+              key={item.productId}
               item={item}
               updateSubtotal={(newSubtotal) =>
                 updateSubtotal(index, newSubtotal)

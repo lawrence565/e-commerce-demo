@@ -13,7 +13,8 @@ interface Product {
 }
 
 type CartItem = {
-  id: number;
+  productId: number;
+  category: string;
   quantity: number;
 };
 
@@ -39,7 +40,6 @@ function ProductPage() {
       try {
         if (itemId) {
           const data = await getSingleProduct(category, parseInt(itemId));
-          console.log(data);
 
           if (data) {
             setProduct(data);
@@ -57,7 +57,11 @@ function ProductPage() {
 
   const addToCart = async () => {
     if (product) {
-      const cartItem: CartItem = { id: product.id, quantity: amount };
+      const cartItem: CartItem = {
+        productId: product.id,
+        category: product.category,
+        quantity: amount,
+      };
       try {
         await postCart(cartItem);
       } catch (e) {
@@ -68,7 +72,11 @@ function ProductPage() {
 
   const buyNow = async () => {
     if (product) {
-      const cartItem: CartItem = { id: product.id, quantity: amount };
+      const cartItem: CartItem = {
+        productId: product.id,
+        category: product.category,
+        quantity: amount,
+      };
       try {
         await postCart(cartItem);
         navigate("/shoppingcart");

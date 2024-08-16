@@ -22,6 +22,7 @@ concurrency:
 
 env:
   VITE_BASE_URL: "/e-commerce-demo"
+  VITE_IMAGE_PATH: "./"
 
 jobs:
   # 单次部署的工作描述

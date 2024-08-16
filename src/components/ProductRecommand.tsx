@@ -80,7 +80,10 @@ function ProductRecomanned(props: {
           >
             {products.map((product, index: number) => {
               return (
-                <Link to={`${product.category}/${product.id}`} key={index}>
+                <Link
+                  to={`stores/${product.category}/${product.id}`}
+                  key={index}
+                >
                   <div className="product-card" ref={productCarouselRef}>
                     <div className="product lg:w-[250px] m-2 h-fit">
                       <div className="product-img-container">

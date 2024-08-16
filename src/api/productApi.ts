@@ -2,7 +2,8 @@ import axios from "axios";
 import products from "../assets/products.json";
 
 type CartItem = {
-  id: number;
+  productId: number;
+  category: string;
   quantity: number;
 };
 
@@ -35,7 +36,6 @@ export const getSingleProduct = async (category: string, id: number) => {
       .then((responce) => {
         return responce.data;
       });
-    console.log(data);
 
     return data.data[0];
   } catch (e) {
@@ -68,11 +68,12 @@ export const getProducts = async (category: string) => {
 
 // Cart
 export const getCart = async () => {
-  return await axiosInstance.get(`cart`);
+  const responce = await axiosInstance.get(`cart`, { withCredentials: true });
+  return responce.data.data;
 };
 
-export const postCart = async (data: CartItem) => {
-  return await axiosInstance.post(`cart`, data);
+export const postCart = async (cartitem: CartItem) => {
+  return await axiosInstance.post(`cart`, cartitem, { withCredentials: true });
 };
 
 export const deleteCartItem = async (id: number) => {
