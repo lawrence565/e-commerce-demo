@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getSingleProduct, postCart } from "../api/productApi";
 import products from "../assets/products.json";
+import { useCookies } from "react-cookie";
 
 interface Product {
   id: number;
@@ -25,6 +26,7 @@ function ProductPage() {
   }>();
   const [amount, setAmount] = useState(1);
   const [product, setProduct] = useState<Product>();
+  const [cookie, setCookie] = useCookies(["cart"]);
   const navigate = useNavigate();
 
   if (!category || !itemId) {
@@ -35,12 +37,17 @@ function ProductPage() {
     );
   }
 
+  // useEffect(() => {
+  //   if (cookie.cart === undefined) {
+  //     setCookie("cart", JSON.stringify([""]));
+  //   }
+  // }, []);
+
   useEffect(() => {
     (async () => {
       try {
         if (itemId) {
           const data = await getSingleProduct(category, parseInt(itemId));
-
           if (data) {
             setProduct(data);
           }
@@ -56,6 +63,8 @@ function ProductPage() {
   }, [category, itemId]);
 
   const addToCart = async () => {
+    console.log("Adding" + cookie.cart);
+
     if (product) {
       const cartItem: CartItem = {
         productId: product.id,
@@ -66,6 +75,30 @@ function ProductPage() {
         await postCart(cartItem);
       } catch (e) {
         console.log("Here's some problem: " + e);
+      } finally {
+        if (cookie.cart === undefined) {
+          setCookie("cart", [cartItem]);
+        } else if (cookie.cart.length != 0) {
+          const cart: CartItem[] = cookie.cart;
+          console.log(cart);
+          const index = cart.findIndex(
+            (product: { productId: number }) =>
+              product.productId === cartItem.productId
+          );
+          if (index === -1) {
+            if (JSON.stringify(cart[0]) === "") {
+              setCookie("cart", [cart]);
+              console.log(cart);
+            } else {
+              cart.push(cartItem);
+              setCookie("cart", cart);
+            }
+          } else {
+            cart[index].quantity += cartItem.quantity;
+            setCookie("cart", cart);
+          }
+        }
+        console.log(cookie.cart);
       }
     }
   };
@@ -113,7 +146,7 @@ function ProductPage() {
           <div className="font-bold text-4xl mr-8 mb-8 text-end">{`$ ${product?.price}`}</div>
           <div
             id="amount&buy"
-            className="flex-1 w-[40dvh] flex items-cneter justify-between mb-4"
+            className="flex-1 min-w-[40dvh] flex items-cneter justify-between mb-4"
           >
             <div className="mx-4">
               <div

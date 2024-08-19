@@ -85,7 +85,7 @@ function ProductRecomanned(props: {
                   key={index}
                 >
                   <div className="product-card" ref={productCarouselRef}>
-                    <div className="product lg:w-[250px] m-2 h-fit">
+                    <div className="product lg:w-[250px] md:w-[150px] m-2 h-fit">
                       <div className="product-img-container">
                         <img
                           className="rounded-lg"

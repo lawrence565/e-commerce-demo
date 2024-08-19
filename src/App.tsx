@@ -8,6 +8,7 @@ import Personal from "./pages/Personal";
 import ShopppingCart from "./pages/ShoppingCart";
 import CheckoutInfo from "./pages/CheckoutInfo";
 import ScrollToTop from "./utils/ScrollToTop";
+import { CookiesProvider } from "react-cookie";
 import "./style/App.css";
 
 function App() {
@@ -15,19 +16,21 @@ function App() {
     <>
       <HashRouter>
         <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Homepage />} />
-            <Route path="about" element={<About />} />
-            <Route path="personal" element={<Personal />} />
-            <Route path="stores" element={<Store />}>
-              <Route path=":category" element={<Store />} />
+        <CookiesProvider>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Homepage />} />
+              <Route path="about" element={<About />} />
+              <Route path="personal" element={<Personal />} />
+              <Route path="stores" element={<Store />}>
+                <Route path=":category" element={<Store />} />
+              </Route>
+              <Route path="stores/:category/:itemId" element={<Product />} />
+              <Route path="shoppingcart" element={<ShopppingCart />} />
+              <Route path="checkout" element={<CheckoutInfo />} />
             </Route>
-            <Route path="stores/:category/:itemId" element={<Product />} />
-            <Route path="shoppingcart" element={<ShopppingCart />} />
-            <Route path="checkout" element={<CheckoutInfo />} />
-          </Route>
-        </Routes>
+          </Routes>
+        </CookiesProvider>
       </HashRouter>
     </>
   );

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { CreditCard } from "../components/PayMethod";
+import CheckoutProcess from "../utils/checkoutProcess";
 import taiwanData from "../assets/taiwan.json";
 import "../style/CheckInfo.scss";
 
@@ -52,8 +53,9 @@ function CheckoutInfo() {
 
   return (
     <>
-      <div className="flex justify-center my-8 ">
-        <div className="max-w-[1200px] w-full flex">
+      <div className="flex flex-col items-center my-8 ">
+        {<CheckoutProcess step={2} />}
+        <div className="max-w-[1200px] w-full flex my-4">
           <div
             id="CheckoutInfo"
             className="flex-[3] flex flex-col min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] mr-16"

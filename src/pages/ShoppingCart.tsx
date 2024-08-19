@@ -1,10 +1,12 @@
 import coupons from "../assets/coupon.json";
 import couponList from "../assets/couponsList.json";
 import CheckoutProcess from "../utils/checkoutProcess";
-import { getSingleProduct, getCart } from "../api/productApi";
+import trashCan from "/trash-can.svg";
+import { getSingleProduct, getCart, deleteCartItem } from "../api/productApi";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../style/CartStyle.scss";
+import { useCookies } from "react-cookie";
 
 interface Product {
   id: number;
@@ -37,88 +39,147 @@ type Coupon = {
 
 function Card(props: {
   item: CartItem;
+  getItem: () => void;
   updateSubtotal: (subtotal: number) => void;
-}): JSX.Element {
+}): JSX.Element | undefined {
   const item = props.item;
   const updateSubtotal = props.updateSubtotal;
+  const getItem = props.getItem;
   const [amount, setAmount] = useState(item.quantity);
   const [product, setProduct] = useState<Product | null>(null);
+  const [cookie, setCookie] = useCookies(["cart"]);
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const fetchedProduct = await getSingleProduct(
-        item.category,
-        item.productId
-      ).then((data) => {
-        return data;
-      });
-      if (fetchedProduct) {
-        setProduct(fetchedProduct);
+      try {
+        const fetchedProduct = await getSingleProduct(
+          item.category,
+          item.productId
+        ).then((data) => {
+          return data;
+        });
+        if (fetchedProduct) {
+          setProduct(fetchedProduct);
+        }
+      } catch (e) {
+        console.log(e);
       }
     };
     fetchProduct();
   }, [item]);
 
-  const add = () => {
-    const newAmount = amount + 1;
-    setAmount(newAmount);
-  };
-
-  const minus = () => {
-    const newAmount = amount - 1;
-    setAmount(newAmount);
-  };
-
   useEffect(() => {
     updateSubtotal(amount * (product?.price ?? 0));
   }, [item, amount, product, updateSubtotal]);
 
-  return (
-    <div className="flex w-full border-b-2 border-midBrown min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] p-4">
-      <div className="md:w-[10dvw] lg:w-[15dvw] h-fit aspect-4/3 overflow-hidden rounded-md">
-        <img src={`./${product?.category}s/${product?.name}.webp`} />
-      </div>
-      <div className="flex justify-between items-center w-full min-w-[400px] md:max-w-[500px] lg:max-w-[800px] mr-8 ml-4 ">
-        <div className="h-fit">
-          <h3 className="font-semibold text-2xl mb-4">{product?.title}</h3>
-          <p className="text-lg">{`$ ${product?.price}`}</p>
+  function add(id: number) {
+    const newAmount = amount + 1;
+    setAmount(newAmount);
+    const cart = cookie.cart;
+    const index = cart.findIndex(
+      (product: CartItem) => product.productId === id
+    );
+    if (index != -1) {
+      cart[index].quantity += 1;
+      setCookie("cart", cart);
+    }
+  }
+
+  function minus(id: number) {
+    const newAmount = amount - 1;
+    setAmount(newAmount);
+    const cart = cookie.cart;
+    const index = cart.findIndex(
+      (product: CartItem) => product.productId === id
+    );
+    if (index != -1) {
+      cart[index].quantity -= 1;
+      setCookie("cart", cart);
+    }
+  }
+
+  const deleteItem = async (id: number, name: string) => {
+    try {
+      await deleteCartItem(id);
+      getItem();
+      alert(`${name}已從購物車移除`);
+    } catch (error) {
+      console.log("deleting item " + name);
+      const cart = cookie.cart;
+      try {
+        const deleteIndex = cart.findIndex(
+          (item: CartItem) => item.productId === id
+        );
+        if (deleteIndex != -1) {
+          console.log("Can't find target");
+          cart.splice(deleteIndex, 1);
+        }
+        getItem();
+        setCookie("cart", cart);
+      } catch (e) {
+        console.error(`移除${name}商品失敗`, error);
+      }
+    }
+  };
+
+  if (product != null)
+    return (
+      <div className="flex w-full border-b-2 border-midBrown min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] p-4">
+        <div className="md:w-[10dvw] lg:w-[15dvw] h-fit aspect-4/3 overflow-hidden rounded-md">
+          <img src={`./${product.category}s/${product.name}.webp`} />
         </div>
-        <div className="h-fit">
-          <div
-            id="amount"
-            className="w-fit ml-4 flex rounded-md border-[1px] border-midBrown"
-          >
-            <div className="w-8 flex justify-center items-centerp-2 text-midBrown cursor-pointer">
-              <button
-                onClick={minus}
-                disabled={amount === 1}
-                className="h-full w-full"
-              >
-                &#10094;
-              </button>
+        <div className="flex justify-between items-center w-full min-w-[400px] md:max-w-[500px] lg:max-w-[800px] mr-8 ml-4 ">
+          <div className="h-fit">
+            <h3 className="font-semibold text-2xl mb-4">{product.title}</h3>
+            <p className="text-lg">{`$ ${product.price}`}</p>
+          </div>
+          <div className="h-fit flex items-center justify-center">
+            <div
+              id="amount"
+              className="w-fit ml-4 flex rounded-md border-[1px] border-midBrown"
+            >
+              <div className="w-8 flex justify-center items-centerp-2 text-midBrown cursor-pointer">
+                <button
+                  onClick={() => minus(product.id)}
+                  disabled={amount === 1}
+                  className="h-full w-full"
+                >
+                  &#10094;
+                </button>
+              </div>
+              <div className="w-12 flex justify-center items-center p-2 bg-midBrown text-white">
+                {amount}
+              </div>
+              <div className="w-8 flex justify-center items-centerp-2 text-midBrown cursor-pointer">
+                <button
+                  onClick={() => add(product.id)}
+                  disabled={amount === 20}
+                  className="h-full w-full"
+                >
+                  &#10095;
+                </button>
+              </div>
             </div>
-            <div className="w-12 flex justify-center items-center p-2 bg-midBrown text-white">
-              {amount}
-            </div>
-            <div className="w-8 flex justify-center items-centerp-2 text-midBrown cursor-pointer">
-              <button
-                onClick={add}
-                disabled={amount === 20}
-                className="h-full w-full"
-              >
-                &#10095;
-              </button>
+
+            <button
+              id="delete"
+              className="h-full"
+              onClick={() => deleteItem(product.id, product.title)}
+            >
+              <img className="h-[2rem] ml-2" src={trashCan} />
+            </button>
+
+            <div
+              className={`text-red-500 text-sm ${
+                amount === 20 ? "" : "hidden"
+              }`}
+            >
+              已達到購買上限
             </div>
           </div>
-          <div
-            className={`text-red-500 text-sm ${amount === 20 ? "" : "hidden"}`}
-          >
-            已達到購買上限
-          </div>
         </div>
       </div>
-    </div>
-  );
+    );
 }
 
 function ShopppingKart() {
@@ -141,7 +202,15 @@ function ShopppingKart() {
       applied: false,
     }))
   );
+  const [cookie, setCookie] = useCookies(["cart"]);
   const [CartItem, setCartitem] = useState<CartItem[]>([]);
+
+  useEffect(() => {
+    getItem();
+    if (cookie.cart === undefined) {
+      setCookie("cart", JSON.stringify([{}]));
+    } else cookie.cart;
+  }, [cookie.cart.length]);
 
   useEffect(() => {
     if (subtotal > 5000) {
@@ -151,18 +220,14 @@ function ShopppingKart() {
     }
   }, [subtotal]);
 
-  useEffect(() => {
-    const getItem = async () => {
-      try {
-        const cart: CartItem[] = await getCart();
-
-        setCartitem(cart);
-      } catch (e) {
-        setCartitem(defaultCartItem);
-      }
-    };
-    getItem();
-  }, []);
+  const getItem = async () => {
+    try {
+      const cart: CartItem[] = await getCart();
+      setCartitem(cart);
+    } catch (e) {
+      setCartitem(cookie.cart);
+    }
+  };
 
   const updateSubtotal = (index: number, newSubtotal: number) => {
     subtotals.current[index] = newSubtotal;
@@ -223,18 +288,25 @@ function ShopppingKart() {
       <div className="flex justify-between my-8 max-w-[1200px] w-full">
         <div
           id="items"
-          className="flex-[3] ml-4 min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] flex flex-col justify-center mr-8"
+          className="flex-[3] ml-4 min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] flex flex-col justify-start mr-8"
         >
           <h1 className="text-4xl font-bold text-midBrown mb-8">購買品項</h1>
-          {CartItem.map((item, index) => (
-            <Card
-              key={item.productId}
-              item={item}
-              updateSubtotal={(newSubtotal) =>
-                updateSubtotal(index, newSubtotal)
-              }
-            />
-          ))}
+          {CartItem.length < 1 ? (
+            <div>
+              <h1>購物車中沒有商品哦</h1>
+            </div>
+          ) : (
+            CartItem.map((item, index) => (
+              <Card
+                key={item.productId}
+                item={item}
+                getItem={getItem}
+                updateSubtotal={(newSubtotal) =>
+                  updateSubtotal(index, newSubtotal)
+                }
+              />
+            ))
+          )}
         </div>
         <div
           id="subtotal"
