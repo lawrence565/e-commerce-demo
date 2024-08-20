@@ -28,6 +28,7 @@ function ProductPage() {
   const [product, setProduct] = useState<Product>();
   const [cookie, setCookie] = useCookies(["cart"]);
   const navigate = useNavigate();
+  const imgURL = import.meta.env.VITE_IMAGE_PATH;
 
   if (!category || !itemId) {
     return (
@@ -134,7 +135,7 @@ function ProductPage() {
           id="product-img"
           className="aspect-square h-[40dvh] rounded-2xl overflow-hidden mx-8 "
         >
-          <img src={`/${product?.category}s/${product?.name}.webp`} />
+          <img src={`${imgURL}/${product?.category}s/${product?.name}.webp`} />
         </div>
         <div id="product-desc" className="mx-8 h-[40dvh] flex flex-col">
           <div className="flex-[4] h-full">
