@@ -123,3 +123,27 @@ export function CreditCard({ handlePaymentMethod }: ChildFormProps) {
     </div>
   );
 }
+
+export function ATM() {
+  return (
+    <div
+      id="ATM-info"
+      className="m-4 border-midBrown border-4 rounded-xl w-fit px-2"
+    >
+      <div className="m-4">
+        <h3 className="text-xl">收款銀行：星展銀行（812）</h3>
+        <h3 className="text-xl">收款帳號：123456789012</h3>
+        <div className="flex flex-col mt-2 px-2">
+          <label htmlFor="transfer-account" className="text-lg pb-2">
+            請輸入轉帳帳號後五碼：
+          </label>
+          <input
+            id="transfer-account"
+            type="text"
+            className="border-midBrown border-[2px] rounded-md h-8 p-[0.25rem] w-full"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -7,11 +7,18 @@ import About from "./pages/About";
 import Personal from "./pages/Personal";
 import ShopppingCart from "./pages/ShoppingCart";
 import CheckoutInfo from "./pages/CheckoutInfo";
+import FinishOrder from "./pages/FinishOrder";
 import ScrollToTop from "./utils/ScrollToTop";
-import { CookiesProvider } from "react-cookie";
+import { CookiesProvider, useCookies } from "react-cookie";
 import "./style/App.css";
 
 function App() {
+  const [cookie, setCookie] = useCookies(["cart"]);
+
+  if (cookie.cart === undefined) {
+    setCookie("cart", JSON.stringify([{}]));
+  } else cookie.cart;
+
   return (
     <>
       <HashRouter>
@@ -28,6 +35,7 @@ function App() {
               <Route path="stores/:category/:itemId" element={<Product />} />
               <Route path="shoppingcart" element={<ShopppingCart />} />
               <Route path="checkout" element={<CheckoutInfo />} />
+              <Route path="finishOrder" element={<FinishOrder />} />
             </Route>
           </Routes>
         </CookiesProvider>

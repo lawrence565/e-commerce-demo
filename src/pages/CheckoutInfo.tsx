@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { CreditCard } from "../components/PayMethod";
+import { CreditCard, ATM } from "../components/PayMethod";
 import CheckoutProcess from "../utils/checkoutProcess";
 import taiwanData from "../assets/taiwan.json";
 import "../style/CheckInfo.scss";
@@ -10,6 +10,12 @@ type CardInfo = {
   expiryMonth: number | string;
   expiryYear: number | string;
   securityCode: string;
+};
+
+type ATMInfo = {
+  bank: string;
+  account: string;
+  transferAccount: string;
 };
 
 type Address = {
@@ -28,7 +34,7 @@ type Address = {
 
 function CheckoutInfo() {
   const [payMethod, setPayMethod] = useState<string>();
-  const [paymentInfo, setPaymentInfo] = useState<CardInfo>();
+  const [paymentInfo, setPaymentInfo] = useState<CardInfo | ATMInfo>();
   const [addressData, setAddressData] = useState<Address[]>([]);
   const { register, control } = useForm();
   const watchCity = useWatch({ control, name: "city", defaultValue: "" });
@@ -45,11 +51,19 @@ function CheckoutInfo() {
     setPaymentInfo(data);
   }
 
+  function handlePayment(method: string) {
+    if (payMethod === method) {
+      setPayMethod("");
+    } else {
+      setPayMethod(method);
+    }
+  }
+
+  function handleCheckout() {}
+
   useEffect(() => {
     setAddressData(taiwanData);
   }, []);
-
-  console.log({ paymentInfo });
 
   return (
     <>
@@ -73,7 +87,7 @@ function CheckoutInfo() {
                       type="radio"
                       id="credit-card"
                       checked={payMethod === "creditCard"}
-                      onChange={() => setPayMethod("creditCard")}
+                      onChange={() => handlePayment("creditCard")}
                     />
                     <p className="paylabel">信用卡</p>
                   </label>
@@ -87,16 +101,19 @@ function CheckoutInfo() {
                       type="radio"
                       id="ATM"
                       checked={payMethod === "ATM"}
-                      onChange={() => setPayMethod("ATM")}
+                      onChange={() => handlePayment("ATM")}
                     />
                     <p className="paylabel">ATM 轉帳</p>
                   </label>
+
+                  {payMethod === "ATM" && <ATM />}
+
                   <label className="flex items-center w-fit">
                     <input
                       type="radio"
                       id="apple-pay"
                       checked={payMethod === "ApplePay"}
-                      onChange={() => setPayMethod("ApplePay")}
+                      onChange={() => handlePayment("ApplePay")}
                     />
                     <p className="paylabel">Apple Pay</p>
                   </label>
@@ -105,7 +122,7 @@ function CheckoutInfo() {
                       type="radio"
                       id="line-pay"
                       checked={payMethod === "LinePay"}
-                      onChange={() => setPayMethod("LinePay")}
+                      onChange={() => handlePayment("LinePay")}
                     />
                     <p className="paylabel">Line Pay</p>
                   </label>
@@ -229,6 +246,9 @@ function CheckoutInfo() {
                     <label
                       className="inline-block mr-2 mb-2"
                       htmlFor="addressDetail"
+                      {...register("address-detail", {
+                        required: { value: true, message: "*" },
+                      })}
                     >
                       <span className="text-red-500">*</span>
                       詳細地址
@@ -246,6 +266,9 @@ function CheckoutInfo() {
                   <label
                     className="inline-block mr-2 mb-2"
                     htmlFor="addressDetail"
+                    {...register("comment", {
+                      required: { value: true, message: "*" },
+                    })}
                   >
                     訂單備註
                   </label>
@@ -254,6 +277,16 @@ function CheckoutInfo() {
                     placeholder="可以留下您的需求或備註"
                     className="w-full border-2 border-midBrown rounded-md bg-gray-100 h-[120px] pl-2"
                   />
+                </div>
+
+                <div className="flex justify-center m-4 rounded-lg">
+                  <button
+                    type="button"
+                    onClick={() => handleCheckout}
+                    className="hover:bg-midBrown hover:text-white bg-white text-midBrown p-2 rounded-md border-2 border-midBrown transition-all ease-in duration-100"
+                  >
+                    <h1 className="text-lg">完成訂單</h1>
+                  </button>
                 </div>
               </form>
             </div>
