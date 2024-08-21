@@ -23,6 +23,7 @@ export function CreditCard({ handlePaymentMethod }: ChildFormProps) {
 
   const onSubmit = (data: CardInfo) => {
     handlePaymentMethod(data);
+    alert("已儲存付款資訊");
   };
 
   return (
@@ -41,7 +42,7 @@ export function CreditCard({ handlePaymentMethod }: ChildFormProps) {
           {...register("cardNumber", {
             required: "請輸入卡號",
             validate: (FormValue) => {
-              return FormValue.length != 16 || "請輸入正確的信用卡號";
+              return FormValue.length == 16 || "請輸入正確的信用卡號";
             },
           })}
         />

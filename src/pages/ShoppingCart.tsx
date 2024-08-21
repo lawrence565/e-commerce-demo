@@ -58,10 +58,6 @@ function Card(props: {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const mergedCart = await syncCart(cookie.cart);
-        if (mergedCart && mergedCart.length !== cookie.cart.length) {
-          setCookie("cart", mergedCart);
-        }
         const fetchedProduct = await getSingleProduct(
           item.category,
           item.productId
@@ -236,6 +232,10 @@ function ShopppingKart() {
 
   const getItem = async () => {
     try {
+      const mergedCart = await syncCart(cookie.cart);
+      if (mergedCart && mergedCart.length !== cookie.cart.length) {
+        setCookie("cart", mergedCart);
+      }
       const cart: CartItem[] = await getCart();
       setCartitem(cart);
     } catch (e) {

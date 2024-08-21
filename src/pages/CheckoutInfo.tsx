@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { CreditCard, ATM } from "../components/PayMethod";
+import { getCart, postOrder } from "../api/productApi";
+import { useCookies } from "react-cookie";
 import CheckoutProcess from "../utils/checkoutProcess";
 import taiwanData from "../assets/taiwan.json";
 import "../style/CheckInfo.scss";
@@ -32,6 +34,12 @@ type AddressData = {
   }[];
 };
 
+type CartItem = {
+  productId: number;
+  category: string;
+  quantity: number;
+};
+
 type ShippmentInfo = {
   city: string;
   district: string;
@@ -52,10 +60,19 @@ type OrderInfo = {
   comment: string;
 };
 
+type Order = {
+  products: CartItem[];
+  recipient: Recipient;
+  shippment: ShippmentInfo;
+  paymentInfo: CardInfo | ATMInfo;
+  comment: string;
+};
+
 function CheckoutInfo() {
   const [payMethod, setPayMethod] = useState<string>();
   const [paymentInfo, setPaymentInfo] = useState<CardInfo | ATMInfo>();
   const [addressData, setAddressData] = useState<AddressData[]>([]);
+  const [cookies] = useCookies(["cart"]);
   const { register, control, getValues } = useForm<OrderInfo>({
     defaultValues: {
       recipient: {
@@ -85,6 +102,16 @@ function CheckoutInfo() {
     discount = 200,
     couponDiscount = 125;
 
+  const getItem = async () => {
+    let cart: CartItem[];
+    try {
+      cart = await getCart();
+    } catch (e) {
+      cart = cookies.cart;
+    }
+    return cart;
+  };
+
   function handlePayMethod(data: CardInfo | ATMInfo) {
     setPaymentInfo(data);
   }
@@ -97,16 +124,37 @@ function CheckoutInfo() {
     }
   }
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     let data: OrderInfo = getValues();
+    console.log("Form: ", data);
+
     if (paymentInfo !== undefined) {
       data.paymentInfo = paymentInfo;
     }
-    console.log("Form value: ", data);
+
+    try {
+      const products = await getItem();
+      console.log(products);
+
+      const order: Order = {
+        products: products,
+        paymentInfo: data.paymentInfo,
+        recipient: data.recipient,
+        shippment: data.shippment,
+        comment: data.comment,
+      };
+      console.log("order: ", order);
+
+      await postOrder(order);
+    } catch (e) {
+      alert("建立訂單失敗");
+      console.log("建立訂單失敗", e);
+    }
   };
 
   useEffect(() => {
     setAddressData(taiwanData);
+    getItem();
   }, []);
 
   return (
@@ -304,9 +352,6 @@ function CheckoutInfo() {
                     <label
                       className="inline-block mr-2 mb-2"
                       htmlFor="addressDetail"
-                      {...register("shippment.detail", {
-                        required: { value: true, message: "*" },
-                      })}
                     >
                       <span className="text-red-500">*</span>
                       詳細地址
@@ -316,6 +361,9 @@ function CheckoutInfo() {
                       id="addressDetail"
                       placeholder="請輸入地址"
                       className="w-full border-2 border-midBrown rounded-md bg-gray-100 h-[40px] pl-2"
+                      {...register("shippment.detail", {
+                        required: { value: true, message: "*" },
+                      })}
                     />
                   </div>
                 </div>

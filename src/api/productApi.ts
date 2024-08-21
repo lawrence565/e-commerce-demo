@@ -1,6 +1,19 @@
 import axios from "axios";
 import products from "../assets/products.json";
 
+type CardInfo = {
+  cardNumber: string;
+  expiryMonth: number | string;
+  expiryYear: number | string;
+  securityCode: string;
+};
+
+type ATMInfo = {
+  bank: string;
+  account: string;
+  transferAccount: string;
+};
+
 type CartItem = {
   productId: number;
   category: string;
@@ -20,6 +33,27 @@ interface Responce {
   status: string;
   data: Product[];
 }
+
+type ShippmentInfo = {
+  city: string;
+  district: string;
+  road: string;
+  detail: string;
+};
+
+type Recipient = {
+  name: string;
+  phone: string;
+  email: string;
+};
+
+type Order = {
+  products: CartItem[];
+  recipient: Recipient;
+  shippment: ShippmentInfo;
+  paymentInfo: CardInfo | ATMInfo;
+  comment: string;
+};
 
 const baseURL = "http://localhost:8080";
 const apiPath = "api";
@@ -102,7 +136,7 @@ export const syncCart = async (cart: CartItem[]) => {
     const responce = await axiosInstance.put("cart", cart, {
       withCredentials: true,
     });
-    return responce.data;
+    return responce.data.data;
   } catch (e) {
     console.log("e");
   } finally {
@@ -115,6 +149,10 @@ export const getOrder = async (id: number) => {
   return await axiosInstance.get(`/order/${id}`, { withCredentials: true });
 };
 
-export const postOrder = async () => {
-  return await axiosInstance.post(`/order/`, { withCredentials: true });
+export const postOrder = async (order: Order) => {
+  const responce = await axiosInstance.post(`/order`, order, {
+    withCredentials: true,
+  });
+  console.log(responce.data);
+  return responce.data.data;
 };
