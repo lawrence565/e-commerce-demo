@@ -2,7 +2,13 @@ import coupons from "../assets/coupon.json";
 import couponList from "../assets/couponsList.json";
 import CheckoutProcess from "../utils/checkoutProcess";
 import trashCan from "/trash-can.svg";
-import { getSingleProduct, getCart, deleteCartItem } from "../api/productApi";
+import {
+  getSingleProduct,
+  getCart,
+  deleteCartItem,
+  editCartItem,
+  syncCart,
+} from "../api/productApi";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../style/CartStyle.scss";
@@ -52,6 +58,10 @@ function Card(props: {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+        const mergedCart = await syncCart(cookie.cart);
+        if (mergedCart && mergedCart.length !== cookie.cart.length) {
+          setCookie("cart", mergedCart);
+        }
         const fetchedProduct = await getSingleProduct(
           item.category,
           item.productId
@@ -72,9 +82,11 @@ function Card(props: {
     updateSubtotal(amount * (product?.price ?? 0));
   }, [item, amount, product, updateSubtotal]);
 
-  function add(id: number) {
+  async function add(id: number) {
     const newAmount = amount + 1;
     setAmount(newAmount);
+    await editCartItem(id, newAmount);
+
     const cart = cookie.cart;
     const index = cart.findIndex(
       (product: CartItem) => product.productId === id
@@ -85,9 +97,10 @@ function Card(props: {
     }
   }
 
-  function minus(id: number) {
+  async function minus(id: number) {
     const newAmount = amount - 1;
     setAmount(newAmount);
+    await editCartItem(id, newAmount);
     const cart = cookie.cart;
     const index = cart.findIndex(
       (product: CartItem) => product.productId === id
@@ -105,6 +118,7 @@ function Card(props: {
       alert(`${name}已從購物車移除`);
     } catch (error) {
       console.log("deleting item " + name);
+    } finally {
       const cart = cookie.cart;
       try {
         const deleteIndex = cart.findIndex(
@@ -117,7 +131,7 @@ function Card(props: {
         getItem();
         setCookie("cart", cart);
       } catch (e) {
-        console.error(`移除${name}商品失敗`, error);
+        console.error(`移除${name}商品失敗`, e);
       }
     }
   };
@@ -208,7 +222,7 @@ function ShopppingKart() {
   useEffect(() => {
     getItem();
     if (cookie.cart === undefined) {
-      setCookie("cart", JSON.stringify([{}]));
+      setCookie("cart", []);
     } else cookie.cart;
   }, [cookie.cart.length]);
 

@@ -77,18 +77,44 @@ export const postCart = async (cartitem: CartItem) => {
 };
 
 export const deleteCartItem = async (id: number) => {
-  return await axiosInstance.delete(`cart/${id}`);
+  return await axiosInstance.delete(`cart/${id}`, { withCredentials: true });
 };
 
 export const deleteCartAll = async () => {
-  return await axiosInstance.delete("carts");
+  return await axiosInstance.delete("carts", { withCredentials: true });
 };
 
-// export const editCartItem = async (item, newQty) => {
-//   return await axiosInstance.put(`cart/${item.id}`, {
-//     data: {
-//       product_id: item.product_id,
-//       qty: newQty,
-//     },
-//   });
-// };
+export const editCartItem = async (id: number, newQty: number) => {
+  return await axiosInstance.put(
+    `cart/${id}`,
+    {
+      data: {
+        id: id,
+        newQty: newQty,
+      },
+    },
+    { withCredentials: true }
+  );
+};
+
+export const syncCart = async (cart: CartItem[]) => {
+  try {
+    const responce = await axiosInstance.put("cart", cart, {
+      withCredentials: true,
+    });
+    return responce.data;
+  } catch (e) {
+    console.log("e");
+  } finally {
+    console.log("Finish syncing");
+  }
+};
+
+// Order
+export const getOrder = async (id: number) => {
+  return await axiosInstance.get(`/order/${id}`, { withCredentials: true });
+};
+
+export const postOrder = async () => {
+  return await axiosInstance.post(`/order/`, { withCredentials: true });
+};

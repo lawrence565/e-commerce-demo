@@ -18,7 +18,7 @@ type ATMInfo = {
   transferAccount: string;
 };
 
-type Address = {
+type AddressData = {
   CityName: string;
   CityEngName: string;
   AreaList: {
@@ -32,22 +32,60 @@ type Address = {
   }[];
 };
 
+type ShippmentInfo = {
+  city: string;
+  district: string;
+  road: string;
+  detail: string;
+};
+
+type Recipient = {
+  name: string;
+  phone: string;
+  email: string;
+};
+
+type OrderInfo = {
+  recipient: Recipient;
+  shippment: ShippmentInfo;
+  paymentInfo: CardInfo | ATMInfo;
+  comment: string;
+};
+
 function CheckoutInfo() {
   const [payMethod, setPayMethod] = useState<string>();
   const [paymentInfo, setPaymentInfo] = useState<CardInfo | ATMInfo>();
-  const [addressData, setAddressData] = useState<Address[]>([]);
-  const { register, control } = useForm();
-  const watchCity = useWatch({ control, name: "city", defaultValue: "" });
+  const [addressData, setAddressData] = useState<AddressData[]>([]);
+  const { register, control, getValues } = useForm<OrderInfo>({
+    defaultValues: {
+      recipient: {
+        name: "",
+        phone: "",
+        email: "",
+      },
+      shippment: {
+        city: "",
+        district: "",
+        road: "",
+        detail: "",
+      },
+      paymentInfo: paymentInfo,
+      comment: "",
+    },
+  });
+  const watchCity = useWatch({
+    control,
+    name: "shippment.city",
+  });
   const watchDistrict = useWatch({
     control,
-    name: "district",
-    defaultValue: "",
+    name: "shippment.district",
   });
   const subtotal = 1000,
     discount = 200,
     couponDiscount = 125;
 
-  function handlePayMethod(data: CardInfo) {
+  function handlePayMethod(data: CardInfo | ATMInfo) {
     setPaymentInfo(data);
   }
 
@@ -59,13 +97,17 @@ function CheckoutInfo() {
     }
   }
 
-  function handleCheckout() {}
+  const handleCheckout = () => {
+    let data: OrderInfo = getValues();
+    if (paymentInfo !== undefined) {
+      data.paymentInfo = paymentInfo;
+    }
+    console.log("Form value: ", data);
+  };
 
   useEffect(() => {
     setAddressData(taiwanData);
   }, []);
-
-  console.log(paymentInfo);
 
   return (
     <>
@@ -108,7 +150,9 @@ function CheckoutInfo() {
                     <p className="paylabel">ATM 轉帳</p>
                   </label>
 
-                  {payMethod === "ATM" && <ATM />}
+                  {payMethod === "ATM" && (
+                    <ATM handlePaymentMethod={handlePayMethod} />
+                  )}
 
                   <label className="flex items-center w-fit">
                     <input
@@ -145,6 +189,9 @@ function CheckoutInfo() {
                       id="name"
                       placeholder="請輸入收件人姓名"
                       className="w-full border-2 border-midBrown rounded-md bg-gray-100 my-2 pl-2"
+                      {...register("recipient.name", {
+                        required: { value: true, message: "請填入收件人姓名" },
+                      })}
                     />
                   </div>
                   <div className="flex-1 flex flex-col">
@@ -156,6 +203,9 @@ function CheckoutInfo() {
                       id="phone"
                       placeholder="請輸入電話號碼"
                       className="w-full border-2 border-midBrown rounded-md bg-gray-100 my-2 pl-2"
+                      {...register("recipient.phone", {
+                        required: { value: true, message: "請填入收件人電話" },
+                      })}
                     />
                   </div>
                 </div>
@@ -168,6 +218,12 @@ function CheckoutInfo() {
                     id="email"
                     placeholder="請輸入電子郵件"
                     className="w-full border-2 border-midBrown rounded-md bg-gray-100 my-2 pl-2"
+                    {...register("recipient.email", {
+                      required: {
+                        value: true,
+                        message: "請填入收件人電子郵件",
+                      },
+                    })}
                   />
                 </div>
 
@@ -179,7 +235,7 @@ function CheckoutInfo() {
                       </label>
                       <select
                         className="h-[40px] border-2 border-midBrown mr-2 pl-2"
-                        {...register("city", {
+                        {...register("shippment.city", {
                           required: { value: true, message: "*" },
                         })}
                       >
@@ -199,7 +255,7 @@ function CheckoutInfo() {
                       </label>
                       <select
                         className="h-[40px] border-2 border-midBrown mr-2"
-                        {...register("district", {
+                        {...register("shippment.district", {
                           required: { value: true, message: "*" },
                         })}
                       >
@@ -224,7 +280,7 @@ function CheckoutInfo() {
                       </label>
                       <select
                         className="h-[40px] border-2 border-midBrown"
-                        {...register("road", {
+                        {...register("shippment.road", {
                           required: { value: true, message: "*" },
                         })}
                       >
@@ -248,7 +304,7 @@ function CheckoutInfo() {
                     <label
                       className="inline-block mr-2 mb-2"
                       htmlFor="addressDetail"
-                      {...register("address-detail", {
+                      {...register("shippment.detail", {
                         required: { value: true, message: "*" },
                       })}
                     >
@@ -268,23 +324,23 @@ function CheckoutInfo() {
                   <label
                     className="inline-block mr-2 mb-2"
                     htmlFor="addressDetail"
-                    {...register("comment", {
-                      required: { value: true, message: "*" },
-                    })}
                   >
                     訂單備註
                   </label>
                   <textarea
                     id="addressDetail"
                     placeholder="可以留下您的需求或備註"
-                    className="w-full border-2 border-midBrown rounded-md bg-gray-100 h-[120px] pl-2"
+                    className="w-full border-2 border-midBrown rounded-md bg-gray-100 h-[120px] pl-2 pt-1"
+                    {...register("comment", {
+                      required: { value: true, message: "*" },
+                    })}
                   />
                 </div>
 
                 <div className="flex justify-center m-4 rounded-lg">
                   <button
                     type="button"
-                    onClick={() => handleCheckout}
+                    onClick={handleCheckout}
                     className="hover:bg-midBrown hover:text-white bg-white text-midBrown p-2 rounded-md border-2 border-midBrown transition-all ease-in duration-100"
                   >
                     <h1 className="text-lg">完成訂單</h1>

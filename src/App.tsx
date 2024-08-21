@@ -16,7 +16,7 @@ function App() {
   const [cookie, setCookie] = useCookies(["cart"]);
 
   if (cookie.cart === undefined) {
-    setCookie("cart", JSON.stringify([{}]));
+    setCookie("cart", []);
   } else cookie.cart;
 
   return (

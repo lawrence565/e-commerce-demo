@@ -7,13 +7,18 @@ type CardInfo = {
   securityCode: string;
 };
 
+type ATMInfo = {
+  bank: string;
+  account: string;
+  transferAccount: string;
+};
+
 interface ChildFormProps {
-  handlePaymentMethod: (data: CardInfo) => void;
+  handlePaymentMethod: (data: CardInfo | ATMInfo) => void;
 }
 
 export function CreditCard({ handlePaymentMethod }: ChildFormProps) {
-  const form = useForm<CardInfo>();
-  const { register, handleSubmit, formState } = form;
+  const { register, handleSubmit, formState } = useForm<CardInfo>();
   const { errors } = formState;
 
   const onSubmit = (data: CardInfo) => {
@@ -71,7 +76,7 @@ export function CreditCard({ handlePaymentMethod }: ChildFormProps) {
             <select
               className="h-8 border-2 border-midBrown"
               {...register("expiryYear", {
-                required: "請選擇年份",
+                required: true,
                 validate: (value) => {
                   return value !== "year" || "請選擇正確的到期日";
                 },
@@ -124,7 +129,20 @@ export function CreditCard({ handlePaymentMethod }: ChildFormProps) {
   );
 }
 
-export function ATM() {
+export function ATM({ handlePaymentMethod }: ChildFormProps) {
+  const { register, handleSubmit, formState } = useForm<ATMInfo>({
+    defaultValues: {
+      transferAccount: "",
+    },
+  });
+  const { errors } = formState;
+
+  const onSubmit = (data: ATMInfo) => {
+    data.bank = "星展銀行";
+    data.account = "123456789012";
+    handlePaymentMethod(data);
+  };
+
   return (
     <div
       id="ATM-info"
@@ -141,7 +159,22 @@ export function ATM() {
             id="transfer-account"
             type="text"
             className="border-midBrown border-[2px] rounded-md h-8 p-[0.25rem] w-full"
+            {...register("transferAccount", {
+              required: "請輸入正確的帳號後五碼",
+              validate: (value: string) => {
+                return value.length == 5 || "請輸入正確的後五碼";
+              },
+            })}
           />
+          <p className="text-red-600">{errors.transferAccount?.message}</p>
+        </div>
+        <div className="flex justify-center">
+          <button
+            className="py-2 px-4 mt-2 text-base bg-midBrown text-white rounded-md"
+            onClick={handleSubmit(onSubmit)}
+          >
+            儲存
+          </button>
         </div>
       </div>
     </div>

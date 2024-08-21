@@ -64,8 +64,6 @@ function ProductPage() {
   }, [category, itemId]);
 
   const addToCart = async () => {
-    console.log("Adding" + cookie.cart);
-
     if (product) {
       const cartItem: CartItem = {
         productId: product.id,
@@ -77,7 +75,7 @@ function ProductPage() {
       } catch (e) {
         console.log("Here's some problem: " + e);
       } finally {
-        if (cookie.cart === undefined) {
+        if (cookie.cart.length < 1) {
           setCookie("cart", [cartItem]);
         } else if (cookie.cart.length != 0) {
           const cart: CartItem[] = cookie.cart;
@@ -99,7 +97,6 @@ function ProductPage() {
             setCookie("cart", cart);
           }
         }
-        console.log(cookie.cart);
       }
     }
   };
