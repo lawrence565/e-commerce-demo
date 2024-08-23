@@ -49,6 +49,11 @@ function Personal() {
             <div className="w-full">
               <h1 className="text-3xl font-bold mb-4">過去訂單</h1>
               <hr />
+              <div className="m-8 flex justify-center items-center">
+                <h1 className="text-2xl font-bold text-midBrown m-12">
+                  此功能尚在製作當作
+                </h1>
+              </div>
             </div>
             <div></div>
           </div>

@@ -22,7 +22,7 @@ Demo 網址：https://lawrence565.github.io/e-commerce-demo/
 
 ## 使用技術
 
-本專案著重於前端部分的規劃，主要使用 React 框架搭配 TypeScript 搭建，同時利用 Vite 打包專案。後端則使用 PostgreSQL 搭配 Node.js 完成簡易伺服器。
+本專案著重於前端部分的規劃，主要使用 React 框架搭配 TypeScript 搭建，同時利用 Vite 打包專案。[後端](https://github.com/lawrence565/e-commerce-backend)則使用 PostgreSQL 搭配 Node.js 完成簡易伺服器。
 
 - React
 - Vite
@@ -39,24 +39,12 @@ $ npm install
 $ npm start
 ```
 
-## Expanding the ESLint configuration
+## 使用套件
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Runtime Environment: Node.js @16.4
+- Front-end Library: React @18.3.1
+- UI Framework: Tailwind @3.4.6
 
-- Configure the top-level `parserOptions` property like this:
+## License
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module",
-    project: ["./tsconfig.json", "./tsconfig.node.json"],
-    tsconfigRootDir: __dirname,
-  },
-};
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Licensed under the MIT License, Copyright © 2024-present Lawrence Wu
