@@ -49,6 +49,7 @@ type Recipient = {
 
 type Order = {
   products: CartItem[];
+  price: number;
   recipient: Recipient;
   shippment: ShippmentInfo;
   paymentInfo: CardInfo | ATMInfo;
@@ -153,6 +154,5 @@ export const postOrder = async (order: Order) => {
   const responce = await axiosInstance.post(`/order`, order, {
     withCredentials: true,
   });
-  console.log(responce.data);
   return responce.data.data;
 };

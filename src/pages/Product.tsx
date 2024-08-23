@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getSingleProduct, postCart } from "../api/productApi";
+import ProductRecomanned from "../components/ProductRecommand";
 import products from "../assets/products.json";
 import { useCookies } from "react-cookie";
 
@@ -125,6 +126,21 @@ function ProductPage() {
     setAmount(amount - 1);
   };
 
+  let title, items, url;
+  if (category === "gadget") {
+    title = "隨身用品";
+    items = "gadgets";
+    url = "/stores/gadgets";
+  } else if (category === "furniture") {
+    title = "手工家具";
+    items = "furnitures";
+    url = "/stores/furnitures";
+  } else if (category === "decoration") {
+    title = "裝飾擺設";
+    items = "decorations";
+    url = "/stores/decorations";
+  }
+
   return (
     <div className="min-h-[70dvh] max-w[1200px] my-8 flex flex-col justify-center items-center">
       <div id="product" className="flex justify-center items-center h-fit mb-8">
@@ -229,6 +245,13 @@ function ProductPage() {
           </div>
         </div>
       </div>
+
+      <ProductRecomanned
+        key="0"
+        title={`${title}`}
+        items={`${items}`}
+        url={`${url}`}
+      />
     </div>
   );
 }

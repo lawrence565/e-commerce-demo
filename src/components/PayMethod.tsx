@@ -36,7 +36,7 @@ export function CreditCard({ handlePaymentMethod }: ChildFormProps) {
           信用卡卡號
         </label>
         <input
-          className="w-full border-2 border-midBrown rounded-md bg-gray-100 h-8"
+          className="w-full border-2 border-midBrown rounded-md bg-gray-100 h-8 pl-2"
           type="text"
           id="cardNumber"
           {...register("cardNumber", {
@@ -58,7 +58,7 @@ export function CreditCard({ handlePaymentMethod }: ChildFormProps) {
           </label>
           <div id="expiry-date" className="flex mr-4">
             <select
-              className="h-8 border-2 border-midBrown"
+              className="h-8 border-2 border-midBrown rounded-md"
               {...register("expiryMonth", {
                 required: "請選擇月份",
                 validate: (value) => {
@@ -75,7 +75,7 @@ export function CreditCard({ handlePaymentMethod }: ChildFormProps) {
             </select>
             <p className="mx-2"> / </p>
             <select
-              className="h-8 border-2 border-midBrown"
+              className="h-8 border-2 border-midBrown rounded-md"
               {...register("expiryYear", {
                 required: true,
                 validate: (value) => {
@@ -105,7 +105,7 @@ export function CreditCard({ handlePaymentMethod }: ChildFormProps) {
             安全碼
           </label>
           <input
-            className="w-full border-2 border-midBrown rounded-md bg-gray-100 h-8"
+            className="w-full border-2 border-midBrown rounded-md bg-gray-100 h-8 pl-2"
             type="text"
             id="securityCode"
             {...register("securityCode", {

@@ -4,9 +4,15 @@ import mainLogo from "../assets/main-logo.svg";
 import shoppingCartIcon from "../assets/shopping-cart-icon.svg";
 import personalIcon from "../assets/personal-icon.svg";
 import "../style/NavbarStyle.scss";
+import { useEffect } from "react";
 
 function NavBar() {
-  const [cookie] = useCookies(["cart"]);
+  const [cookie, setCookie] = useCookies(["cart"]);
+  useEffect(() => {
+    if (cookie.cart === undefined) {
+      setCookie("cart", []);
+    } else cookie.cart;
+  });
 
   return (
     <div className="flex justify-center h-fit border-b-2 border-[#a0937d] min-h-[5dvh]">
@@ -40,7 +46,7 @@ function NavBar() {
               src={shoppingCartIcon}
               alt="Shopping Cart Icon"
             />
-            {cookie.cart.length > 0 && (
+            {cookie.cart && cookie.cart.length > 0 && (
               <span className="absolute top-0 right-[-20%] rounded-lg bg-red-600 w-[1rem] aspect-square flex items-center justify-center">
                 <p className="text-[0.8rem] text-white">{cookie.cart.length}</p>
               </span>

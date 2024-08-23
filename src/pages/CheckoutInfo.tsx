@@ -3,6 +3,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { CreditCard, ATM } from "../components/PayMethod";
 import { getCart, postOrder } from "../api/productApi";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 import CheckoutProcess from "../utils/checkoutProcess";
 import taiwanData from "../assets/taiwan.json";
 import "../style/CheckInfo.scss";
@@ -62,17 +63,26 @@ type OrderInfo = {
 
 type Order = {
   products: CartItem[];
+  price: number;
   recipient: Recipient;
   shippment: ShippmentInfo;
   paymentInfo: CardInfo | ATMInfo;
   comment: string;
 };
 
-function CheckoutInfo() {
+type Subtotal = {
+  total: number;
+  subtotal: number;
+  discount: number;
+  couponDiscount: number;
+};
+
+function CheckoutInfo(props: { subtotalData: Subtotal }) {
+  const navigate = useNavigate();
   const [payMethod, setPayMethod] = useState<string>();
   const [paymentInfo, setPaymentInfo] = useState<CardInfo | ATMInfo>();
   const [addressData, setAddressData] = useState<AddressData[]>([]);
-  const [cookies] = useCookies(["cart"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["cart", "order"]);
   const { register, control, getValues } = useForm<OrderInfo>({
     defaultValues: {
       recipient: {
@@ -90,6 +100,7 @@ function CheckoutInfo() {
       comment: "",
     },
   });
+  const { total, subtotal, discount, couponDiscount } = props.subtotalData;
   const watchCity = useWatch({
     control,
     name: "shippment.city",
@@ -98,9 +109,6 @@ function CheckoutInfo() {
     control,
     name: "shippment.district",
   });
-  const subtotal = 1000,
-    discount = 200,
-    couponDiscount = 125;
 
   const getItem = async () => {
     let cart: CartItem[];
@@ -113,7 +121,12 @@ function CheckoutInfo() {
   };
 
   function handlePayMethod(data: CardInfo | ATMInfo) {
-    setPaymentInfo(data);
+    try {
+      setPaymentInfo(data);
+      alert("成功儲存付款資訊");
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   function handlePayment(method: string) {
@@ -128,27 +141,48 @@ function CheckoutInfo() {
     let data: OrderInfo = getValues();
     console.log("Form: ", data);
 
-    if (paymentInfo !== undefined) {
-      data.paymentInfo = paymentInfo;
-    }
+    await (async () => {
+      if (paymentInfo !== undefined && paymentInfo) {
+        data.paymentInfo = paymentInfo;
+        try {
+          const products = await getItem();
+          console.log(products);
 
-    try {
-      const products = await getItem();
-      console.log(products);
+          const order: Order = {
+            products: products,
+            price: total,
+            paymentInfo: data.paymentInfo,
+            recipient: data.recipient,
+            shippment: data.shippment,
+            comment: data.comment,
+          };
+          console.log("order: ", order);
 
-      const order: Order = {
-        products: products,
-        paymentInfo: data.paymentInfo,
-        recipient: data.recipient,
-        shippment: data.shippment,
-        comment: data.comment,
-      };
-      console.log("order: ", order);
+          const responce = await postOrder(order);
+          if (responce) removeCookie("cart");
+        } catch (e) {
+          alert("建立訂單失敗");
+          console.log("建立訂單失敗", e);
+        } finally {
+          const order: Order = {
+            products: cookies.cart,
+            price: total,
+            paymentInfo: data.paymentInfo,
+            recipient: data.recipient,
+            shippment: data.shippment,
+            comment: data.comment,
+          };
+          setCookie("order", order);
+        }
+      } else {
+        alert("請輸入付款資訊");
+        return;
+      }
+    })();
 
-      await postOrder(order);
-    } catch (e) {
-      alert("建立訂單失敗");
-      console.log("建立訂單失敗", e);
+    if (cookies.order.products.length > 0) {
+      removeCookie("cart");
+      navigate("/finishOrder");
     }
   };
 
@@ -159,12 +193,12 @@ function CheckoutInfo() {
 
   return (
     <>
-      <div className="flex flex-col items-center my-8 ">
+      <div className="flex flex-col items-center m-8 ">
         {<CheckoutProcess step={2} />}
         <div className="max-w-[1200px] w-full flex my-4">
           <div
             id="CheckoutInfo"
-            className="flex-[3] flex flex-col min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] mr-16"
+            className="flex-[3] flex flex-col min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] mr-12"
           >
             <div id="payment">
               <div className="my-4">
@@ -282,7 +316,7 @@ function CheckoutInfo() {
                         <span className="text-red-500">*</span>縣/市
                       </label>
                       <select
-                        className="h-[40px] border-2 border-midBrown mr-2 pl-2"
+                        className="h-[40px] border-2 border-midBrown mr-2 pl-2 rounded-md bg-gray-100"
                         {...register("shippment.city", {
                           required: { value: true, message: "*" },
                         })}
@@ -302,7 +336,7 @@ function CheckoutInfo() {
                         <span className="text-red-500">*</span>鄉鎮市區
                       </label>
                       <select
-                        className="h-[40px] border-2 border-midBrown mr-2"
+                        className="h-[40px] border-2 border-midBrown mr-2 rounded-md bg-gray-100"
                         {...register("shippment.district", {
                           required: { value: true, message: "*" },
                         })}
@@ -327,7 +361,7 @@ function CheckoutInfo() {
                         <span className="text-red-500">*</span>街道名
                       </label>
                       <select
-                        className="h-[40px] border-2 border-midBrown"
+                        className="h-[40px] border-2 border-midBrown rounded-md bg-gray-100"
                         {...register("shippment.road", {
                           required: { value: true, message: "*" },
                         })}
@@ -400,7 +434,7 @@ function CheckoutInfo() {
 
           <div
             id="subtotal"
-            className="flex-1 min-w-[300px] max-w-[20dvw] rounded-lg bg-midBrown p-6 m-4 h-fit "
+            className="flex-1 min-w-[300px] max-w-[20dvw] rounded-lg bg-midBrown p-6 my-4 h-fit "
           >
             <h1 className="font-semibold text-3xl text-white mb-4 max-w-[15dvw] ml-2">
               購買明細

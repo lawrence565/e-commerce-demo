@@ -10,10 +10,49 @@ import CheckoutInfo from "./pages/CheckoutInfo";
 import FinishOrder from "./pages/FinishOrder";
 import ScrollToTop from "./utils/ScrollToTop";
 import { CookiesProvider, useCookies } from "react-cookie";
+import { useState } from "react";
 import "./style/App.css";
+
+type SubtotalInfo = {
+  total: number;
+  subtotal: number;
+  discount: number;
+  couponDiscount: number;
+  setTotal: (total: number) => void;
+  setSubtotal: (subtotal: number) => void;
+  setDiscount: (discount: number) => void;
+  setCouponDiscount: (couponDiscount: number) => void;
+};
+
+type Subtotal = {
+  total: number;
+  subtotal: number;
+  discount: number;
+  couponDiscount: number;
+};
 
 function App() {
   const [cookie, setCookie] = useCookies(["cart"]);
+  const [total, setTotal] = useState(0);
+  const [subtotal, setSubtotal] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [couponDiscount, setCouponDiscount] = useState(0);
+  const subtotalInfo: SubtotalInfo = {
+    total: total,
+    subtotal: subtotal,
+    discount: discount,
+    couponDiscount: couponDiscount,
+    setTotal: setTotal,
+    setSubtotal: setSubtotal,
+    setDiscount: setDiscount,
+    setCouponDiscount: setCouponDiscount,
+  };
+  const subtotalData: Subtotal = {
+    total: total,
+    subtotal: subtotal,
+    discount: discount,
+    couponDiscount: couponDiscount,
+  };
 
   if (cookie.cart === undefined) {
     setCookie("cart", []);
@@ -33,8 +72,14 @@ function App() {
                 <Route path=":category" element={<Store />} />
               </Route>
               <Route path="stores/:category/:itemId" element={<Product />} />
-              <Route path="shoppingcart" element={<ShopppingCart />} />
-              <Route path="checkout" element={<CheckoutInfo />} />
+              <Route
+                path="shoppingcart"
+                element={<ShopppingCart subtotalInfo={subtotalInfo} />}
+              />
+              <Route
+                path="checkout"
+                element={<CheckoutInfo subtotalData={subtotalData} />}
+              />
               <Route path="finishOrder" element={<FinishOrder />} />
             </Route>
           </Routes>

@@ -38,6 +38,17 @@ type Coupon = {
   applied: boolean;
 };
 
+type SubtotalInfo = {
+  total: number;
+  subtotal: number;
+  discount: number;
+  couponDiscount: number;
+  setTotal: (total: number) => void;
+  setSubtotal: (subtotal: number) => void;
+  setDiscount: (discount: number) => void;
+  setCouponDiscount: (couponDiscount: number) => void;
+};
+
 // type applyCoupon = {
 //   id: number;
 //   coupon: number;
@@ -192,20 +203,28 @@ function Card(props: {
     );
 }
 
-function ShopppingKart() {
+function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
   const defaultCartItem: CartItem[] = [
     { productId: 2, category: "gadget", quantity: 3 },
     { productId: 27, category: "furniture", quantity: 2 },
     { productId: 6, category: "gadget", quantity: 5 },
   ];
   const subtotals = useRef<number[]>(new Array(defaultCartItem.length).fill(0));
-  const [subtotal, setSubtotal] = useState(0);
+  const {
+    total,
+    setTotal,
+    subtotal,
+    setSubtotal,
+    discount,
+    setDiscount,
+    couponDiscount,
+    setCouponDiscount,
+  } = props.subtotalInfo;
   const [applyCouponCode, setApplyCouponCode] =
     useState<string>("請輸入優惠碼");
   const [typed, setTyped] = useState(false);
   const [appliedCoupon, setAppliedCoupon] = useState<number[]>([]);
-  const [couponDiscount, setCouponDiscount] = useState(0);
-  const [discount, setDiscount] = useState(0);
+
   const [avaliableCoupons, setAvaliableCoupons] = useState<Coupon[]>(
     coupons.map((coupon) => ({
       ...coupon,
@@ -228,6 +247,7 @@ function ShopppingKart() {
     } else {
       setDiscount(0);
     }
+    setTotal(subtotal - couponDiscount - discount);
   }, [subtotal]);
 
   const getItem = async () => {
@@ -264,14 +284,14 @@ function ShopppingKart() {
     );
     if (appliedOneIndex !== -1) {
       const appliedOne = avaliableCoupons[appliedOneIndex];
+      const prevCouponDiscount = couponDiscount;
       setAppliedCoupon((prev) => prev.filter((id) => id !== appliedOne.id));
-      setCouponDiscount((prev) => prev - appliedOne.discount);
+      setCouponDiscount(prevCouponDiscount - appliedOne.discount);
       setAvaliableCoupons((prevCoupons) => {
         return prevCoupons.map((coupon) =>
           coupon.id === couponId ? { ...coupon, applied: false } : coupon
         );
       });
-      alert("已移除優惠券");
     }
   }
 
@@ -280,14 +300,14 @@ function ShopppingKart() {
     if (foundCoupon) {
       const alreadyExisted = appliedCoupon.includes(foundCoupon.id);
       if (!alreadyExisted) {
+        const prevCouponDiscount = couponDiscount;
         setAppliedCoupon((prev) => [...prev, foundCoupon.id]);
-        setCouponDiscount((prev) => prev + foundCoupon.discount);
+        setCouponDiscount(prevCouponDiscount + foundCoupon.discount);
         setAvaliableCoupons((prevCoupons) => {
           return prevCoupons.map((coupon) =>
             coupon.code === couponCode ? { ...coupon, applied: true } : coupon
           );
         });
-        alert("已套用優惠券");
       } else {
         alert("優惠券已存在");
       }
@@ -372,9 +392,7 @@ function ShopppingKart() {
           <div className="flex justify-center w-9/10 m-2">
             <div className="flex text-white w-full justify-between max-w-[350px]">
               <h1 className="font-semibold text-2xl">結帳金額：</h1>
-              <h1 className="text-end text-2xl">
-                {subtotal - couponDiscount - discount}
-              </h1>
+              <h1 className="text-end text-2xl">{total}</h1>
             </div>
           </div>
           <div className="w-3/5 h-fit bg-white p-2 ml-[20%] mt-4 text-end rounded-md flex justify-center">
@@ -420,10 +438,13 @@ function ShopppingKart() {
               </tr>
             </thead>
             <tbody>
-              {avaliableCoupons.map((coupon, index) => {
+              {avaliableCoupons.map((coupon) => {
                 if (!coupon.applied) {
                   return (
-                    <tr className="w-full text-center h-fit mb-2" key={index}>
+                    <tr
+                      className="w-full text-center h-fit mb-2"
+                      key={coupon.id}
+                    >
                       <td className="w-2/5 text-start text-lg pl-2 py-2">
                         {coupon.name}
                       </td>

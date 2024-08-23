@@ -1,5 +1,11 @@
 import personalImg from "../assets/testing_thumbnail.webp";
 
+// type OrderData = {
+//   id: string;
+//   total: number;
+//   shippment: string;
+// };
+
 function Personal() {
   return (
     <>
@@ -39,7 +45,13 @@ function Personal() {
               <img src={personalImg} className="min-w-[200px] w-full" />
             </div>
           </div>
-          <div id=""></div>
+          <div id="order-history" className="flex m-8">
+            <div className="w-full">
+              <h1 className="text-3xl font-bold mb-4">過去訂單</h1>
+              <hr />
+            </div>
+            <div></div>
+          </div>
         </div>
       </div>
     </>
