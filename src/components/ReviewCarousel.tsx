@@ -2,12 +2,22 @@ import reviews from "../assets/customer-review.json";
 import { useState, useEffect, useRef } from "react";
 import thumbnail from "../assets/testing_thumbnail.webp";
 
-function ReviewCarousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [width, setWidth] = useState(300);
-  const reviewCarouselRef = useRef<HTMLDivElement>(null);
-  const totalPage: number = 10;
+interface Review {
+  id: number;
+  name: string;
+  age: number;
+  comment: string;
+}
 
+function ReviewCarousel() {
+  const [currentIndex, setCurrentIndex] = useState(1);
+  const [width, setWidth] = useState(300);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [extendedReviews, setExtendedReviews] = useState<Review[]>([]);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const reviewCarouselRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const updateWidth = () => {
       if (reviewCarouselRef.current) {
@@ -21,39 +31,101 @@ function ReviewCarousel() {
     };
   }, []);
 
+  useEffect(() => {
+    if (reviews.length > 0) {
+      setExtendedReviews([reviews[reviews.length - 1], ...reviews, reviews[0]]);
+    }
+  }, [reviews]);
+
+  useEffect(() => {
+    if (carouselRef.current) {
+      if (isTransitioning) {
+        // 若是在變換頁面時，啟用動畫
+        carouselRef.current.style.transition = "transform 0.3s ease-in-out";
+      } else {
+        // 否則禁用動畫
+        carouselRef.current.style.transition = "none";
+      }
+      carouselRef.current.style.transform = `translateX(-${
+        currentIndex * 100
+      }%)`;
+      console.log(carouselRef.current.clientWidth);
+    }
+    setIsTransitioning(false);
+  }, [currentIndex]);
+
+  useEffect(() => {
+    if (isTransitioning) {
+      if (currentIndex === extendedReviews.length - 1) {
+        setTimeout(() => {
+          setIsTransitioning(false);
+          setCurrentIndex(1);
+        }, 300);
+      } else if (currentIndex === 0) {
+        setTimeout(() => {
+          setIsTransitioning(false);
+          setCurrentIndex(extendedReviews.length - 2);
+        }, 300);
+      } else {
+        setIsTransitioning(false);
+      }
+    }
+  }, [currentIndex, isTransitioning, extendedReviews.length]);
+
   const previous = () => {
-    setCurrentIndex(
-      (prevIndex: number) => (prevIndex - 1 + totalPage) % totalPage
-    );
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setCurrentIndex(currentIndex - 1);
   };
 
   const next = () => {
-    setCurrentIndex((prevIndex: number) => (prevIndex + 1) % totalPage);
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setCurrentIndex(currentIndex + 1);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setStartX(e.touches[0].clientX);
+    setIsDragging(true);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    const endX = e.changedTouches[0].clientX;
+    if (startX - endX > 50) {
+      next();
+    } else if (endX - startX > 50) {
+      previous();
+    }
+    setIsDragging(false);
   };
 
   return (
-    <div className="Review-Carousel flex items-center">
+    <div
+      className="Review-Carousel flex items-center"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       <button className="text-black arrow previous" onClick={previous}>
         &#10094;
       </button>
       <div
-        id="carousel-slide"
         className="overflow-hidden flex"
-        style={{
-          width: `${width}px`,
-        }}
+        // style={{
+        //   width: `${width}px`,
+        // }}
       >
         <div
           id="review-carousel"
-          className="flex justify-start transition-all duration-600 ease-in-out"
-          style={{ transform: `translateX(-${currentIndex * width}px)` }}
+          className="flex justify-start"
+          style={{ width: `${width}px` }}
+          ref={carouselRef}
         >
-          {reviews.map((review, index: number) => {
+          {extendedReviews.map((review, index: number) => {
             return (
               <div
                 key={index}
-                className="customer-review my-8 flex items-center justify-center text-white"
-                style={{ width: "50vw", height: "20dvh" }}
+                className="flex-shrink-0 customer-review my-8 flex items-center justify-center text-white w-[70vw] md:w-[50vw] h-[20dvh]"
                 ref={reviewCarouselRef}
               >
                 <div className="customer-img-container w-[100px] h-[100px] rounded-[50%] border-midBrown overflow-hidden object-cover mx-8 flex-2">

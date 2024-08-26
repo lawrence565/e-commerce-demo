@@ -6,10 +6,19 @@ import "../style/HomepageStyle.scss";
 import { useState, useRef, useEffect } from "react";
 
 function Carousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const carouselRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(1);
   const [width, setWidth] = useState(300);
+  const [startX, setStartX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const carouselRef = useRef<HTMLDivElement>(null);
   const cards = [
+    {
+      id: 4,
+      title: "軟木藝術品",
+      content: "獨特的軟木藝術品，增添藝術氣息。",
+      img: cork_art,
+    },
     {
       id: 1,
       title: "木製手機架",
@@ -34,6 +43,12 @@ function Carousel() {
       content: "獨特的軟木藝術品，增添藝術氣息。",
       img: cork_art,
     },
+    {
+      id: 1,
+      title: "木製手機架",
+      content: "使用台東漂流木結合原住民雕刻文化打造的特色手機架",
+      img: phone_stand,
+    },
   ];
 
   useEffect(() => {
@@ -50,78 +65,136 @@ function Carousel() {
     };
   }, []);
 
-  const updateCarousel = (newIndex: number) => {
-    setCurrentIndex((newIndex + cards.length) % cards.length);
+  useEffect(() => {
+    if (carouselRef.current) {
+      if (isTransitioning) {
+        // 若是在變換頁面時，啟用動畫
+        carouselRef.current.style.transition = "transform 0.3s ease-in-out";
+      } else {
+        // 否則禁用動畫
+        carouselRef.current.style.transition = "none";
+      }
+      carouselRef.current.style.transform = `translateX(-${
+        currentIndex * 100
+      }%)`;
+    }
+    setIsTransitioning(false);
+  }, [currentIndex]);
+
+  useEffect(() => {
+    if (isTransitioning) {
+      if (currentIndex === cards.length - 1) {
+        setTimeout(() => {
+          setIsTransitioning(false);
+          setCurrentIndex(1);
+        }, 300);
+      } else if (currentIndex === 0) {
+        setTimeout(() => {
+          setIsTransitioning(false);
+          setCurrentIndex(cards.length - 2);
+        }, 300);
+      } else {
+        setIsTransitioning(false);
+      }
+    }
+  }, [currentIndex, isTransitioning, cards.length]);
+
+  const previous = () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setCurrentIndex(currentIndex - 1);
+  };
+
+  const next = () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setCurrentIndex(currentIndex + 1);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setStartX(e.touches[0].clientX);
+    setIsDragging(true);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    const endX = e.changedTouches[0].clientX;
+    if (startX - endX > 50) {
+      next();
+    } else if (endX - startX > 50) {
+      previous();
+    }
+    setIsDragging(false);
   };
 
   return (
     <>
-      <div className="promotion-img-container w-full h-2/5 min-h-[350px] flex flex-col items-center justify-center">
-        <div className="carousel flex items-center justify-center w-full mt-16 mb-6">
-          <button
-            className="arrow left"
-            onClick={() => updateCarousel(currentIndex - 1)}
-          >
+      <div
+        className="promotion-img-container w-full flex flex-col items-center justify-center"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div className="carousel flex items-center justify-center w-full lg:mt-16 lg:mb-6">
+          <button className="arrow left" onClick={previous}>
             &#10094;
           </button>
 
-          <div className="carousel-slide mx-8" ref={carouselRef}>
-            {cards.map((product, index) => {
-              return (
-                <div
-                  key={index}
-                  className={`card ${
-                    index === currentIndex ? "active" : ""
-                  } transition-all duration-800 ease-in-out bg-white`}
-                  style={{
-                    transform: `translateX(-${currentIndex * width}px)`,
-                  }}
-                  ref={carouselRef}
-                >
-                  <div className="img-container rounded-lg">
-                    <img
-                      className="promote-img "
-                      src={product.img}
-                      alt={product.content}
-                    />
-                    <div className="goods-tag">
-                      <h3 className="goods-name">{product.title}</h3>
-                      <p className="goods-disc">{product.content}</p>
+          <div className="carousel-slide md:mx-8">
+            <div
+              className="flex"
+              ref={carouselRef}
+              style={{ width: `${width}px` }}
+            >
+              {cards.map((product, index) => {
+                return (
+                  <div
+                    key={index}
+                    className={`card ${
+                      index === currentIndex ? "active" : ""
+                    } bg-white`}
+                  >
+                    <div className="img-container rounded-lg overflow-hidden">
+                      <img
+                        className="promote-img "
+                        src={product.img}
+                        alt={product.content}
+                      />
+                      <div className="goods-tag">
+                        <h3 className="goods-name">{product.title}</h3>
+                        <p className="goods-disc">{product.content}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
 
-          <button
-            className="arrow right"
-            onClick={() => updateCarousel(currentIndex + 1)}
-          >
+          <button className="arrow right" onClick={next}>
             &#10095;
           </button>
         </div>
         <div className="page-indicater flex items-center">
           <div
-            className={`page1 dot ${currentIndex === 0 ? "active" : ""}`}
+            className={`dot ${currentIndex === 1 ? "active" : ""}`}
             onClick={() => {
               setCurrentIndex(0);
             }}
           ></div>
           <div
-            className={`page1 dot ${currentIndex === 1 ? "active" : ""}`}
+            className={`dot ${currentIndex === 2 ? "active" : ""}`}
             onClick={() => {
               setCurrentIndex(1);
             }}
           ></div>
           <div
-            className={`page1 dot ${currentIndex === 2 ? "active" : ""}`}
+            className={`dot ${currentIndex === 3 ? "active" : ""}`}
             onClick={() => {
               setCurrentIndex(2);
             }}
           ></div>
           <div
-            className={`page1 dot ${currentIndex === 3 ? "active" : ""}`}
+            className={`dot ${currentIndex === 4 ? "active" : ""}`}
             onClick={() => {
               setCurrentIndex(3);
             }}

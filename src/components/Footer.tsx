@@ -10,12 +10,12 @@ function Footer() {
   return (
     <div className="flex justify-center items-center bg-midBrown min-h-[25dvh] h-fit w-full">
       <div className="max-w-[1200px] w-full">
-        <div className="bg-midBrown w-100% my-4 flex items-center justify-center">
+        <div className="bg-midBrown w-100% mb-8 sm:my-4 flex flex-col-reverse md:flex-row items-center justify-center">
           <div id="store-info" className="flex-1 p-4 max-w-[450px]">
-            <div className="logo-container w-fit">
+            <div className="logo-container w-full flex justify-center items-center">
               <img
                 src={white_logo}
-                className="min-w-[250px] max-w-[300px] w-[22dvw]"
+                className="sm:min-w-[250px] max-w-[300px] w-[50dvw] sm:w-[22dvw]"
               />
             </div>
             <div
@@ -54,9 +54,9 @@ function Footer() {
           </div>
           <div
             id="usual-links"
-            className="flex-1 text-white flex justify-end mx-4 p-4 max-w-[450px]"
+            className="flex-1 text-white flex md:flex-row justify-end m-2 sm:mx-4 p-4 max-w-[450px]"
           >
-            <div className="flex-1 text-white flex flex-col mx-4">
+            <div className="flex-1 text-white flex flex-col items-center sm:items-start mx-4">
               <h1 className="text-xl font-semibold mb-2">常用連結</h1>
               <Link to="/stores" className="text-base">
                 商店首頁
@@ -73,7 +73,7 @@ function Footer() {
             </div>
             <div
               id="business-cooperation"
-              className="flex-1 text-white flex flex-col mx-4"
+              className="flex-1 text-white flex flex-col mx-4 items-center sm:items-start "
             >
               <h1 className="text-xl font-semibold mb-2">招商專區</h1>
               <Link to="/business/apply" className="text-base">
@@ -86,7 +86,10 @@ function Footer() {
                 如何加入
               </Link>
             </div>
-            <div id="about-us" className="flex-1 text-white flex flex-col mx-4">
+            <div
+              id="about-us"
+              className="flex-1 text-white flex flex-col mx-4 items-center sm:items-start "
+            >
               <h1 className="text-xl font-semibold mb-2">關於我們</h1>
               <Link to="/help/faqs" className="text-base">
                 常見問題

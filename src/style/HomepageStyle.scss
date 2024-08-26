@@ -27,13 +27,12 @@
   max-width: 1200px;
   aspect-ratio: 16/9;
   overflow: hidden;
-  display: flex;
-  align-items: center;
 }
 
 .arrow {
   font-size: 1.5vw;
   aspect-ratio: 1/1;
+  margin: 0.25rem;
 }
 
 .dot {
@@ -49,4 +48,40 @@
 
 .active {
   background-color: #404040;
+}
+
+@media screen and (max-width: 576px) {
+  .img-container {
+    width: 90dvw;
+  }
+
+  .carousel-slide {
+    width: 90dvw;
+  }
+
+  .arrow {
+    font-size: 5vw;
+    aspect-ratio: 1/1;
+  }
+
+  .dot {
+    width: 10px;
+    max-height: 20px;
+    margin: 0.25rem;
+    margin-top: 0.5rem;
+    border-radius: 10%;
+  }
+
+  .goods-tag {
+    transform-origin: 0 100%;
+    position: absolute;
+    padding: 0.5rem;
+    width: fit-content;
+    height: fit-content;
+    font-size: smaller;
+    max-width: 200px;
+    bottom: -10%;
+    left: 5%;
+    border-radius: 10px;
+  }
 }

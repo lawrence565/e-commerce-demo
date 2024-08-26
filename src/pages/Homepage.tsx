@@ -10,12 +10,12 @@ function Homepage(): JSX.Element {
   return (
     <>
       <div className="homepage-contanier">
-        <div className="h-2/5 min-h-[350px]">
+        <div className="lg:h-2/5 lg:min-h-[350px] mt-8">
           <Carousel />
         </div>
 
-        <div className="product-recommand  flex flex-col justify-center items-center">
-          <div className="max-w-[1200px] lg:max-w-[1400px]">
+        <div className="product-recommand flex flex-col justify-center items-center">
+          <div className="md:max-w-[1200px] lg:max-w-[1400px] m-4">
             <h1 className="text-3xl my-4 text-midBrown font-semibold">
               產品推薦
             </h1>
@@ -59,7 +59,7 @@ function Homepage(): JSX.Element {
         <div className="flex justify-center ">
           <div className="store-introduce m-8 max-w-[1200px]">
             <h1 className="text-midBrown text-3xl font-bold">商家介紹</h1>
-            <div className="store-card-container flex justify-center items-start">
+            <div className="store-card-container flex flex-col lg:flex-row justify-center items-start">
               {Stores.map((store, index: number) => {
                 return (
                   <div
