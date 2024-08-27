@@ -169,7 +169,7 @@ function ProductRecomanned(props: {
                         key={index}
                       >
                         <div className="product-card">
-                          <div className="product w-[35dvw] lg:w-[250px] md:w-[150px] m-2 h-fit">
+                          <div className="product w-[35dvw] md:w-[20dvw] md:max-w-[180px] lg:max-w-[250px] m-2 h-fit">
                             <div className="product-img-container">
                               <img
                                 className="rounded-lg"

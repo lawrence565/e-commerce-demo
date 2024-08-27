@@ -59,14 +59,16 @@ function Homepage(): JSX.Element {
         <div className="flex justify-center ">
           <div className="store-introduce m-8 max-w-[1200px]">
             <h1 className="text-midBrown text-3xl font-bold">商家介紹</h1>
-            <div className="store-card-container flex flex-col lg:flex-row justify-center items-start">
+            <div className="store-card-container flex flex-col md:flex-row justify-center items-start">
               {Stores.map((store, index: number) => {
                 return (
                   <div
-                    className="bg-midbrown max-w-[300px] w-[20dvw] m-4"
+                    className="bg-midbrown max-w-[300px] w-[70dvw] md:w-[20dvw] m-4"
                     key={index}
                   >
-                    <h1 className="text-[1.3rem]">{store.name}</h1>
+                    <h1 className="text-nowrap text-[1.3rem] md:text-[1rem] lg:text-[1.2rem] font-semibold">
+                      {store.name}
+                    </h1>
                     <div className="store-img-container aspect-[4/3] overflow-hidden rounded-md my-2">
                       <img src={store.img} />
                     </div>

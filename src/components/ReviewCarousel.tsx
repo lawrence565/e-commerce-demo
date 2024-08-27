@@ -18,18 +18,20 @@ function ReviewCarousel() {
   const [extendedReviews, setExtendedReviews] = useState<Review[]>([]);
   const carouselRef = useRef<HTMLDivElement>(null);
   const reviewCarouselRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const updateWidth = () => {
       if (reviewCarouselRef.current) {
         setWidth(reviewCarouselRef.current.getBoundingClientRect().width);
       }
     };
+
     updateWidth();
     window.addEventListener("resize", updateWidth);
     return () => {
       window.removeEventListener("resize", updateWidth);
     };
-  }, []);
+  }, [extendedReviews]);
 
   useEffect(() => {
     if (reviews.length > 0) {
@@ -49,7 +51,6 @@ function ReviewCarousel() {
       carouselRef.current.style.transform = `translateX(-${
         currentIndex * 100
       }%)`;
-      console.log(carouselRef.current.clientWidth);
     }
     setIsTransitioning(false);
   }, [currentIndex]);
@@ -110,35 +111,34 @@ function ReviewCarousel() {
         &#10094;
       </button>
       <div
-        className="overflow-hidden flex"
-        // style={{
-        //   width: `${width}px`,
-        // }}
+        className="overflow-hidden"
+        style={{
+          width: `${width}px`,
+        }}
       >
         <div
           id="review-carousel"
           className="flex justify-start"
-          style={{ width: `${width}px` }}
           ref={carouselRef}
         >
           {extendedReviews.map((review, index: number) => {
             return (
               <div
                 key={index}
-                className="flex-shrink-0 customer-review my-8 flex items-center justify-center text-white w-[70vw] md:w-[50vw] h-[20dvh]"
+                className="flex-shrink-0 customer-review md:my-8 flex items-center justify-center text-white w-[80vw] md:w-[50vw] h-[20dvh]"
                 ref={reviewCarouselRef}
               >
-                <div className="customer-img-container w-[100px] h-[100px] rounded-[50%] border-midBrown overflow-hidden object-cover mx-8 flex-2">
+                <div className="customer-img-container w-[50px] h-[50px] md:w-[100px] md:h-[100px] rounded-[50%] border-midBrown overflow-hidden object-cover mx-2 md:mx-8 flex-2">
                   <img src={thumbnail} />
                 </div>
                 <div className="customer-review w-3/5 flex-3">
                   <div className="customer-title h-2/5">
-                    <h1 className="customer-title text-3xl pb-4">
+                    <h1 className="customer-title text-xl md:text-3xl pb-2 md:pb-4">
                       {review.name}
                     </h1>
                   </div>
                   <div className="customer-content h-3/5 w-full align-middle">
-                    <p className="text-xl">{review.comment}</p>
+                    <p className="text-base md:text-xl">{review.comment}</p>
                   </div>
                 </div>
               </div>

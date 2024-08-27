@@ -11,33 +11,48 @@ function Footer() {
     <div className="flex justify-center items-center bg-midBrown min-h-[25dvh] h-fit w-full">
       <div className="max-w-[1200px] w-full">
         <div className="bg-midBrown w-100% mb-8 sm:my-4 flex flex-col-reverse md:flex-row items-center justify-center">
-          <div id="store-info" className="flex-1 p-4 max-w-[450px]">
+          <div
+            id="store-info"
+            className="flex-1 flex flex-col justify-center items-center p-4 max-w-[450px]"
+          >
             <div className="logo-container w-full flex justify-center items-center">
               <img
                 src={white_logo}
-                className="sm:min-w-[250px] max-w-[300px] w-[50dvw] sm:w-[22dvw]"
+                className="w-[60dvw] sm:w-[22dvw] sm:min-w-[250px] max-w-[300px]"
               />
             </div>
             <div
               id="social-logo"
-              className="flex w-[25dvw] justify-between max-w-[300px]"
+              className="flex w-[60dvw] md:w-[25dvw] justify-between max-w-[300px]"
             >
-              <div className="icon-container" id="facebook">
+              <div
+                className="w-[18dvw] m-2 mb-4 md:m-4 max-w-[35px] md:min-w-[40px] aspect-square"
+                id="facebook"
+              >
                 <a href="https://www.facebook.com/facebook/?brand_redir=103274306376166">
                   <img src={facebook} />
                 </a>
               </div>
-              <div className="icon-container" id="instagram">
+              <div
+                className="w-[18dvw] m-2 mb-4 md:m-4 max-w-[35px] md:min-w-[40px] aspect-square"
+                id="instagram"
+              >
                 <a href="https://www.instagram.com/instagram/">
                   <img src={instagram} />
                 </a>
               </div>
-              <div className="icon-container" id="twitter">
+              <div
+                className="w-[18dvw] m-2 mb-4 md:m-4 max-w-[35px] md:min-w-[40px] aspect-square"
+                id="twitter"
+              >
                 <a href="https://x.com/X">
                   <img src={twitter} />
                 </a>
               </div>
-              <div className="icon-container" id="line">
+              <div
+                className="w-[18dvw] m-2 mb-4 md:m-4 max-w-[35px] md:min-w-[40px] aspect-square"
+                id="line"
+              >
                 <a href="https://liff.line.me/1645278921-kWRPP32q/?accountId=line">
                   <img src={line} />
                 </a>

@@ -16,3 +16,20 @@
   background-color: white;
   color: #a0937d;
 }
+
+@media screen and (min-width: 577px) and (max-width: 1024px) {
+  .category-indicator {
+    height: 2.3rem;
+    font-size: 1.2rem;
+    border-radius: 9px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .category-indicator {
+    height: 2rem;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    padding: 1rem;
+  }
+}

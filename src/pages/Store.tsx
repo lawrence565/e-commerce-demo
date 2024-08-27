@@ -35,23 +35,30 @@ function Store() {
         setDisplayheight(
           displayRef.current.getBoundingClientRect().height.toString() + "px"
         );
+        console.log(
+          displayRef.current.getBoundingClientRect().height.toString() + "px"
+        );
       }
     };
+
     setHeight();
   }, []);
 
   return (
     <div className="flex justify-center items-center min-h-[70dvh]">
-      <div className="max-w-[1200px] min-h-[50dvh] my-16 flex">
+      <div className="max-w-[1200px] min-h-[50dvh] my-6 lg:my-16 flex flex-col justify-center items-center md:flex-row">
         <div
           id="category-indicator-conponents"
-          className={`h-[${displayHeight}] w-[15dvw] bg-midBrown rounded-lg p-8 mx-4`}
+          className={`h-[${displayHeight}] w-[90dvw] lg:w-[20dvw] xl:w-[15dvw] bg-midBrown rounded-lg p-4 lg:p-8 mx-4`}
+          // style={{ height: `${displayHeight}` }}
         >
           <div className="text-white">
-            <h1 className="font-bold text-2xl">商品類別</h1>
+            <h1 className="font-bold text-3xl lg:text-2xl text-center lg:text-start mb-3 lg:mb-1">
+              商品類別
+            </h1>
             <hr />
           </div>
-          <div className="flex flex-col my-8 justify-center">
+          <div className="flex lg:flex-col p-2 lg:p-4 lg:my-8 justify-center">
             <div
               className={`category-indicator ${
                 currentType === "gadgets" ? "thisType" : ""

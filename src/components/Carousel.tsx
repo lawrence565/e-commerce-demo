@@ -12,6 +12,7 @@ function Carousel() {
   const [isDragging, setIsDragging] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const cardCarouselRef = useRef<HTMLDivElement>(null);
   const cards = [
     {
       id: 4,
@@ -53,8 +54,8 @@ function Carousel() {
 
   useEffect(() => {
     const updateWidth = () => {
-      if (carouselRef.current) {
-        setWidth(carouselRef.current.getBoundingClientRect().width);
+      if (cardCarouselRef.current) {
+        setWidth(cardCarouselRef.current.getBoundingClientRect().width);
       }
     };
 
@@ -152,8 +153,9 @@ function Carousel() {
                     className={`card ${
                       index === currentIndex ? "active" : ""
                     } bg-white`}
+                    ref={cardCarouselRef}
                   >
-                    <div className="img-container rounded-lg overflow-hidden">
+                    <div className="img-container rounded-lg overflow-hidden relative">
                       <img
                         className="promote-img "
                         src={product.img}

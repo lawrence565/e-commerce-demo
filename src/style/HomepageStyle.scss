@@ -31,6 +31,7 @@
 
 .arrow {
   font-size: 1.5vw;
+  max-height: 50px;
   aspect-ratio: 1/1;
   margin: 0.25rem;
 }
@@ -48,6 +49,44 @@
 
 .active {
   background-color: #404040;
+}
+
+@media screen and (min-width: 577px) and (max-width: 1024px) {
+  .img-container {
+    width: 75dvw;
+  }
+
+  .carousel-slide {
+    width: 75dvw;
+  }
+
+  .arrow {
+    font-size: 3vw;
+    aspect-ratio: 1/1;
+  }
+
+  .dot {
+    width: 15px;
+    max-width: 15px;
+    max-height: 20px;
+    margin: 0.25rem;
+    margin-top: 0.5rem;
+    border-radius: 10%;
+  }
+
+  .goods-tag {
+    transform-origin: 0 100%;
+    position: absolute;
+    padding: 0.5rem;
+    width: fit-content;
+    height: fit-content;
+    font-size: larger;
+    max-width: 350px;
+    top: auto;
+    bottom: 5%;
+    left: 5%;
+    border-radius: 10px;
+  }
 }
 
 @media screen and (max-width: 576px) {
@@ -80,7 +119,8 @@
     height: fit-content;
     font-size: smaller;
     max-width: 200px;
-    bottom: -10%;
+    top: auto;
+    bottom: 5%;
     left: 5%;
     border-radius: 10px;
   }
