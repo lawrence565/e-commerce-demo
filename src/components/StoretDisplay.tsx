@@ -28,14 +28,13 @@ function paginate(
 function StoreDisplay(props: { type: string }) {
   const displayRef = useRef<HTMLDivElement>(null);
   const [pageIndex, setPageIndex] = useState(0);
-  const [displayHeight, setdisplayHeight] = useState(500);
   const [products, setProducts] = useState<Product[]>([]);
 
   const display = products.map((product, index) => {
     return (
-      <div className="mx-6 my-2 cursor-pointer" key={index}>
+      <div className="mx-4 md:mx-6 my-2 cursor-pointer" key={index}>
         <Link to={`/stores/${product.category}/${product.id}`}>
-          <div className="w-[12dvw] max-w-[250px] rounded-md overflow-hidden border-midBrown border-[5px] aspect-4/3">
+          <div className="w-full lg:w-[12dvw] max-w-[250px] rounded-md overflow-hidden border-midBrown border-[5px] aspect-4/3">
             <img src={`./${product.category}s/${product.name}.webp`} />
           </div>
           <div className="">
@@ -64,23 +63,12 @@ function StoreDisplay(props: { type: string }) {
   }, [props.type]);
 
   useEffect(() => {
-    const updateHeight = () => {
-      if (displayRef.current) {
-        setdisplayHeight(displayRef.current.getBoundingClientRect().height);
-      }
-    };
-
-    updateHeight();
-
-    window.addEventListener("resize", updateHeight);
-    return () => {
-      window.removeEventListener("resize", updateHeight);
-    };
+    setPageIndex(0);
   }, [products]);
 
   useEffect(() => {
-    setPageIndex(0);
-  }, [products]);
+    window.scrollTo(0, 0);
+  }, [pageIndex]);
 
   const pages = paginate(display, 9); // 把 products 中的產品分為 9 個
 
@@ -95,8 +83,7 @@ function StoreDisplay(props: { type: string }) {
   return (
     <div className="h-fit">
       <div
-        className={`grid grid-cols-3 justify-center content-start`}
-        style={{ minHeight: displayHeight }}
+        className={`grid grid-cols-2 md:grid-cols-3 justify-center content-start`}
         ref={displayRef}
       >
         {pages[pageIndex]}
@@ -105,7 +92,7 @@ function StoreDisplay(props: { type: string }) {
         id="page-indicator"
         className="flex items-center justify-center my-4"
       >
-        <div className=" rounded-lg flex items-center justify-center border-box relative">
+        <div className="rounded-lg flex items-center justify-center border-box relative">
           <div className="prev px-4 text-lg">
             <button onClick={handlePreviousPage} disabled={pageIndex === 0}>
               &#10094;
@@ -114,7 +101,9 @@ function StoreDisplay(props: { type: string }) {
           {Array.from({ length: totalPages }, (_, index) => (
             <div
               key={index}
-              onClick={() => setPageIndex(index)}
+              onClick={() => {
+                setPageIndex(index);
+              }}
               className={`px-4 cursor-pointer aspect-square flex items-center rounded-lg transition-all ease-in duration-300 ${
                 pageIndex === index
                   ? "bg-midBrown text-white"

@@ -11,7 +11,7 @@ function CheckoutProcess(props: { step: number }) {
         {step > 1 ? <div id="first">✔</div> : <div>1</div>}
       </div>
       <div
-        className={`line h-[3px] w-[30dvh] ${
+        className={`line h-[3px] w-[20dvw] ${
           step > 1 ? "bg-midBrown" : "bg-gray-200"
         }`}
       ></div>
@@ -24,7 +24,7 @@ function CheckoutProcess(props: { step: number }) {
         {step > 2 ? <div id="first">✔</div> : <div>2</div>}
       </div>
       <div
-        className={`line h-[3px] w-[30dvh] ${
+        className={`line h-[3px] w-[20dvw] ${
           step > 2 ? "bg-midBrown" : "bg-gray-200"
         }`}
       ></div>

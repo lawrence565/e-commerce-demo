@@ -139,7 +139,7 @@ export const syncCart = async (cart: CartItem[]) => {
     });
     return responce.data.data;
   } catch (e) {
-    console.log("e");
+    console.log(e);
   } finally {
     console.log("Finish syncing");
   }

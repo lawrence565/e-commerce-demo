@@ -120,7 +120,9 @@ function ProductRecomanned(props: {
     setIsDragging(false);
   };
 
-  const scrollToTop = () => {};
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
+  };
 
   useEffect(() => {
     const updateWidth = () => {

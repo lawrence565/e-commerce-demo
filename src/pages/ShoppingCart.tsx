@@ -145,60 +145,61 @@ function Card(props: {
 
   if (product != null)
     return (
-      <div className="flex w-full border-b-2 border-midBrown min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] p-4">
-        <div className="md:w-[10dvw] lg:w-[15dvw] h-fit aspect-4/3 overflow-hidden rounded-md">
+      <div className="relative grid grid-cols-5 md:grid-cols-9 items-center w-full border-b-2 border-midBrown md:min-w-[600px] max-w-[80dvw] lg:max-w-[60dvw] p-4">
+        <div className="col-span-2 md:w-[10dvw] lg:w-[10dvw] h-fit aspect-4/3 overflow-hidden rounded-md">
           <img src={`./${product.category}s/${product.name}.webp`} />
         </div>
-        <div className="flex justify-between items-center w-full min-w-[400px] md:max-w-[500px] lg:max-w-[800px] mr-8 ml-4 ">
+        <div className="col-span-3 flex justify-items-center mr-8 ml-4 ">
           <div className="h-fit">
             <h3 className="font-semibold text-2xl mb-4">{product.title}</h3>
             <p className="text-lg">{`$ ${product.price}`}</p>
           </div>
-          <div className="h-fit flex items-center justify-center">
-            <div
-              id="amount"
-              className="w-fit ml-4 flex rounded-md border-[1px] border-midBrown"
-            >
-              <div className="w-8 flex justify-center items-centerp-2 text-midBrown cursor-pointer">
-                <button
-                  onClick={() => minus(product.id)}
-                  disabled={amount === 1}
-                  className="h-full w-full"
-                >
-                  &#10094;
-                </button>
-              </div>
-              <div className="w-12 flex justify-center items-center p-2 bg-midBrown text-white">
-                {amount}
-              </div>
-              <div className="w-8 flex justify-center items-centerp-2 text-midBrown cursor-pointer">
-                <button
-                  onClick={() => add(product.id)}
-                  disabled={amount === 20}
-                  className="h-full w-full"
-                >
-                  &#10095;
-                </button>
-              </div>
+        </div>
+        <div className="col-span-3 md:col-span-2 mt-2 h-fit flex items-center justify-center">
+          <div
+            id="amount"
+            className="w-fit ml-4 flex rounded-md border-[1px] border-midBrown"
+          >
+            <div className="w-8 flex justify-center items-centerp-2 text-midBrown cursor-pointer">
+              <button
+                onClick={() => minus(product.id)}
+                disabled={amount === 1}
+                className="h-full w-full"
+              >
+                &#10094;
+              </button>
             </div>
-
-            <button
-              id="delete"
-              className="h-full"
-              onClick={() => deleteItem(product.id, product.title)}
-            >
-              <img className="h-[2rem] ml-2" src={trashCan} />
-            </button>
-
-            <div
-              className={`text-red-500 text-sm ${
-                amount === 20 ? "" : "hidden"
-              }`}
-            >
-              已達到購買上限
+            <div className="w-12 flex justify-center items-center p-2 bg-midBrown text-white">
+              {amount}
+            </div>
+            <div className="w-8 flex justify-center items-centerp-2 text-midBrown cursor-pointer">
+              <button
+                onClick={() => add(product.id)}
+                disabled={amount === 20}
+                className="h-full w-full"
+              >
+                &#10095;
+              </button>
             </div>
           </div>
+
+          <div
+            className={`text-red-500 text-sm ${amount === 20 ? "" : "hidden"}`}
+          >
+            已達到購買上限
+          </div>
         </div>
+        <div className="col-span-2 md:col-span-1 mt-2 w-full text-nowrap ml-4">
+          {`NTS ${product.price * amount}`}
+        </div>
+
+        <button
+          id="delete"
+          className="absolute right-0 top-[5%]"
+          onClick={() => deleteItem(product.id, product.title)}
+        >
+          <img className="h-[1.8rem] ml-2" src={trashCan} />
+        </button>
       </div>
     );
 }
@@ -319,15 +320,17 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
   return (
     <div className="flex flex-col items-center justify-start my-8 w-full min-h-[70dvh]">
       {<CheckoutProcess step={1} />}
-      <div className="flex justify-between my-8 max-w-[1200px] w-full">
+      <div className="flex flex-col md:flex-row items-center justify-between my-8 max-w-[1200px] w-full">
         <div
           id="items"
-          className="flex-[3] ml-4 min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] flex flex-col justify-start mr-8"
+          className="flex-[3] min-w-[250px] md:min-w-[450px] lg:min-w-[600px] w-full max-w-[90dvw] md:max-w-[40dvw] lg:max-w-[60dvw] flex flex-col justify-start ml-4 mr-4 md:mr-8"
         >
           <h1 className="text-4xl font-bold text-midBrown mb-8">購買品項</h1>
           {CartItem.length < 1 ? (
-            <div>
-              <h1>購物車中沒有商品哦</h1>
+            <div className="flex items-center text-center h-[20dvw] w-full">
+              <h1 className="text-xl font-semibold w-full">
+                購物車中沒有商品哦
+              </h1>
             </div>
           ) : (
             CartItem.map((item, index) => (
@@ -344,9 +347,9 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
         </div>
         <div
           id="subtotal"
-          className="flex-[1] min-w-[300px] max-w-[20dvw] rounded-lg bg-midBrown p-6 m-4 h-fit "
+          className="flex-1 min-w-[300px] w-full max-w-[90dvw] md:max-w-[25dvw] lg:max-w-[20dvw] rounded-lg bg-midBrown p-6 m-4 h-fit "
         >
-          <h1 className="font-semibold text-3xl text-white mb-4 max-w-[15dvw] ml-2">
+          <h1 className="font-semibold text-3xl text-white mb-4 lg:max-w-[15dvw] ml-2">
             購買明細
           </h1>
           <hr />
@@ -405,7 +408,7 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
         </div>
       </div>
 
-      <div id="coupon" className="w-full max-w-[1200px]">
+      <div id="coupon" className="w-full lg:max-w-[1200px]">
         <div className="m-4 w-fit rounded-lg overflow-hidden  border-[2px] border-midBrown">
           <input
             className={`w-[200px] p-2 bg-gray-200 ${
@@ -431,7 +434,7 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
           <table className="w-full max-w-[800px]">
             <thead className="w-full bg-midBrown">
               <tr className="w-full text-white">
-                <th className="w-2/5 text-lg font-semibold py-[2px]">名稱</th>
+                <th className="w-1/4 text-lg font-semibold py-[2px]">名稱</th>
                 <th className="w-1/5 text-lg font-semibold py-[2px]">折扣</th>
                 <th className="w-1/5 text-lg font-semibold py-[2px]">到期日</th>
                 <th className="w-fit text-lg font-semibold py-[2px]">選擇</th>
@@ -445,11 +448,13 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
                       className="w-full text-center h-fit mb-2"
                       key={coupon.id}
                     >
-                      <td className="w-2/5 text-start text-lg pl-2 py-2">
+                      <td className="w-2/5 text-start text-base md:text-lg pl-2 py-2">
                         {coupon.name}
                       </td>
-                      <td className="w-1/5 text-lg py-2">{coupon.discount}</td>
-                      <td className="w-1/5 text-lg py-2">
+                      <td className="w-1/5 text-base md:text-lg py-2">
+                        {coupon.discount}
+                      </td>
+                      <td className="w-1/5 text-base md:text-lg py-2">
                         {coupon.expirement}
                       </td>
                       <td className="w-fit">
