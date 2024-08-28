@@ -145,7 +145,7 @@ function Card(props: {
 
   if (product != null)
     return (
-      <div className="relative grid grid-cols-5 md:grid-cols-9 items-center w-full border-b-2 border-midBrown md:min-w-[600px] max-w-[80dvw] lg:max-w-[60dvw] p-4">
+      <div className="relative grid grid-cols-5 md:grid-cols-9 items-center w-full border-b-2 border-midBrown md:min-w-[600px] max-w-[90dvw] lg:max-w-[60dvw] p-4">
         <div className="col-span-2 md:w-[10dvw] lg:w-[10dvw] h-fit aspect-4/3 overflow-hidden rounded-md">
           <img src={`./${product.category}s/${product.name}.webp`} />
         </div>
@@ -155,12 +155,12 @@ function Card(props: {
             <p className="text-lg">{`$ ${product.price}`}</p>
           </div>
         </div>
-        <div className="col-span-3 md:col-span-2 mt-2 h-fit flex items-center justify-center">
+        <div className="col-span-3 md:col-span-2 mt-4 h-fit flex justify-start md:justify-center items-center">
           <div
             id="amount"
-            className="w-fit ml-4 flex rounded-md border-[1px] border-midBrown"
+            className="w-fit md:ml-4 flex rounded-md border-[1px] border-midBrown"
           >
-            <div className="w-8 flex justify-center items-centerp-2 text-midBrown cursor-pointer">
+            <div className="w-10 md:w-8 flex justify-center items-centerp-2 text-midBrown cursor-pointer">
               <button
                 onClick={() => minus(product.id)}
                 disabled={amount === 1}
@@ -169,13 +169,13 @@ function Card(props: {
                 &#10094;
               </button>
             </div>
-            <div className="w-12 flex justify-center items-center p-2 bg-midBrown text-white">
+            <div className="w-14 md:w-12 flex justify-center items-center p-2 bg-midBrown text-white text-xl md:text-lg">
               {amount}
             </div>
-            <div className="w-8 flex justify-center items-centerp-2 text-midBrown cursor-pointer">
+            <div className="w-10 md:w-8 flex justify-center items-centerp-2 text-midBrown cursor-pointer">
               <button
                 onClick={() => add(product.id)}
-                disabled={amount === 20}
+                disabled={amount === 10}
                 className="h-full w-full"
               >
                 &#10095;
@@ -189,7 +189,7 @@ function Card(props: {
             已達到購買上限
           </div>
         </div>
-        <div className="col-span-2 md:col-span-1 mt-2 w-full text-nowrap ml-4">
+        <div className="col-span-2 md:col-span-1 mt-4 w-full text-nowrap ml-4 text-xl font-semibold">
           {`NTS ${product.price * amount}`}
         </div>
 

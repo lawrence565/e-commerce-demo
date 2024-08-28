@@ -27,7 +27,7 @@ export function CreditCard({ handlePaymentMethod }: ChildFormProps) {
   };
 
   return (
-    <div className="p-4 m-4 border-4 border-midBrown w-fit rounded-lg">
+    <div className="p-3 md:p-4 md:m-4 border-4 border-midBrown w-full md:w-fit rounded-lg">
       <div className="mb-2 flex flex-col">
         <label
           htmlFor="cardNumber"
@@ -147,7 +147,7 @@ export function ATM({ handlePaymentMethod }: ChildFormProps) {
   return (
     <div
       id="ATM-info"
-      className="m-4 border-midBrown border-4 rounded-xl w-fit px-2"
+      className="m-4 border-midBrown border-4 rounded-xl w-4/5 md:w-fit px-2"
     >
       <div className="m-4">
         <h3 className="text-xl">收款銀行：星展銀行（812）</h3>

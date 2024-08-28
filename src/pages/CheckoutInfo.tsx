@@ -193,12 +193,12 @@ function CheckoutInfo(props: { subtotalData: Subtotal }) {
 
   return (
     <>
-      <div className="flex flex-col items-center m-8 ">
+      <div className="flex flex-col items-center m-4 md:m-8 ">
         {<CheckoutProcess step={2} />}
-        <div className="max-w-[1200px] w-full flex my-4">
+        <div className="max-w-[1200px] w-full flex flex-col md:flex-row items-center md:items-start my-4">
           <div
             id="CheckoutInfo"
-            className="flex-[3] flex flex-col min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] mr-12"
+            className="flex-[3] flex flex-col md:min-w-[500px] lg:min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] md:mr-12"
           >
             <div id="payment">
               <div className="my-4">
@@ -263,7 +263,7 @@ function CheckoutInfo(props: { subtotalData: Subtotal }) {
               <form className="w-full">
                 <div className="flex">
                   <div className="flex-1 flex flex-col mr-2">
-                    <label className="inline-block mr-2 " htmlFor="name">
+                    <label className="inline-block mr-2" htmlFor="name">
                       <span className="text-red-500">*</span>
                       收貨人姓名
                     </label>
@@ -316,7 +316,7 @@ function CheckoutInfo(props: { subtotalData: Subtotal }) {
                         <span className="text-red-500">*</span>縣/市
                       </label>
                       <select
-                        className="h-[40px] border-2 border-midBrown mr-2 pl-2 rounded-md bg-gray-100"
+                        className="h-[40px] border-2 border-midBrown mr-2 md:pl-2 rounded-md bg-gray-100"
                         {...register("shippment.city", {
                           required: { value: true, message: "*" },
                         })}
@@ -336,7 +336,7 @@ function CheckoutInfo(props: { subtotalData: Subtotal }) {
                         <span className="text-red-500">*</span>鄉鎮市區
                       </label>
                       <select
-                        className="h-[40px] border-2 border-midBrown mr-2 rounded-md bg-gray-100"
+                        className="h-[40px] border-2 border-midBrown mr-2 md:pl-2 rounded-md bg-gray-100"
                         {...register("shippment.district", {
                           required: { value: true, message: "*" },
                         })}
@@ -357,7 +357,7 @@ function CheckoutInfo(props: { subtotalData: Subtotal }) {
                       </select>
                     </div>
                     <div className="flex-1 flex flex-col">
-                      <label className="inline-block mr-2 mb-2">
+                      <label className="inline-block mr-2 md:pl-2 mb-2">
                         <span className="text-red-500">*</span>街道名
                       </label>
                       <select
@@ -434,9 +434,9 @@ function CheckoutInfo(props: { subtotalData: Subtotal }) {
 
           <div
             id="subtotal"
-            className="flex-1 min-w-[300px] max-w-[20dvw] rounded-lg bg-midBrown p-6 my-4 h-fit "
+            className="flex-1 min-w-[300px] w-full max-w-[90dvw] md:max-w-[25dvw] lg:max-w-[20dvw] rounded-lg bg-midBrown p-6 md:m-4 h-fit "
           >
-            <h1 className="font-semibold text-3xl text-white mb-4 max-w-[15dvw] ml-2">
+            <h1 className="font-semibold text-3xl text-white mb-4 lg:max-w-[15dvw] ml-2">
               購買明細
             </h1>
             <hr />

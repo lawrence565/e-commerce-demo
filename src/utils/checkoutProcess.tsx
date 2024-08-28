@@ -8,7 +8,13 @@ function CheckoutProcess(props: { step: number }) {
           step > 0 ? "bg-midBrown text-white" : "bg-gray-200 "
         }`}
       >
-        {step > 1 ? <div id="first">✔</div> : <div>1</div>}
+        {step > 1 ? (
+          <div id="first" className="text-white">
+            ✔
+          </div>
+        ) : (
+          <div>1</div>
+        )}
       </div>
       <div
         className={`line h-[3px] w-[20dvw] ${
@@ -21,7 +27,13 @@ function CheckoutProcess(props: { step: number }) {
           step > 1 ? "bg-midBrown text-white" : "bg-gray-200 "
         }`}
       >
-        {step > 2 ? <div id="first">✔</div> : <div>2</div>}
+        {step > 2 ? (
+          <div id="second" className="text-white">
+            ✔
+          </div>
+        ) : (
+          <div>2</div>
+        )}
       </div>
       <div
         className={`line h-[3px] w-[20dvw] ${
@@ -34,7 +46,13 @@ function CheckoutProcess(props: { step: number }) {
           step > 3 ? "bg-midBrown text-white" : "bg-gray-200 "
         }`}
       >
-        {step > 3 ? <div id="first">✔</div> : <div>3</div>}
+        {step > 3 ? (
+          <div id="third" className="text-white">
+            ✔
+          </div>
+        ) : (
+          <div>3</div>
+        )}
       </div>
     </div>
   );

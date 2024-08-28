@@ -73,13 +73,13 @@ function finishOrder(): JSX.Element {
               />
             </div>
           </td>
-          <td className="align-middle text-center py-2">
+          <td className="align-middle text-center py-2 text-lg md:text-xl text-nowrap">
             <h1 className="text-xl p-2">{product.title}</h1>
           </td>
-          <td className="align-middle text-center py-2">
+          <td className="align-middle text-center py-2 text-lg md:text-xl text-nowrap">
             <h3 className="p-2">{item.quantity}</h3>
           </td>
-          <td className="align-middle text-center py-2">
+          <td className="align-middle text-center py-2 text-lg md:text-xl text-nowrap">
             <h3 className="p-2">{product.price}</h3>
           </td>
         </tr>
@@ -97,31 +97,31 @@ function finishOrder(): JSX.Element {
 
   return (
     <div className="flex justify-center">
-      <div className="min-h-[70dvh] max-w-[1200px] w-full flex flex-col items-center m-8">
+      <div className="min-h-[70dvh] max-w-[1200px] w-full flex flex-col items-center m-2 md:m-8">
         <div
           id="title"
-          className="w-4/5 flex flex-col items-center lg:mt-[5dvh]"
+          className="w-10/12 md:w-4/5 flex flex-col items-center lg:mt-[5dvh]"
         >
           <h1 className="text-4xl text-midBrown font-bold m-4">訂單成立</h1>
           <div className="bg-midBrown h-1 w-full"></div>
         </div>
 
-        <div id="order-info" className="m-8 lg:min-w-[600px]">
+        <div id="order-info" className="m-2 md:m-8 lg:min-w-[600px]">
           <div>
             <p className="text-lg m-3">
               感謝惠顧！ 您的商品會在付款日後 3-5 個工作天送達，若有問題請洽
               Line 客服。
             </p>
-            <div className="p-8 rounded-xl border-2 border-midBrown">
+            <div className="p-4 md:p-8 rounded-xl border-2 border-midBrown">
               <table>
-                <tbody className="text-lg">
+                <tbody className="text-lg text-nowrap">
                   <tr>
                     <td>訂單時間：</td>
                     <td>{`${date}`}</td>
                   </tr>
                   <tr>
-                    <td>寄送地址：</td>
-                    <td>{address}</td>
+                    <td className="flex justify-start">寄送地址：</td>
+                    <td className="text-wrap">{address}</td>
                   </tr>
                   <tr>
                     <td>收件資訊：</td>
@@ -140,16 +140,16 @@ function finishOrder(): JSX.Element {
               <table>
                 <thead>
                   <tr className="text-xl align-middle text-center">
-                    <th className="w-3/12 align-middle text-center px-2"></th>
+                    <th className="w-2/12 align-middle text-center px-2"></th>
                     <th className="w-3/12 align-middle text-center px-2 font-semibold">
                       產品名稱
                     </th>
 
                     <th className="w-2/12 align-middle text-center px-2 font-semibold">
-                      產品數量
+                      數量
                     </th>
                     <th className="w-2/12 align-middle text-center px-2 font-semibold">
-                      產品價格
+                      價格
                     </th>
                   </tr>
                 </thead>
