@@ -1,4 +1,6 @@
 import { Routes, Route, HashRouter } from "react-router-dom";
+import { CookiesProvider, useCookies } from "react-cookie";
+import { useState } from "react";
 import Layout from "./Layout";
 import Homepage from "./pages/Homepage";
 import Store from "./pages/Store";
@@ -9,8 +11,7 @@ import ShopppingCart from "./pages/ShoppingCart";
 import CheckoutInfo from "./pages/CheckoutInfo";
 import FinishOrder from "./pages/FinishOrder";
 import ScrollToTop from "./utils/ScrollToTop";
-import { CookiesProvider, useCookies } from "react-cookie";
-import { useState } from "react";
+import StillBuilding from "./pages/StillBuilding";
 import "./style/App.css";
 
 type SubtotalInfo = {
@@ -72,6 +73,11 @@ function App() {
                 <Route path=":category" element={<Store />} />
               </Route>
               <Route path="stores/:category/:itemId" element={<Product />} />
+              <Route
+                path="business/:function"
+                element={<StillBuilding />}
+              ></Route>
+              <Route path="help/:function" element={<StillBuilding />}></Route>
               <Route
                 path="shoppingcart"
                 element={<ShopppingCart subtotalInfo={subtotalInfo} />}

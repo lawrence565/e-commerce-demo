@@ -69,7 +69,7 @@ function Footer() {
           </div>
           <div
             id="usual-links"
-            className="flex-1 text-white flex md:flex-row justify-end m-2 sm:mx-4 p-4 max-w-[450px]"
+            className="flex-1 text-white text-nowrap flex md:flex-row justify-end m-2 sm:mx-4 p-4 max-w-[450px]"
           >
             <div className="flex-1 text-white flex flex-col items-center sm:items-start mx-4">
               <h1 className="text-xl font-semibold mb-2">常用連結</h1>
