@@ -320,7 +320,7 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
   return (
     <div className="flex flex-col items-center justify-start my-8 w-full min-h-[70dvh]">
       {<CheckoutProcess step={1} />}
-      <div className="flex flex-col md:flex-row items-center justify-between my-8 max-w-[1200px] w-full">
+      <div className="flex flex-col md:flex-row items-start justify-between my-8 max-w-[1200px] h-fit w-full">
         <div
           id="items"
           className="flex-[3] min-w-[250px] md:min-w-[450px] lg:min-w-[600px] w-full max-w-[90dvw] md:max-w-[40dvw] lg:max-w-[60dvw] flex flex-col justify-start ml-4 mr-4 md:mr-8"
@@ -347,7 +347,7 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
         </div>
         <div
           id="subtotal"
-          className="flex-1 min-w-[300px] w-full max-w-[90dvw] md:max-w-[25dvw] lg:max-w-[20dvw] rounded-lg bg-midBrown p-6 m-4 h-fit "
+          className="flex-1 min-w-[300px] w-full max-w-[90dvw] md:max-w-[25dvw] lg:max-w-[20dvw] rounded-lg bg-midBrown p-6 m-4 h-fit"
         >
           <h1 className="font-semibold text-3xl text-white mb-4 lg:max-w-[15dvw] ml-2">
             購買明細

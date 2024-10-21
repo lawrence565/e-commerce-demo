@@ -2,20 +2,16 @@
 name: Deploy static content to Pages
 
 on:
-  # 仅在推送到默认分支时运行。
   push:
     branches: ["main"]
 
-  # 这个选项可以使你手动在 Action tab 页面触发工作流
   workflow_dispatch:
 
-# 设置 GITHUB_TOKEN 的权限，以允许部署到 GitHub Pages。
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 允许一个并发的部署
 concurrency:
   group: "pages"
   cancel-in-progress: true
@@ -25,7 +21,6 @@ env:
   VITE_IMAGE_PATH: "./"
 
 jobs:
-  # 单次部署的工作描述
   deploy:
     environment:
       name: github-pages
@@ -51,7 +46,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload dist folder
           path: "./dist"
       - name: Deploy to GitHub Pages
         id: deployment

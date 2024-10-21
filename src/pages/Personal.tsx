@@ -58,7 +58,7 @@ function Personal() {
               <hr />
               <div className="m-4 lg:m-8 flex justify-center items-center border-2 border-midBrown rounded-xl">
                 <h1 className="text-2xl font-bold text-midBrown m-12">
-                  此功能尚在製作當作
+                  此功能尚在製作當中
                 </h1>
               </div>
             </div>

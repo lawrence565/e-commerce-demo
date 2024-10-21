@@ -167,7 +167,7 @@ function ProductRecomanned(props: {
                     // 渲染卡片
                     return (
                       <Link
-                        to={`stores/${product.category}/${product.id}`}
+                        to={`/stores/${product.category}/${product.id}`}
                         key={index}
                       >
                         <div className="product-card">
