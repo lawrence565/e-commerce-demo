@@ -135,7 +135,7 @@ function Carousel() {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <div className="carousel flex items-center justify-center w-full lg:mt-16 lg:mb-6">
+        <div className="carousel flex items-center justify-center w-full lg:mt-10 lg:mb-6">
           <button className="arrow left" onClick={previous}>
             &#10094;
           </button>

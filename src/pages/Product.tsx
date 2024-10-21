@@ -4,6 +4,7 @@ import { getSingleProduct, postCart } from "../api/productApi";
 import ProductRecomanned from "../components/ProductRecommand";
 import products from "../assets/products.json";
 import { useCookies } from "react-cookie";
+import Modal from "../components/Modal";
 
 interface Product {
   id: number;
@@ -27,6 +28,8 @@ function ProductPage() {
   }>();
   const [amount, setAmount] = useState(1);
   const [product, setProduct] = useState<Product>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isProblemModalOpen, setIsProblemModalOpen] = useState(false);
   const [cookie, setCookie] = useCookies(["cart"]);
   const navigate = useNavigate();
   const imgURL = import.meta.env.VITE_IMAGE_PATH;
@@ -93,7 +96,16 @@ function ProductPage() {
           }
         }
       }
+      setIsModalOpen(true);
     }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleProblemModal = () => {
+    setIsProblemModalOpen(false);
   };
 
   const buyNow = async () => {
@@ -108,6 +120,7 @@ function ProductPage() {
         navigate("/shoppingcart");
       } catch (e) {
         console.log("Here's some problem: " + e);
+        setIsProblemModalOpen(true);
       }
     }
   };
@@ -138,13 +151,19 @@ function ProductPage() {
   return (
     <div className="flex justify-center items-center">
       <div className="min-h-[70dvh] max-w-[1200px] my-8 flex flex-col justify-center items-center">
+        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+          <p>已成功加入購物車</p>
+        </Modal>
+        <Modal isOpen={isProblemModalOpen} onClose={handleProblemModal}>
+          <p>出現某些錯誤，請稍後再試</p>
+        </Modal>
         <div
           id="product"
           className="flex flex-col md:flex-row justify-center items-center h-fit mb-4 sm:mb-6 md:mb-8"
         >
           <div
             id="product-img"
-            className="flex-1 aspect-4/3 md:aspect-square h-[30dvh] md:h-[40dvh] rounded-2xl overflow-hidden mx-6"
+            className="flex-1 aspect-4/3 md:aspect-square h-[30dvh] md:h-[50dvh] rounded-2xl overflow-hidden mx-6"
           >
             <img
               className="h-full w-full object-cover"
@@ -230,7 +249,7 @@ function ProductPage() {
 
         <div
           id="info"
-          className="w-[90dvw] md:w-full flex flex-col md:flex-row justify-center items-start m-4 md:m-8"
+          className="w-[90dvw] md:w-4/5 flex flex-col md:flex-row justify-center items-start m-4 md:m-8"
         >
           <div id="product-info" className="flex-1 mx-4">
             <h1 className="text-xl font-bold">商品相關資訊</h1>

@@ -41,7 +41,7 @@ Demo 網址：https://lawrence565.github.io/e-commerce-demo/
 
 ## 專案安裝
 
-```JavaScript
+```
 $ git clone https://github.com/lawrence565/e-commerce-demo.git
 $ cd e-commerce-demo
 $ npm install
