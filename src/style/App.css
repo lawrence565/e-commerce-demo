@@ -7,3 +7,73 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+.faq {
+  /* color: #a0937d; */
+  margin: 2rem;
+}
+
+.faq > h2 {
+  font-size: 1.3rem;
+}
+
+.background {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.656);
+  position: fixed;
+  z-index: 100;
+}
+
+.spinner {
+  width: 180px;
+  height: 180px;
+  position: relative;
+  z-index: 100;
+}
+
+.word {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  color: #a0937d;
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.spinnerSector {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 10px solid transparent;
+  mix-blend-mode: multiply;
+  animation: rotate var(--duration) var(--timing) infinite;
+}
+
+.spinnerMidBrown {
+  border-top-color: #a0937d;
+  border-right-color: #a0937d;
+  --duration: 1.8s;
+  --timing: ease-in-out;
+}
+
+.spinnerWhite {
+  border-left-color: white;
+  border-bottom-color: white;
+  --duration: 2.2s;
+  --timing: ease-out;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

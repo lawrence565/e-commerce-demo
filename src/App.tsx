@@ -12,6 +12,7 @@ import CheckoutInfo from "./pages/CheckoutInfo";
 import FinishOrder from "./pages/FinishOrder";
 import ScrollToTop from "./utils/ScrollToTop";
 import StillBuilding from "./pages/StillBuilding";
+import Helps from "./pages/Helps";
 import "./style/App.css";
 
 type SubtotalInfo = {
@@ -77,7 +78,7 @@ function App() {
                 path="business/:function"
                 element={<StillBuilding />}
               ></Route>
-              <Route path="help/:function" element={<StillBuilding />}></Route>
+              <Route path="help/:functions" element={<Helps />}></Route>
               <Route
                 path="shoppingcart"
                 element={<ShopppingCart subtotalInfo={subtotalInfo} />}
