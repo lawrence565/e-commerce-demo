@@ -15,6 +15,8 @@ import StillBuilding from "./pages/StillBuilding";
 import Helps from "./pages/Helps";
 import "./style/App.css";
 
+import { SpinnerProvider } from "./utils/SpinnerContext.tsx";
+
 type SubtotalInfo = {
   total: number;
   subtotal: number;
@@ -65,31 +67,33 @@ function App() {
       <HashRouter>
         <ScrollToTop />
         <CookiesProvider>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Homepage />} />
-              <Route path="about" element={<About />} />
-              <Route path="personal" element={<Personal />} />
-              <Route path="stores" element={<Store />}>
-                <Route path=":category" element={<Store />} />
+          <SpinnerProvider>
+            <Routes>
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Homepage />} />
+                <Route path="about" element={<About />} />
+                <Route path="personal" element={<Personal />} />
+                <Route path="stores" element={<Store />}>
+                  <Route path=":category" element={<Store />} />
+                </Route>
+                <Route path="stores/:category/:itemId" element={<Product />} />
+                <Route
+                  path="business/:function"
+                  element={<StillBuilding />}
+                ></Route>
+                <Route path="help/:functions" element={<Helps />}></Route>
+                <Route
+                  path="shoppingcart"
+                  element={<ShopppingCart subtotalInfo={subtotalInfo} />}
+                />
+                <Route
+                  path="checkout"
+                  element={<CheckoutInfo subtotalData={subtotalData} />}
+                />
+                <Route path="finishOrder" element={<FinishOrder />} />
               </Route>
-              <Route path="stores/:category/:itemId" element={<Product />} />
-              <Route
-                path="business/:function"
-                element={<StillBuilding />}
-              ></Route>
-              <Route path="help/:functions" element={<Helps />}></Route>
-              <Route
-                path="shoppingcart"
-                element={<ShopppingCart subtotalInfo={subtotalInfo} />}
-              />
-              <Route
-                path="checkout"
-                element={<CheckoutInfo subtotalData={subtotalData} />}
-              />
-              <Route path="finishOrder" element={<FinishOrder />} />
-            </Route>
-          </Routes>
+            </Routes>
+          </SpinnerProvider>
         </CookiesProvider>
       </HashRouter>
     </>

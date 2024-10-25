@@ -6,23 +6,28 @@ interface SpinnerContextProps {
   hideSpinner: () => void;
 }
 
-interface SpinnerProviderProps {
-  children: ReactNode;
-}
-
 // 建立 SpinnerContext
 const SpinnerContext = createContext<SpinnerContextProps | undefined>(
   undefined
 );
+
+interface SpinnerProviderProps {
+  children: ReactNode;
+}
 
 // 建立 Provider
 export const SpinnerProvider: React.FC<SpinnerProviderProps> = ({
   children,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const showSpinner = () => setIsLoading(true);
-  const hideSpinner = () => setIsLoading(false);
-
+  const showSpinner = () => {
+    console.log("showSpinner called");
+    setIsLoading(true);
+  };
+  const hideSpinner = () => {
+    console.log("hideSpinner called");
+    setIsLoading(false);
+  };
   return (
     <SpinnerContext.Provider value={{ isLoading, showSpinner, hideSpinner }}>
       {children}

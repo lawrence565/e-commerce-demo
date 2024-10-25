@@ -5,8 +5,16 @@ import ReviewCarousel from "../components/ReviewCarousel.tsx";
 import down_arrow from "../assets/down_arrow.svg";
 import Stores from "../assets/stores.json";
 import "../style/HomepageStyle.scss";
+import { useSpinner } from "../utils/SpinnerContext.tsx";
+import { useEffect } from "react";
 
 function Homepage(): JSX.Element {
+  const { hideSpinner } = useSpinner();
+
+  useEffect(() => {
+    hideSpinner();
+  }, [hideSpinner]);
+
   return (
     <>
       <div className="homepage-contanier">
