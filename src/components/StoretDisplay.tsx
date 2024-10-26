@@ -15,12 +15,12 @@ function paginate(
   array: JSX.Element[],
   pageSize: number
 ): Array<Array<JSX.Element>> {
-  return array.reduce((acc, val, i) => {
+  return array.reduce((acc, value, i) => {
     const pageIndex = Math.floor(i / pageSize); // 判斷每一個元素在哪個頁面並加入
     if (!acc[pageIndex]) {
       acc[pageIndex] = []; //若沒有資料則清空後再加入
     }
-    acc[pageIndex].push(val);
+    acc[pageIndex].push(value);
     return acc;
   }, [] as Array<Array<JSX.Element>>);
 }

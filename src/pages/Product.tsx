@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getSingleProduct, postCart } from "../api/productApi";
+import { useSpinner } from "../utils/SpinnerContext";
 import ProductRecomanned from "../components/ProductRecommand";
 import products from "../assets/products.json";
 import { useCookies } from "react-cookie";
@@ -30,6 +31,7 @@ function ProductPage() {
   const [product, setProduct] = useState<Product>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProblemModalOpen, setIsProblemModalOpen] = useState(false);
+  const { showSpinner, hideSpinner } = useSpinner();
   const [cookie, setCookie] = useCookies(["cart"]);
   const navigate = useNavigate();
   const imgURL = import.meta.env.VITE_IMAGE_PATH;
@@ -60,6 +62,10 @@ function ProductPage() {
       }
     })();
   }, [category, itemId]);
+
+  useEffect(() => {
+    showSpinner();
+  }, []);
 
   const addToCart = async () => {
     if (product) {
@@ -168,6 +174,7 @@ function ProductPage() {
             <img
               className="h-full w-full object-cover"
               src={`${imgURL}/${product?.category}s/${product?.name}.webp`}
+              onLoad={() => hideSpinner()}
             />
           </div>
           <div

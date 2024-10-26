@@ -13,6 +13,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../style/CartStyle.scss";
 import { useCookies } from "react-cookie";
+import { useSpinner } from "../utils/SpinnerContext";
 
 interface Product {
   id: number;
@@ -234,12 +235,19 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
   );
   const [cookie, setCookie] = useCookies(["cart"]);
   const [CartItem, setCartitem] = useState<CartItem[]>([]);
+  const { showSpinner, hideSpinner } = useSpinner();
 
   useEffect(() => {
-    getItem();
-    if (cookie.cart === undefined) {
-      setCookie("cart", []);
-    } else cookie.cart;
+    const fetchData = async () => {
+      showSpinner();
+      await getItem();
+      if (cookie.cart === undefined) {
+        setCookie("cart", []);
+      } else cookie.cart;
+      hideSpinner();
+    };
+
+    fetchData();
   }, [cookie.cart.length]);
 
   useEffect(() => {

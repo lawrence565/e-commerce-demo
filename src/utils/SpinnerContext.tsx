@@ -21,11 +21,9 @@ export const SpinnerProvider: React.FC<SpinnerProviderProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const showSpinner = () => {
-    console.log("showSpinner called");
     setIsLoading(true);
   };
   const hideSpinner = () => {
-    console.log("hideSpinner called");
     setIsLoading(false);
   };
   return (

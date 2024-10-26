@@ -9,11 +9,15 @@ import { useSpinner } from "../utils/SpinnerContext.tsx";
 import { useEffect } from "react";
 
 function Homepage(): JSX.Element {
-  const { hideSpinner } = useSpinner();
+  const { showSpinner, hideSpinner } = useSpinner();
 
   useEffect(() => {
-    hideSpinner();
-  }, [hideSpinner]);
+    showSpinner();
+
+    setTimeout(() => {
+      hideSpinner();
+    }, 800);
+  }, []);
 
   return (
     <>
