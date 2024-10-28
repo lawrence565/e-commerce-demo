@@ -1,4 +1,6 @@
+import { useState } from "react";
 import personalImg from "../assets/testing_thumbnail.webp";
+import Modal from "../components/Modal";
 
 // type OrderData = {
 //   id: string;
@@ -7,8 +9,21 @@ import personalImg from "../assets/testing_thumbnail.webp";
 // };
 
 function Personal() {
+  const [personalClicked, setpersonalClicked] = useState(false);
+
+  const showPersonClicked = () => {
+    setpersonalClicked(true);
+  };
+
+  const handlePersonClicked = () => {
+    setpersonalClicked(false);
+  };
+
   return (
     <>
+      <Modal isOpen={personalClicked} onClose={handlePersonClicked}>
+        <p>功能製作中，敬請期待</p>
+      </Modal>
       <div className="min-h-[70dvh] flex justify-center">
         <div className="max-w-[1200px]">
           <div
@@ -35,10 +50,16 @@ function Personal() {
                 </div>
               </div>
               <div className="function flex justify-center items-center">
-                <button className="bg-midBrown text-white px-4 py-2 rounded-md m-2 border-[1px] border-midBrown hover:bg-white hover:text-midBrown transition-all ease-in duration-100 text-lg font-semibold">
+                <button
+                  className="bg-midBrown text-white px-4 py-2 rounded-md m-2 border-[1px] border-midBrown hover:bg-white hover:text-midBrown transition-all ease-in duration-100 text-lg font-semibold"
+                  onClick={showPersonClicked}
+                >
                   修改
                 </button>
-                <button className="bg-white text-midBrown px-4 py-2 rounded-md m-2 border-[1px] border-midBrown hover:bg-midBrown hover:text-white transition-all ease-in duration-100 text-lg font-semibold">
+                <button
+                  className="bg-white text-midBrown px-4 py-2 rounded-md m-2 border-[1px] border-midBrown hover:bg-midBrown hover:text-white transition-all ease-in duration-100 text-lg font-semibold"
+                  onClick={showPersonClicked}
+                >
                   保存
                 </button>
               </div>

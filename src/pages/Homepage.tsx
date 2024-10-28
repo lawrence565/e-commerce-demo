@@ -4,12 +4,14 @@ import ProductRecomanned from "../components/ProductRecommand.tsx";
 import ReviewCarousel from "../components/ReviewCarousel.tsx";
 import down_arrow from "../assets/down_arrow.svg";
 import Stores from "../assets/stores.json";
+import Modal from "../components/Modal.tsx";
 import "../style/HomepageStyle.scss";
 import { useSpinner } from "../utils/SpinnerContext.tsx";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function Homepage(): JSX.Element {
   const { showSpinner, hideSpinner } = useSpinner();
+  const [storeClicked, setStoreClicked] = useState(false);
 
   useEffect(() => {
     showSpinner();
@@ -19,8 +21,19 @@ function Homepage(): JSX.Element {
     }, 800);
   }, []);
 
+  const showStoredModal = () => {
+    setStoreClicked(true);
+  };
+
+  const handleStoreClicked = () => {
+    setStoreClicked(false);
+  };
+
   return (
     <>
+      <Modal isOpen={storeClicked} onClose={handleStoreClicked}>
+        <p>功能製作中，敬請期待</p>
+      </Modal>
       <div className="homepage-contanier">
         <div className="lg:h-2/5 lg:min-h-[350px] mt-8">
           <Carousel />
@@ -75,8 +88,9 @@ function Homepage(): JSX.Element {
               {Stores.map((store, index: number) => {
                 return (
                   <div
-                    className="bg-midbrown max-w-[300px] w-[70dvw] md:w-[20dvw] m-4"
+                    className="bg-midbrown max-w-[300px] w-[70dvw] md:w-[20dvw] m-4 cursor-pointer"
                     key={index}
+                    onClick={showStoredModal}
                   >
                     <h1 className="text-nowrap text-[1.3rem] md:text-[1rem] lg:text-[1.2rem] font-semibold">
                       {store.name}

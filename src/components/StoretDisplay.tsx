@@ -83,7 +83,7 @@ function StoreDisplay(props: { type: string }) {
   return (
     <div className="h-fit">
       <div
-        className={`grid grid-cols-2 md:grid-cols-3 justify-center content-start`}
+        className={`grid grid-cols-2 md:grid-cols-3 justify-center content-start py-4 md:py-0`}
         ref={displayRef}
       >
         {pages[pageIndex]}
