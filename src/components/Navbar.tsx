@@ -37,9 +37,6 @@ function NavBar() {
             <Link className="nav-item" to="/stores">
               商店首頁
             </Link>
-            <Link className="nav-item" to="/personal">
-              個人頁面
-            </Link>
           </div>
 
           <Link
