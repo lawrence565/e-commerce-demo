@@ -47,19 +47,19 @@ function Homepage(): JSX.Element {
             <ProductRecomanned
               key="0"
               title="隨身用品"
-              items="gadgets"
+              category="gadgets"
               url="/stores/gadgets"
             />
             <ProductRecomanned
               key="1"
               title="手工家具"
-              items="furnitures"
+              category="furnitures"
               url="/stores/furnitures"
             />
             <ProductRecomanned
               key="2"
               title="裝飾擺設"
-              items="decorations"
+              category="decorations"
               url="/stores/decorations"
             />
           </div>

@@ -13,7 +13,7 @@ interface Product {
   name: string;
   category: string;
   price: number;
-  discription: string;
+  description: string;
 }
 
 type CartItem = {
@@ -190,7 +190,7 @@ function ProductPage() {
                 商品簡介：
               </h3>
               <p className="mx-4 my-2 md:my-4 min-h-[50px]">
-                {product?.discription}
+                {product?.description}
               </p>
             </div>
             <div className="font-bold text-3xl md:text-4xl mr-4 md:mr-8 mb-6 md:mb-8 text-end">{`$ ${product?.price}`}</div>
@@ -291,7 +291,7 @@ function ProductPage() {
         <ProductRecomanned
           key="0"
           title={`${title}`}
-          items={`${items}`}
+          category={`${items}`}
           url={`${url}`}
         />
       </div>

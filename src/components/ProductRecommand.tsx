@@ -7,13 +7,13 @@ interface Product {
   title: string;
   name: string;
   category: string;
+  description: string;
   price: number;
-  discription: string;
 }
 
 function ProductRecomanned(props: {
   title: string;
-  items: string;
+  category: string;
   url: string;
 }) {
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -34,17 +34,17 @@ function ProductRecomanned(props: {
   const carouselRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     (async () => {
-      let items;
-      if (props.items === "gadgets") {
+      let items: Product[] = [];
+      if (props.category === "gadgets") {
         items = await getProducts("gadget");
-      } else if (props.items === "furnitures") {
+      } else if (props.category === "furnitures") {
         items = await getProducts("furniture");
-      } else if (props.items === "decorations") {
+      } else if (props.category === "decorations") {
         items = await getProducts("decoration");
       }
       setProducts(items ?? []);
     })();
-  }, [props.items]);
+  }, [props.category]);
 
   // 渲染 Carousel 頁面
   useEffect(() => {
@@ -138,6 +138,8 @@ function ProductRecomanned(props: {
     };
   }, [products, extendedProducts]);
 
+  console.log("products", products);
+
   return (
     <div className="text-midBrown my-4">
       <h2 className="text-2xl font-semibold">{props.title}</h2>
@@ -182,7 +184,7 @@ function ProductRecomanned(props: {
                               {product.title}
                             </h3>
                             <p className="product-content text-sm">
-                              {product.discription}
+                              {product.description}
                             </p>
                           </div>
                         </div>
