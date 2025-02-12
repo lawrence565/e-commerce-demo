@@ -8,7 +8,7 @@ interface Product {
   name: string;
   category: string;
   price: number;
-  discription: string;
+  description: string;
 }
 
 function paginate(
