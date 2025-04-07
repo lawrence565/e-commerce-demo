@@ -142,7 +142,7 @@ function Carousel() {
 
           <div className="carousel-slide md:mx-8">
             <div
-              className="flex"
+              className="flex rounded-md"
               ref={carouselRef}
               style={{ width: `${width}px` }}
             >

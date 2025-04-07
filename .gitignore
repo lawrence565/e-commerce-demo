@@ -7,6 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Runtime data
 node_modules
 dist
 dist-ssr
@@ -23,7 +24,65 @@ dist-ssr
 *.sln
 *.sw?
 
-# Other
-.DS_Store
+# Environment files
 .env
 .env.production
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Build artifacts
+build/
+
+# Dependency directories
+bower_components/
+
+# Test coverage reports
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
+
+# MacOS-specific files
+.AppleDouble
+.LSOverride
+
+# IDE-specific files
+*.iml
+*.ipr
+*.iws
+
+# Temporary lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Storybook
+storybook-static/
+
+# ESLint cache
+.eslintcache
+
+# Prettier cache
+.prettiercache
+
+# TypeScript build artifacts
+*.tsbuildinfo
+
+# Next.js specific
+.next/
+out/
+
+# SASS cache
+.sass-cache/
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+
+# Jest
+jest-html-reporters-*.html

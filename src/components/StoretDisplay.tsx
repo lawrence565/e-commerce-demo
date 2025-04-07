@@ -46,7 +46,8 @@ function StoreDisplay(props: { type: string }) {
     );
   });
 
-  const totalPages = display.length / 9 + 1;
+  const totalPages =
+    display.length % 9 == 0 ? display.length / 9 : display.length / 9 + 1;
 
   useEffect(() => {
     (async () => {
