@@ -31,7 +31,12 @@ function Homepage(): JSX.Element {
 
   return (
     <>
-      <Modal isOpen={storeClicked} onClose={handleStoreClicked}>
+      <Modal
+        isOpen={storeClicked}
+        onClose={handleStoreClicked}
+        type="info"
+        title="功能開發中"
+      >
         <p>功能製作中，敬請期待</p>
       </Modal>
       <div className="homepage-contanier">

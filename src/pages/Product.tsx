@@ -157,10 +157,20 @@ function ProductPage() {
   return (
     <div className="flex justify-center items-center">
       <div className="min-h-[70dvh] max-w-[1200px] my-8 flex flex-col justify-center items-center">
-        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          type="success"
+          title="加入購物車"
+        >
           <p>已成功加入購物車</p>
         </Modal>
-        <Modal isOpen={isProblemModalOpen} onClose={handleProblemModal}>
+        <Modal
+          isOpen={isProblemModalOpen}
+          onClose={handleProblemModal}
+          type="error"
+          title="發生錯誤"
+        >
           <p>出現某些錯誤，請稍後再試</p>
         </Modal>
         <div

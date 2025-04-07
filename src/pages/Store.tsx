@@ -47,8 +47,21 @@ function Store() {
         }
       }
     };
+
     setHeight();
-  }, []);
+
+    window.addEventListener("resize", setHeight);
+
+    const observer = new ResizeObserver(setHeight);
+    if (displayRef.current) {
+      observer.observe(displayRef.current);
+    }
+
+    return () => {
+      window.removeEventListener("resize", setHeight);
+      observer.disconnect();
+    };
+  }, [currentType]);
 
   return (
     <div className="flex justify-center items-center min-h-[70dvh]">

@@ -147,12 +147,17 @@ function Card(props: {
   if (product != null)
     return (
       <div className="relative grid grid-cols-5 md:grid-cols-9 items-center w-full border-b-2 border-midBrown md:min-w-[600px] max-w-[90dvw] lg:max-w-[60dvw] p-4">
-        <div className="col-span-2 md:w-[10dvw] lg:w-[10dvw] h-fit aspect-4/3 overflow-hidden rounded-md">
-          <img src={`./${product.category}s/${product.name}.webp`} />
+        <div className="col-span-2 h-fit aspect-4/3 overflow-hidden rounded-md">
+          <img
+            src={`./${product.category}s/${product.name}.webp`}
+            className="w-full h-full object-cover"
+          />
         </div>
-        <div className="col-span-3 flex justify-items-center mr-8 ml-4 ">
-          <div className="h-fit">
-            <h3 className="font-semibold text-2xl mb-4">{product.title}</h3>
+        <div className="col-span-3 flex justify-items-center mr-8 ml-4">
+          <div className="h-fit w-full">
+            <h3 className="font-semibold text-2xl mb-4 break-words whitespace-normal line-clamp-2">
+              {product.title}
+            </h3>
             <p className="text-lg">{`$ ${product.price}`}</p>
           </div>
         </div>
@@ -161,7 +166,7 @@ function Card(props: {
             id="amount"
             className="w-fit md:ml-4 flex rounded-md border-[1px] border-midBrown"
           >
-            <div className="w-10 md:w-8 flex justify-center items-centerp-2 text-midBrown cursor-pointer">
+            <div className="w-10 md:w-8 flex justify-center items-center p-2 text-midBrown cursor-pointer">
               <button
                 onClick={() => minus(product.id)}
                 disabled={amount === 1}
@@ -173,7 +178,7 @@ function Card(props: {
             <div className="w-14 md:w-12 flex justify-center items-center p-2 bg-midBrown text-white text-xl md:text-lg">
               {amount}
             </div>
-            <div className="w-10 md:w-8 flex justify-center items-centerp-2 text-midBrown cursor-pointer">
+            <div className="w-10 md:w-8 flex justify-center items-center p-2 text-midBrown cursor-pointer">
               <button
                 onClick={() => add(product.id)}
                 disabled={amount === 10}

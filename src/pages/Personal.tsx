@@ -21,7 +21,12 @@ function Personal() {
 
   return (
     <>
-      <Modal isOpen={personalClicked} onClose={handlePersonClicked}>
+      <Modal
+        isOpen={personalClicked}
+        onClose={handlePersonClicked}
+        type="info"
+        title="功能開發中"
+      >
         <p>功能製作中，敬請期待</p>
       </Modal>
       <div className="min-h-[70dvh] flex justify-center">
