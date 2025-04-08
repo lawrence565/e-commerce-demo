@@ -7,6 +7,14 @@ export default defineConfig({
   base: process.env.VITE_BASE_URL,
   css: {
     postcss: "./postcss.config.js",
+    preprocessorOptions: {
+      scss: {
+        implementation: "sass",
+        sassOptions: {
+          outputStyle: "compressed",
+        },
+      },
+    },
   },
   build: {
     outDir: "dist",
