@@ -16,6 +16,7 @@ function Carousel() {
   const carouselRef = useRef<HTMLDivElement>(null);
   const cardCarouselRef = useRef<HTMLDivElement>(null);
   const transitionTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const originalCards = [
     {
@@ -44,12 +45,33 @@ function Carousel() {
     },
   ];
 
-  // 創建帶有前後複製項的卡片陣列以實現無限輪播
   const cards = [
-    originalCards[originalCards.length - 1], // 最後一個放在最前
-    ...originalCards, // 原始卡片
-    originalCards[0], // 第一個放在最後
+    originalCards[originalCards.length - 1],
+    ...originalCards,
+    originalCards[0],
   ];
+
+  // 自動播放
+  useEffect(() => {
+    const startAutoPlay = () => {
+      if (autoPlayTimerRef.current) {
+        clearInterval(autoPlayTimerRef.current);
+      }
+      autoPlayTimerRef.current = setInterval(() => {
+        if (!isDragging && !isTransitioning) {
+          next();
+        }
+      }, 5000);
+    };
+
+    startAutoPlay();
+
+    return () => {
+      if (autoPlayTimerRef.current) {
+        clearInterval(autoPlayTimerRef.current);
+      }
+    };
+  }, [isDragging, isTransitioning]);
 
   useEffect(() => {
     const updateWidth = () => {
@@ -164,9 +186,7 @@ function Carousel() {
   const goToSlide = (index: number) => {
     if (isTransitioning) return;
     setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentIndex(index + 1);
-    }, 1000);
+    setCurrentIndex(index + 1);
   };
 
   return (
@@ -188,29 +208,27 @@ function Carousel() {
               ref={carouselRef}
               style={{ width: `${width}px` }}
             >
-              {cards.map((product, index) => {
-                return (
-                  <div
-                    key={index}
-                    className={`card ${
-                      index === currentIndex ? "active" : ""
-                    } bg-white`}
-                    ref={cardCarouselRef}
-                  >
-                    <div className="img-container rounded-lg overflow-hidden relative">
-                      <img
-                        className="promote-img"
-                        src={product.img}
-                        alt={product.content}
-                      />
-                      <div className="goods-tag">
-                        <h3 className="goods-name">{product.title}</h3>
-                        <p className="goods-disc">{product.content}</p>
-                      </div>
+              {cards.map((product, index) => (
+                <div
+                  key={index}
+                  className={`card ${
+                    index === currentIndex ? "active" : ""
+                  } bg-white`}
+                  ref={cardCarouselRef}
+                >
+                  <div className="img-container rounded-lg overflow-hidden relative">
+                    <img
+                      className="promote-img"
+                      src={product.img}
+                      alt={product.content}
+                    />
+                    <div className="goods-tag">
+                      <h3 className="goods-name">{product.title}</h3>
+                      <p className="goods-disc">{product.content}</p>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           </div>
 
