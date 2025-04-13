@@ -92,10 +92,11 @@ function Carousel() {
       const translateX =
         -currentIndex * 100 + (isDragging ? (dragX / width) * 100 : 0);
 
-      // 在切換到克隆卡片時不使用過渡效果
+      // 只在克隆卡片切換回原始卡片時禁用過渡效果
       const shouldTransition = !(
         isTransitioning &&
-        (currentIndex === 0 || currentIndex === cards.length - 1)
+        ((currentIndex === 1 && dragX > 0) ||
+          (currentIndex === cards.length - 2 && dragX < 0))
       );
 
       carouselRef.current.style.transition = shouldTransition
@@ -103,7 +104,7 @@ function Carousel() {
         : "none";
       carouselRef.current.style.transform = `translateX(${translateX}%)`;
     }
-  }, [currentIndex, isDragging, dragX, width, isTransitioning]);
+  }, [currentIndex, isDragging, dragX, width, isTransitioning, cards.length]);
 
   useEffect(() => {
     if (isTransitioning) {
