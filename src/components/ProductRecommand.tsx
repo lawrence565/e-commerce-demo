@@ -138,8 +138,6 @@ function ProductRecomanned(props: {
     };
   }, [products, extendedProducts]);
 
-  console.log("products", products);
-
   return (
     <div className="text-midBrown my-4">
       <h2 className="text-2xl font-semibold">{props.title}</h2>

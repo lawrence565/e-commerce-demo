@@ -26,6 +26,8 @@
         eightChatScriptElement.id = eightChatId;
         eightChatScriptElement.src =
           window.eightChatConfig.launchLocation + "/launch.js";
+        eightChatScriptElement.async = true;
+        eightChatScriptElement.defer = true;
         firstScriptElement.parentNode.insertBefore(
           eightChatScriptElement,
           firstScriptElement
