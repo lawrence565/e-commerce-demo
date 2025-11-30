@@ -1,15 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import personalImg from "../assets/testing_thumbnail.webp";
 import Modal from "../components/Modal";
-
-// type OrderData = {
-//   id: string;
-//   total: number;
-//   shippment: string;
-// };
+import { getUserProfile, getUserOrders, UserProfile } from "../api/userApi";
+import { Order } from "../types";
 
 function Personal() {
   const [personalClicked, setpersonalClicked] = useState(false);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [orders, setOrders] = useState<Order[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const userProfile = await getUserProfile();
+      setProfile(userProfile);
+      const userOrders = await getUserOrders();
+      setOrders(userOrders);
+    };
+    fetchData();
+  }, []);
 
   const showPersonClicked = () => {
     setpersonalClicked(true);
@@ -46,12 +54,18 @@ function Personal() {
                   <p className="my-2">生日：</p>
                   <p className="my-2">電子郵件：</p>
                   <p className="my-2">聯絡電話：</p>
+                  <p className="my-2">地址：</p>
                 </div>
                 <div className="text-xl m-4 ml-2 lg:ml-16">
-                  <p className="my-2">王小明</p>
-                  <p className="my-2">1980/10/10</p>
-                  <p className="my-2">higoogle@google.com</p>
-                  <p className="my-2">0912345678</p>
+                  <p className="my-2">{profile?.name}</p>
+                  <p className="my-2">{profile?.birthday}</p>
+                  <p className="my-2">{profile?.email}</p>
+                  <p className="my-2">{profile?.phone}</p>
+                  <p className="my-2">
+                    {profile?.addresses[0]
+                      ? `${profile.addresses[0].city}${profile.addresses[0].district}${profile.addresses[0].road}${profile.addresses[0].detail}`
+                      : "尚無地址"}
+                  </p>
                 </div>
               </div>
               <div className="function flex justify-center items-center">
@@ -82,10 +96,33 @@ function Personal() {
                 過去訂單
               </h1>
               <hr />
-              <div className="m-4 lg:m-8 flex justify-center items-center border-2 border-midBrown rounded-xl">
-                <h1 className="text-2xl font-bold text-midBrown m-12">
-                  此功能尚在製作當中
-                </h1>
+              <div className="m-4 lg:m-8 flex flex-col justify-center items-center border-2 border-midBrown rounded-xl p-4">
+                {orders.length > 0 ? (
+                  orders.map((order, index) => (
+                    <div key={index} className="w-full border-b-2 border-gray-200 py-4 last:border-b-0">
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="text-xl font-semibold">訂單 #{index + 1}</h3>
+                        <span className="text-lg font-bold text-midBrown">
+                          NT$ {order.price}
+                        </span>
+                      </div>
+                      <div className="text-gray-600">
+                        <p>收件人: {order.recipient.name}</p>
+                        <p>
+                          地址: {order.shippment.city}
+                          {order.shippment.district}
+                          {order.shippment.road}
+                          {order.shippment.detail}
+                        </p>
+                        <p>商品數量: {order.products.length}</p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <h1 className="text-2xl font-bold text-midBrown m-12">
+                    尚無訂單紀錄
+                  </h1>
+                )}
               </div>
             </div>
             <div></div>
