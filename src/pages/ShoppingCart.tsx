@@ -15,6 +15,7 @@ import "../style/CartStyle.scss";
 import { useCookies } from "react-cookie";
 import { useSpinner } from "../utils/SpinnerContext";
 import { Product, CartItem } from "../types";
+import { calculateDiscount, calculateTotal } from "../utils/cartUtils";
 
 type Coupon = {
   id: number;
@@ -240,13 +241,10 @@ function ShopppingKart() {
   }, [cookie.cart.length]);
 
   useEffect(() => {
-    if (subtotal > 5000) {
-      setDiscount(500);
-    } else {
-      setDiscount(0);
-    }
-    setTotal(subtotal - couponDiscount - discount);
-  }, [subtotal]);
+    const newDiscount = calculateDiscount(subtotal);
+    setDiscount(newDiscount);
+    setTotal(calculateTotal(subtotal, newDiscount, couponDiscount));
+  }, [subtotal, couponDiscount]);
 
   const getItem = async () => {
     try {
