@@ -1,5 +1,5 @@
 import { client } from "./client";
-import { Order, Recipient, ShippmentInfo } from "../types";
+import { Order, ShippmentInfo } from "../types";
 
 export type UserProfile = {
     name: string;

@@ -1,7 +1,6 @@
-import { Routes, Route, HashRouter } from "react-router-dom";
+import { Routes, Route, HashRouter, Navigate } from "react-router-dom";
 import { lazy } from "react";
 import { CookiesProvider, useCookies } from "react-cookie";
-import { useState } from "react";
 import Layout from "./Layout";
 import ScrollToTop from "./utils/ScrollToTop";
 import "./style/App.css";
@@ -19,6 +18,10 @@ const CheckoutInfo = lazy(() => import("./pages/CheckoutInfo"));
 const FinishOrder = lazy(() => import("./pages/FinishOrder"));
 const Helps = lazy(() => import("./pages/Helps"));
 const Business = lazy(() => import("./pages/Business"));
+const MerchantLayout = lazy(() => import("./pages/Merchant/MerchantLayout"));
+const MerchantDashboard = lazy(() => import("./pages/Merchant/Dashboard"));
+const MerchantProducts = lazy(() => import("./pages/Merchant/Products"));
+const MerchantPosts = lazy(() => import("./pages/Merchant/Posts"));
 
 function App() {
   const [cookie, setCookie] = useCookies(["cart"]);
@@ -57,6 +60,12 @@ function App() {
                     element={<CheckoutInfo />}
                   />
                   <Route path="finishOrder" element={<FinishOrder />} />
+                </Route>
+                <Route path="merchant" element={<MerchantLayout />}>
+                  <Route index element={<Navigate to="dashboard" replace />} />
+                  <Route path="dashboard" element={<MerchantDashboard />} />
+                  <Route path="products" element={<MerchantProducts />} />
+                  <Route path="posts" element={<MerchantPosts />} />
                 </Route>
               </Routes>
             </CartProvider>
