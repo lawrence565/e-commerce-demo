@@ -17,8 +17,8 @@ const Personal = lazy(() => import("./pages/Personal"));
 const ShopppingCart = lazy(() => import("./pages/ShoppingCart"));
 const CheckoutInfo = lazy(() => import("./pages/CheckoutInfo"));
 const FinishOrder = lazy(() => import("./pages/FinishOrder"));
-const StillBuilding = lazy(() => import("./pages/StillBuilding"));
 const Helps = lazy(() => import("./pages/Helps"));
+const Business = lazy(() => import("./pages/Business"));
 
 function App() {
   const [cookie, setCookie] = useCookies(["cart"]);
@@ -45,7 +45,7 @@ function App() {
                   <Route path="stores/:category/:itemId" element={<Product />} />
                   <Route
                     path="business/:function"
-                    element={<StillBuilding />}
+                    element={<Business />}
                   ></Route>
                   <Route path="help/:functions" element={<Helps />}></Route>
                   <Route

@@ -67,6 +67,47 @@ function Faq() {
   );
 }
 
+function Returns() {
+  return (
+    <div className="flex justify-center mt-12">
+      <div className="max-w-[700px] pb-12 flex flex-col items-center">
+        <h1 className="text-[2.5rem] py-4 text-center font-bold">退換貨問題</h1>
+        <div className="w-full h-[2px] bg-midBrown mb-8"></div>
+        <div className="px-8">
+          <p className="mb-4">
+            我們希望您對購買的商品感到滿意。如果您需要退貨或換貨，請參閱以下政策：
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>商品必須在收到後 30 天內退回。</li>
+            <li>商品必須未經使用且處於原始包裝中。</li>
+            <li>退貨運費由買家承擔，除非商品有瑕疵。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Contact() {
+  return (
+    <div className="flex justify-center mt-12">
+      <div className="max-w-[700px] pb-12 flex flex-col items-center">
+        <h1 className="text-[2.5rem] py-4 text-center font-bold">聯絡我們</h1>
+        <div className="w-full h-[2px] bg-midBrown mb-8"></div>
+        <div className="px-8 text-center">
+          <p className="mb-4">有任何問題嗎？請隨時與我們聯繫！</p>
+          <p className="text-xl font-semibold mb-2">電話</p>
+          <p className="mb-4">02-1234-5678</p>
+          <p className="text-xl font-semibold mb-2">電子郵件</p>
+          <p className="mb-4">emailus@gmail.com</p>
+          <p className="text-xl font-semibold mb-2">地址</p>
+          <p>台北市中正區重慶南路一段122號</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Helps() {
   const { functions: func } = useParams<{
     functions: string;
@@ -76,6 +117,10 @@ function Helps() {
 
   if (func === "faqs") {
     return <Faq />;
+  } else if (func === "returns-and-exchange") {
+    return <Returns />;
+  } else if (func === "contact-us") {
+    return <Contact />;
   } else {
     return <StillBuilding />;
   }
