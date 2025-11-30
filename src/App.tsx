@@ -22,6 +22,7 @@ const MerchantLayout = lazy(() => import("./pages/Merchant/MerchantLayout"));
 const MerchantDashboard = lazy(() => import("./pages/Merchant/Dashboard"));
 const MerchantProducts = lazy(() => import("./pages/Merchant/Products"));
 const MerchantPosts = lazy(() => import("./pages/Merchant/Posts"));
+const Login = lazy(() => import("./pages/Login"));
 
 function App() {
   const [cookie, setCookie] = useCookies(["cart"]);
@@ -67,6 +68,7 @@ function App() {
                   <Route path="products" element={<MerchantProducts />} />
                   <Route path="posts" element={<MerchantPosts />} />
                 </Route>
+                <Route path="login" element={<Login />} />
               </Routes>
             </CartProvider>
           </SpinnerProvider>

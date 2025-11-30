@@ -37,6 +37,9 @@ function NavBar() {
             <Link className="nav-item" to="/stores">
               商店首頁
             </Link>
+            <Link className="nav-item" to="/login">
+              登入
+            </Link>
           </div>
 
           <Link
@@ -84,11 +87,10 @@ function NavBar() {
         </div>
       </div>
       <div
-        className={`absolute top-[100%] w-full border-b-4 border-midBrown rounded-md flex flex-col items-center bg-white shadow-lg transition-all transform ${
-          isOpen
+        className={`absolute top-[100%] w-full border-b-4 border-midBrown rounded-md flex flex-col items-center bg-white shadow-lg transition-all transform ${isOpen
             ? "translate-y-0 opacity-100 z-10 ease-in"
             : "-translate-y-full opacity-0 -z-10 ease-out"
-        }`}
+          }`}
       >
         <Link
           className="nav-item text-xl w-full p-2 flex justify-center"
