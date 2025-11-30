@@ -5,36 +5,54 @@ function CheckoutProcess(props: { step: number }) {
       <div
         id="first"
         className={`rounded-2xl w-8 h-8 overflow-hidden text-center align-middle flex justify-center items-center ${
-          step === 1 ? "bg-gray-200" : "bg-midBrown"
+          step > 0 ? "bg-midBrown text-white" : "bg-gray-200 "
         }`}
       >
-        {step === 1 ? <div>1</div> : <div id="first">✔</div>}
+        {step > 1 ? (
+          <div id="first" className="text-white">
+            ✔
+          </div>
+        ) : (
+          <div>1</div>
+        )}
       </div>
       <div
-        className={`h-[3px] w-[30dvh] ${
+        className={`line h-[3px] w-[20dvw] ${
           step > 1 ? "bg-midBrown" : "bg-gray-200"
         }`}
       ></div>
       <div
         id="second"
-        className={`rounded-2xl w-8 h-8 overflow-hidden text-center align-middle flex justify-center items-center ${
-          step === 1 ? "bg-gray-200" : "bg-midBrown"
+        className={`rounded-2xl w-8 h-8 overflow-hidden text-center align-middle flex justify-center items-center  ${
+          step > 1 ? "bg-midBrown text-white" : "bg-gray-200 "
         }`}
       >
-        {step === 1 ? <div>2</div> : <div id="first">✔</div>}
+        {step > 2 ? (
+          <div id="second" className="text-white">
+            ✔
+          </div>
+        ) : (
+          <div>2</div>
+        )}
       </div>
       <div
-        className={`h-[3px] w-[30dvh] ${
+        className={`line h-[3px] w-[20dvw] ${
           step > 2 ? "bg-midBrown" : "bg-gray-200"
         }`}
       ></div>
       <div
         id="third"
-        className={`rounded-2xl w-8 h-8 overflow-hidden text-center align-middle flex justify-center items-center ${
-          step === 1 ? "bg-gray-200" : "bg-midBrown"
+        className={`rounded-2xl w-8 h-8 overflow-hidden text-center align-middle flex justify-center items-center  ${
+          step > 3 ? "bg-midBrown text-white" : "bg-gray-200 "
         }`}
       >
-        {step === 1 ? <div>3</div> : <div id="first">✔</div>}
+        {step > 3 ? (
+          <div id="third" className="text-white">
+            ✔
+          </div>
+        ) : (
+          <div>3</div>
+        )}
       </div>
     </div>
   );

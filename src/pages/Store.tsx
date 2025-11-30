@@ -7,6 +7,7 @@ function Store() {
   let [currentType, setCurrentType] = useState("gadgets");
   let [displayHeight, setDisplayheight] = useState("55vh");
   let displayRef = useRef<HTMLDivElement>(null);
+  const initialHeightRef = useRef<string | null>(null);
   const { category } = useParams();
 
   const toGadgets = () => {
@@ -32,26 +33,50 @@ function Store() {
   useEffect(() => {
     const setHeight = () => {
       if (displayRef.current) {
-        setDisplayheight(
-          displayRef.current.getBoundingClientRect().height.toString() + "px"
-        );
+        if (window.innerWidth > 768) {
+          if (initialHeightRef.current == null) {
+            initialHeightRef.current =
+              displayRef.current.getBoundingClientRect().height.toString() +
+              "px";
+          }
+          setDisplayheight(initialHeightRef.current.toString() + "px");
+        } else {
+          setDisplayheight(
+            displayRef.current.getBoundingClientRect().height.toString() + "px"
+          );
+        }
       }
     };
+
     setHeight();
-  }, []);
+
+    window.addEventListener("resize", setHeight);
+
+    const observer = new ResizeObserver(setHeight);
+    if (displayRef.current) {
+      observer.observe(displayRef.current);
+    }
+
+    return () => {
+      window.removeEventListener("resize", setHeight);
+      observer.disconnect();
+    };
+  }, [currentType]);
 
   return (
     <div className="flex justify-center items-center min-h-[70dvh]">
-      <div className="max-w-[1200px] min-h-[50dvh] my-16 flex">
+      <div className="max-w-[1200px] min-h-[50dvh] my-6 lg:my-16 flex flex-col md:flex-row justify-center">
         <div
           id="category-indicator-conponents"
-          className={`h-[${displayHeight}] w-[15dvw] bg-midBrown rounded-lg p-8 mx-4`}
+          className={`md:h-[${displayHeight}] md:w-[20dvw] xl:w-[15dvw] bg-midBrown rounded-lg px-4 md:px-8 py-4 lg:py-8 mx-4 flex-shrink-0`}
         >
           <div className="text-white">
-            <h1 className="font-bold text-2xl">商品類別</h1>
+            <h1 className="font-bold text-3xl lg:text-2xl text-center lg:text-start mb-3 lg:mb-1">
+              商品類別
+            </h1>
             <hr />
           </div>
-          <div className="flex flex-col my-8 justify-center">
+          <div className="flex md:flex-col justify-center pt-4 md:pt-2 p-2 lg:p-4 lg:my-8">
             <div
               className={`category-indicator ${
                 currentType === "gadgets" ? "thisType" : ""
