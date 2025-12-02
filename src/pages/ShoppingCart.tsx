@@ -204,14 +204,7 @@ function ShopppingKart() {
     setDiscount,
     couponDiscount,
     setCouponDiscount,
-    const {
-      setTotal,
-      subtotal,
-      setSubtotal,
-      setDiscount,
-      couponDiscount,
-      setCouponDiscount,
-    } = useCart();
+  } = useCart();
   const [applyCouponCode, setApplyCouponCode] =
     useState<string>("請輸入優惠碼");
   const [typed, setTyped] = useState(false);
