@@ -138,6 +138,9 @@ function Card(props: {
             quantity: amount,
           },
         ]);
+        // reload 以取得最新資料
+        window.location.reload();
+        return;
       }
       getItem();
       alert(`${name}已從購物車移除`);
@@ -370,6 +373,8 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
       );
       if (validItems.length > 0) {
         trackBeginCheckout(validItems);
+        // 跳轉到結帳頁（完整 reload）
+        window.location.href = "/checkout";
       }
     }
   };

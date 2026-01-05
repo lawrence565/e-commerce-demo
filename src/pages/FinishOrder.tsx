@@ -140,6 +140,8 @@ function finishOrder(): JSX.Element {
             currency: "TWD",
             items: validItems,
           });
+          // 完成後回首頁（完整 reload）
+          window.location.href = "/";
         }
       }
     }

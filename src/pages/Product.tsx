@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getSingleProduct, postCart } from "../api/productApi";
 import { useSpinner } from "../utils/SpinnerContext";
@@ -38,7 +38,6 @@ function ProductPage() {
   const [isProblemModalOpen, setIsProblemModalOpen] = useState(false);
   const { showSpinner, hideSpinner } = useSpinner();
   const [cookie, setCookie] = useCookies(["cart"]);
-  const navigate = useNavigate();
   const imgURL = import.meta.env.VITE_IMAGE_PATH;
 
   if (!category || !itemId) {
@@ -139,7 +138,8 @@ function ProductPage() {
           quantity: amount,
         },
       ]);
-      setIsModalOpen(true);
+      // 立即重新整理頁面以取得最新資料
+      window.location.reload();
     }
   };
 
@@ -170,7 +170,8 @@ function ProductPage() {
             quantity: amount,
           },
         ]);
-        navigate("/shoppingcart");
+        // 直接跳轉到購物車頁（完整 reload）
+        window.location.href = "/shoppingcart";
       } catch (e) {
         console.log("Here's some problem: " + e);
         setIsProblemModalOpen(true);
