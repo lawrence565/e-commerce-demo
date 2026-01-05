@@ -14,6 +14,11 @@ import { Link } from "react-router-dom";
 import "../style/CartStyle.scss";
 import { useCookies } from "react-cookie";
 import { useSpinner } from "../utils/SpinnerContext";
+import {
+  trackViewCart,
+  trackRemoveFromCart,
+  trackBeginCheckout,
+} from "../utils/gaEventTracking";
 
 interface Product {
   id: number;
@@ -122,6 +127,18 @@ function Card(props: {
   const deleteItem = async (id: number, name: string) => {
     try {
       await deleteCartItem(id);
+      // 追蹤移除購物車事件
+      if (product) {
+        trackRemoveFromCart([
+          {
+            item_name: product.title,
+            item_id: product.id.toString(),
+            price: product.price,
+            item_category: product.category,
+            quantity: amount,
+          },
+        ]);
+      }
       getItem();
       alert(`${name}已從購物車移除`);
     } catch (error) {
@@ -272,6 +289,42 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
       }
       const cart: CartItem[] = await getCart();
       setCartitem(cart);
+
+      // 追蹤查看購物車事件 - 載入所有商品資料後追蹤
+      if (cart.length > 0) {
+        const fetchAllProducts = async () => {
+          const items = await Promise.all(
+            cart.map(async (item) => {
+              try {
+                const product = await getSingleProduct(
+                  item.category,
+                  item.productId
+                );
+                return {
+                  item_name: product.title,
+                  item_id: product.id.toString(),
+                  price: product.price,
+                  item_category: product.category,
+                  quantity: item.quantity,
+                };
+              } catch (e) {
+                return null;
+              }
+            })
+          );
+          const validItems = items.filter(
+            (item): item is NonNullable<typeof item> => item !== null
+          );
+          if (validItems.length > 0) {
+            const cartValue = validItems.reduce(
+              (sum, item) => sum + Number(item.price) * item.quantity,
+              0
+            );
+            trackViewCart(validItems, cartValue);
+          }
+        };
+        fetchAllProducts();
+      }
     } catch (e) {
       setCartitem(cookie.cart);
     }
@@ -280,6 +333,37 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
   const updateSubtotal = (index: number, newSubtotal: number) => {
     subtotals.current[index] = newSubtotal;
     setSubtotal(subtotals.current.reduce((acc, curr) => acc + curr, 0));
+  };
+
+  const handleCheckoutClick = async () => {
+    // 追蹤開始結帳事件
+    if (CartItem.length > 0) {
+      const items = await Promise.all(
+        CartItem.map(async (item) => {
+          try {
+            const product = await getSingleProduct(
+              item.category,
+              item.productId
+            );
+            return {
+              item_name: product.title,
+              item_id: product.id.toString(),
+              price: product.price,
+              item_category: product.category,
+              quantity: item.quantity,
+            };
+          } catch (e) {
+            return null;
+          }
+        })
+      );
+      const validItems = items.filter(
+        (item): item is NonNullable<typeof item> => item !== null
+      );
+      if (validItems.length > 0) {
+        trackBeginCheckout(validItems);
+      }
+    }
   };
 
   function typeCoupon(couponCode: string) {
@@ -412,7 +496,7 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
             </div>
           </div>
           <div className="w-3/5 h-fit bg-white p-2 ml-[20%] mt-4 text-end rounded-md flex justify-center">
-            <Link to="/checkout">
+            <Link to="/checkout" onClick={handleCheckoutClick}>
               <button className="w-full h-full font-bold text-midBrown">
                 結帳
               </button>

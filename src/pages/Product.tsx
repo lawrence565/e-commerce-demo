@@ -6,6 +6,11 @@ import ProductRecomanned from "../components/ProductRecommand";
 import products from "../assets/products.json";
 import { useCookies } from "react-cookie";
 import Modal from "../components/Modal";
+import {
+  trackViewItem,
+  trackAddToCart,
+  trackBeginCheckout,
+} from "../utils/gaEventTracking";
 
 interface Product {
   id: number;
@@ -51,6 +56,16 @@ function ProductPage() {
           const data = await getSingleProduct(category, parseInt(itemId));
           if (data) {
             setProduct(data);
+            // 追蹤查看商品事件
+            trackViewItem([
+              {
+                item_name: data.title,
+                item_id: data.id.toString(),
+                price: data.price,
+                item_category: data.category,
+                quantity: 1,
+              },
+            ]);
           }
         }
       } catch (e) {
@@ -59,6 +74,18 @@ function ProductPage() {
           return product.id === parseInt(itemId);
         });
         setProduct(data);
+        if (data) {
+          // 追蹤查看商品事件
+          trackViewItem([
+            {
+              item_name: data.title,
+              item_id: data.id.toString(),
+              price: data.price,
+              item_category: data.category,
+              quantity: 1,
+            },
+          ]);
+        }
       }
     })();
   }, [category, itemId]);
@@ -102,6 +129,16 @@ function ProductPage() {
           }
         }
       }
+      // 追蹤加入購物車事件
+      trackAddToCart([
+        {
+          item_name: product.title,
+          item_id: product.id.toString(),
+          price: product.price,
+          item_category: product.category,
+          quantity: amount,
+        },
+      ]);
       setIsModalOpen(true);
     }
   };
@@ -123,6 +160,16 @@ function ProductPage() {
       };
       try {
         await postCart(cartItem);
+        // 追蹤開始結帳事件（立即購買）
+        trackBeginCheckout([
+          {
+            item_name: product.title,
+            item_id: product.id.toString(),
+            price: product.price,
+            item_category: product.category,
+            quantity: amount,
+          },
+        ]);
         navigate("/shoppingcart");
       } catch (e) {
         console.log("Here's some problem: " + e);

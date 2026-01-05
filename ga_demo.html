@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>小工具 - 再行銷測試</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="/materialize.min.css" />
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/materialize.min.js"></script>
+    <script src="/vue.js"></script>
+    <script src="/jquery.min.js"></script>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', '{{GTMTag}}');
+    </script>
+    <!-- End Google Tag Manager -->
+    <style>
+      .title {
+        display: flex;
+        height: 60px;
+      }
+
+      .marginItem {
+        height: 80px;
+      }
+
+      .btnBlock div {
+        margin-bottom: 16px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <div class="logout">
+        <input class="btn-small" type="button" @click="goToMenu" value="回列表" />
+      </div>
+      <div class="container">
+        <div>
+          <img src="/logo.png" class="Rectangle" />
+        </div>
+        <div class="titlecreate">小工具 - 再行銷測試</div>
+        <div class="row btnBlock">
+          <div>
+            <input type="text" v-model="ecCustomerId" placeholder="請填入 ecCustomerId" />
+            <input
+              class="btn-small"
+              type="button"
+              @click="loginEvent()"
+              value="ec 登入"
+              :disabled="isLoading === true"
+            />
+          </div>
+          <div>
+            <input
+              class="btn-small"
+              type="button"
+              @click="logoutEvent()"
+              value="ec 登出"
+              :disabled="isLoading === true"
+            />
+          </div>
+          <div>
+            <input
+              class="btn-small"
+              type="button"
+              @click="sendEvent('add_to_cart')"
+              value="加入購物車"
+              :disabled="isLoading === true"
+            />
+          </div>
+          <div>
+            <input
+              class="btn-small"
+              type="button"
+              @click="sendEvent('remove_from_cart')"
+              value="移除購物車"
+              :disabled="isLoading === true"
+            />
+          </div>
+          <div>
+            <input
+              class="btn-small"
+              type="button"
+              @click="sendEvent('purchase')"
+              value="結帳"
+              :disabled="isLoading === true"
+            />
+          </div>
+          <div>
+            <input
+              class="btn-small"
+              type="button"
+              @click="checkEcCustStatusEvent('purchase')"
+              value="確認 ec 登入狀態"
+              :disabled="isLoading === true"
+            />
+          </div>
+        </div>
+        <footer class="wrapper-right">© 2022 雲發互動科技有限公司</footer>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script type="application/javascript">
+  var app = new Vue({
+    el: '#app',
+    data() {
+      return {
+        ecCustomerId: '',
+        isLoading: false,
+      };
+    },
+    methods: {
+      goToMenu: function name(params) {
+        window.location.href = `https://${window.location.hostname}`.replace('tools', 'tools-next') + '/dashboard';
+      },
+      loginEvent: async function () {
+        if (window.ecLogin) {
+          window.ecLogin(this.ecCustomerId, {
+            name: this.ecCustomerId,
+            mobilePhone: '',
+            email: '',
+            birthday: '',
+            gender: '',
+            membershipTierName: '',
+            ...(window.selfBuildProfile || {}),
+          });
+        }
+      },
+      logoutEvent: function () {
+        if (window.ecLogout) {
+          window.ecLogout();
+        }
+      },
+      checkEcCustStatusEvent: function () {
+        if (window.checkEcCustStatus) {
+          window.checkEcCustStatus();
+        }
+      },
+      sendEvent: async function (eventType) {
+        if (window.dataLayer) {
+          switch (eventType) {
+            case 'add_to_cart':
+              dataLayer.push({
+                event: 'add_to_cart',
+                eventModel: {
+                  items: [
+                    {
+                      item_name: 'Donut Friday Scented T-Shirt', // Name or ID is required.
+                      item_id: '67890',
+                      price: '33.75',
+                      item_brand: 'Google',
+                      item_category: 'Apparel',
+                      item_category2: 'Mens',
+                      item_category3: 'Shirts',
+                      item_category4: 'Tshirts',
+                      item_variant: 'Black',
+                      item_list_name: 'Search Results',
+                      item_list_id: 'SR123',
+                      index: 1,
+                      quantity: 2,
+                    },
+                  ],
+                },
+              });
+
+              alert('add_to_cart success!!');
+              break;
+            case 'remove_from_cart':
+              dataLayer.push({
+                event: 'remove_from_cart',
+                eventModel: {
+                  items: [
+                    {
+                      item_name: 'Donut Friday Scented T-Shirt', // Name or ID is required.
+                      item_id: '67890',
+                      price: 33.75,
+                      item_brand: 'Google',
+                      item_category: 'Apparel',
+                      item_variant: 'Black',
+                      item_list_name: 'Search Results', // If associated with a list selection.
+                      item_list_id: 'SR123', // If associated with a list selection.
+                      index: 1, // If associated with a list selection.
+                      quantity: 1,
+                    },
+                  ],
+                },
+              });
+
+              alert('remove_from_cart success!!');
+              break;
+            case 'purchase':
+              dataLayer.push({
+                event: 'purchase',
+                eventModel: {
+                  transaction_id: 'T12345',
+                  affiliation: 'Online Store',
+                  value: '59.89',
+                  tax: '4.90',
+                  shipping: '5.99',
+                  currency: 'EUR',
+                  coupon: 'SUMMER_SALE',
+                  items: [
+                    {
+                      item_name: 'Donut Friday Scented T-Shirt',
+                      item_id: '67890',
+                      price: 33.75,
+                      item_brand: 'Google',
+                      item_category: 'Apparel',
+                      item_variant: 'Black',
+                      quantity: 1,
+                    },
+                  ],
+                },
+              });
+
+              alert('purchase success!!');
+              break;
+            default:
+              break;
+          }
+        }
+      },
+    },
+    beforeMount: async function () {},
+  });
+</script>

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { getSingleProduct } from "../api/productApi";
 import { useEffect } from "react";
+import { trackPurchase } from "../utils/gaEventTracking";
 
 type CartItem = {
   productId: number;
@@ -91,6 +92,52 @@ function finishOrder(): JSX.Element {
     async function fetchDetails() {
       const details = await Promise.all(products.map((item) => detail(item)));
       setRemarks(details.filter(Boolean) as JSX.Element[]);
+
+      // 追蹤購買完成事件
+      if (cookie.order && products.length > 0) {
+        const items = await Promise.all(
+          products.map(async (item) => {
+            try {
+              const product = await getSingleProduct(
+                item.category,
+                item.productId
+              );
+              return {
+                item_name: product.title,
+                item_id: product.id.toString(),
+                price: product.price,
+                item_category: product.category,
+                quantity: item.quantity,
+              };
+            } catch (e) {
+              return null;
+            }
+          })
+        );
+        const validItems = items.filter(
+          (item): item is NonNullable<typeof item> => item !== null
+        );
+
+        if (validItems.length > 0) {
+          // 生成唯一訂單 ID
+          const transactionId = `ORDER-${Date.now()}-${Math.random()
+            .toString(36)
+            .substr(2, 9)}`;
+
+          trackPurchase({
+            transaction_id: transactionId,
+            affiliation: "線上商店",
+            value:
+              cookie.order.price ||
+              validItems.reduce(
+                (sum, item) => sum + Number(item.price) * item.quantity,
+                0
+              ),
+            currency: "TWD",
+            items: validItems,
+          });
+        }
+      }
     }
     fetchDetails();
   }, [products]);
