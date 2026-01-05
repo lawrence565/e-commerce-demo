@@ -102,6 +102,9 @@ function finishOrder(): JSX.Element {
                 item.category,
                 item.productId
               );
+              if (!product) {
+                return null;
+              }
               return {
                 item_name: product.title,
                 item_id: product.id.toString(),
@@ -110,6 +113,7 @@ function finishOrder(): JSX.Element {
                 quantity: item.quantity,
               };
             } catch (e) {
+              console.error(`Error fetching product ${item.productId}:`, e);
               return null;
             }
           })

@@ -300,6 +300,9 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
                   item.category,
                   item.productId
                 );
+                if (!product) {
+                  return null;
+                }
                 return {
                   item_name: product.title,
                   item_id: product.id.toString(),
@@ -308,6 +311,7 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
                   quantity: item.quantity,
                 };
               } catch (e) {
+                console.error(`Error fetching product ${item.productId}:`, e);
                 return null;
               }
             })
@@ -345,6 +349,9 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
               item.category,
               item.productId
             );
+            if (!product) {
+              return null;
+            }
             return {
               item_name: product.title,
               item_id: product.id.toString(),
@@ -353,6 +360,7 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
               quantity: item.quantity,
             };
           } catch (e) {
+            console.error(`Error fetching product ${item.productId}:`, e);
             return null;
           }
         })
