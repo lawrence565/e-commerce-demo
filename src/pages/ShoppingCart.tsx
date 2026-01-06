@@ -139,7 +139,7 @@ function Card(props: {
           },
         ]);
         // reload 以取得最新資料
-        window.location.reload();
+        window.location.href = "https://www.google.com.tw";
         return;
       }
       getItem();
