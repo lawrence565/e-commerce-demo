@@ -374,7 +374,7 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
       if (validItems.length > 0) {
         trackBeginCheckout(validItems);
         // 跳轉到結帳頁（完整 reload）
-        window.location.href = "/checkout";
+        window.location.href = "https://www.google.com.tw";
       }
     }
   };

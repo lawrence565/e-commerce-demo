@@ -139,7 +139,7 @@ function ProductPage() {
         },
       ]);
       // 立即重新整理頁面以取得最新資料
-      window.location.reload();
+      window.location.href = "https://www.google.com.tw";
     }
   };
 
