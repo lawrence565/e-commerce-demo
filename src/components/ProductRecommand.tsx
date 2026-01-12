@@ -67,9 +67,8 @@ function ProductRecomanned(props: {
         // 否則禁用動畫
         carouselRef.current.style.transition = "none";
       }
-      carouselRef.current.style.transform = `translateX(-${
-        currentIndex * 100
-      }%)`;
+      carouselRef.current.style.transform = `translateX(-${currentIndex * 100
+        }%)`;
     }
     setIsTransitioning(false);
   }, [currentIndex]);
@@ -176,6 +175,8 @@ function ProductRecomanned(props: {
                               <img
                                 className="rounded-lg"
                                 src={`./${product.category}s/${product.name}.webp`}
+                                alt={product.title}
+                                loading="lazy"
                               />
                             </div>
                             <h3 className="product-title text-xl">

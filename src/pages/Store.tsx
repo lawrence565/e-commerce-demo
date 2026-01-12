@@ -4,10 +4,9 @@ import { useParams } from "react-router-dom";
 import StoreDisplay from "../components/StoretDisplay";
 
 function Store() {
-  let [currentType, setCurrentType] = useState("gadgets");
-  let [displayHeight, setDisplayheight] = useState("55vh");
-  let displayRef = useRef<HTMLDivElement>(null);
-  const initialHeightRef = useRef<string | null>(null);
+  const [currentType, setCurrentType] = useState("gadgets");
+  const [displayHeight, setDisplayheight] = useState<number | null>(null);
+  const displayRef = useRef<HTMLDivElement>(null);
   const { category } = useParams();
 
   const toGadgets = () => {
@@ -32,20 +31,9 @@ function Store() {
 
   useEffect(() => {
     const setHeight = () => {
-      if (displayRef.current) {
-        if (window.innerWidth > 768) {
-          if (initialHeightRef.current == null) {
-            initialHeightRef.current =
-              displayRef.current.getBoundingClientRect().height.toString() +
-              "px";
-          }
-          setDisplayheight(initialHeightRef.current.toString() + "px");
-        } else {
-          setDisplayheight(
-            displayRef.current.getBoundingClientRect().height.toString() + "px"
-          );
-        }
-      }
+      if (!displayRef.current) return;
+      const height = displayRef.current.getBoundingClientRect().height;
+      setDisplayheight(height);
     };
 
     setHeight();
@@ -68,7 +56,12 @@ function Store() {
       <div className="max-w-[1200px] min-h-[50dvh] my-6 lg:my-16 flex flex-col md:flex-row justify-center">
         <div
           id="category-indicator-conponents"
-          className={`md:h-[${displayHeight}] md:w-[20dvw] xl:w-[15dvw] bg-midBrown rounded-lg px-4 md:px-8 py-4 lg:py-8 mx-4 flex-shrink-0`}
+          className="md:w-[20dvw] xl:w-[15dvw] bg-midBrown rounded-lg px-4 md:px-8 py-4 lg:py-8 mx-4 flex-shrink-0"
+          style={
+            displayHeight && displayHeight > 0
+              ? { minHeight: `${displayHeight}px` }
+              : undefined
+          }
         >
           <div className="text-white">
             <h1 className="font-bold text-3xl lg:text-2xl text-center lg:text-start mb-3 lg:mb-1">

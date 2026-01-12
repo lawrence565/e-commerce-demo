@@ -1,19 +1,14 @@
 import { Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import mainLogo from "../assets/main-logo.svg";
 import shoppingCartIcon from "../assets/shopping-cart-icon.svg";
 import personalIcon from "../assets/personal-icon.svg";
 import "../style/NavbarStyle.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useCartCookie } from "../utils/useCartCookie";
 
 function NavBar() {
-  const [cookie, setCookie] = useCookies(["cart"]);
+  const { cart } = useCartCookie();
   const [isOpen, setIsOpen] = useState(false);
-  useEffect(() => {
-    if (cookie.cart === undefined) {
-      setCookie("cart", []);
-    } else cookie.cart;
-  });
 
   const handleOpen = () => setIsOpen(!isOpen);
 
@@ -52,9 +47,9 @@ function NavBar() {
               src={shoppingCartIcon}
               alt="Shopping Cart Icon"
             />
-            {cookie.cart && cookie.cart.length > 0 && (
+            {cart && cart.length > 0 && (
               <span className="absolute top-[10%] right-[-20%] rounded-lg bg-red-600 w-[1rem] aspect-square flex items-center justify-center">
-                <p className="text-[0.8rem] text-white">{cookie.cart.length}</p>
+                <p className="text-[0.8rem] text-white">{cart.length}</p>
               </span>
             )}
           </Link>

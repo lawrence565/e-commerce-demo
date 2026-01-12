@@ -25,7 +25,7 @@ type Recipient = {
   email: string;
 };
 
-function finishOrder(): JSX.Element {
+function FinishOrder(): JSX.Element {
   const [cookie] = useCookies(["order"]);
   const [remarks, setRemarks] = useState<JSX.Element[]>([]);
   const fakeproducts: CartItem[] = [
@@ -43,7 +43,7 @@ function finishOrder(): JSX.Element {
     address = `${cookie.order.shippment.city}${cookie.order.shippment.district}${cookie.order.shippment.road}${cookie.order.shippment.detail}`;
     date = cookie.order.date;
     products = cookie.order.products;
-    address = address;
+
     recipient = cookie.order.recipient;
   } else {
     const nowDate = new Date().toLocaleDateString("zh-TW");
@@ -168,4 +168,4 @@ function finishOrder(): JSX.Element {
   );
 }
 
-export default finishOrder;
+export default FinishOrder;

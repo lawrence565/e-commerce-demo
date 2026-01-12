@@ -6,6 +6,8 @@ import "../style/HomepageStyle.scss";
 import { useState, useRef, useEffect } from "react";
 
 function Carousel() {
+  const TRANSITION_MS = 320;
+  const MIN_WIDTH = 280;
   const [currentIndex, setCurrentIndex] = useState(1);
   const [width, setWidth] = useState(300);
   const [startX, setStartX] = useState(0);
@@ -55,7 +57,8 @@ function Carousel() {
   useEffect(() => {
     const updateWidth = () => {
       if (cardCarouselRef.current) {
-        setWidth(cardCarouselRef.current.getBoundingClientRect().width);
+        const measuredWidth = cardCarouselRef.current.getBoundingClientRect().width;
+        setWidth(Math.max(measuredWidth, MIN_WIDTH));
       }
     };
 
@@ -70,7 +73,7 @@ function Carousel() {
     if (carouselRef.current) {
       if (isTransitioning) {
         // 若是在變換頁面時，啟用動畫
-        carouselRef.current.style.transition = "transform 0.3s ease-in-out";
+        carouselRef.current.style.transition = `transform ${TRANSITION_MS}ms ease-in-out`;
       } else {
         // 否則禁用動畫
         carouselRef.current.style.transition = "none";
@@ -88,12 +91,12 @@ function Carousel() {
         setTimeout(() => {
           setIsTransitioning(false);
           setCurrentIndex(1);
-        }, 300);
+        }, TRANSITION_MS);
       } else if (currentIndex === 0) {
         setTimeout(() => {
           setIsTransitioning(false);
           setCurrentIndex(cards.length - 2);
-        }, 300);
+        }, TRANSITION_MS);
       } else {
         setIsTransitioning(false);
       }

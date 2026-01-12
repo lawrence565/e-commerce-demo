@@ -27,6 +27,7 @@ type Coupon = {
 };
 
 import { useCart } from "../context/CartContext";
+import { useToast } from "../components/Toast";
 
 // type applyCoupon = {
 //   id: number;
@@ -44,6 +45,7 @@ function Card(props: {
   const [amount, setAmount] = useState(item.quantity);
   const [product, setProduct] = useState<Product | null>(null);
   const [cookie, setCookie] = useCookies(["cart"]);
+  const { showToast } = useToast();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -101,7 +103,7 @@ function Card(props: {
     try {
       await deleteCartItem(id);
       getItem();
-      alert(`${name}已從購物車移除`);
+      showToast(`${name}已從購物車移除`, "success");
     } catch (error) {
       console.log("deleting item " + name);
     } finally {
@@ -128,6 +130,8 @@ function Card(props: {
         <div className="col-span-2 h-fit aspect-4/3 overflow-hidden rounded-md">
           <img
             src={`./${product.category}s/${product.name}.webp`}
+            alt={product.title}
+            loading="lazy"
             className="w-full h-full object-cover"
           />
         </div>
@@ -189,12 +193,7 @@ function Card(props: {
 }
 
 function ShopppingKart() {
-  const defaultCartItem: CartItem[] = [
-    { productId: 2, category: "gadget", quantity: 3 },
-    { productId: 27, category: "furniture", quantity: 2 },
-    { productId: 6, category: "gadget", quantity: 5 },
-  ];
-  const subtotals = useRef<number[]>(new Array(defaultCartItem.length).fill(0));
+  const subtotals = useRef<number[]>([]);
   const {
     total,
     setTotal,
@@ -205,9 +204,8 @@ function ShopppingKart() {
     couponDiscount,
     setCouponDiscount,
   } = useCart();
-  const [applyCouponCode, setApplyCouponCode] =
-    useState<string>("請輸入優惠碼");
-  const [typed, setTyped] = useState(false);
+  const { showToast } = useToast();
+  const [applyCouponCode, setApplyCouponCode] = useState<string>("");
   const [appliedCoupon, setAppliedCoupon] = useState<number[]>([]);
 
   const [avaliableCoupons, setAvaliableCoupons] = useState<Coupon[]>(
@@ -217,7 +215,7 @@ function ShopppingKart() {
     }))
   );
   const [cookie, setCookie] = useCookies(["cart"]);
-  const [CartItem, setCartitem] = useState<CartItem[]>([]);
+  const [cartItems, setCartitems] = useState<CartItem[]>([]);
   const { showSpinner, hideSpinner } = useSpinner();
 
   useEffect(() => {
@@ -225,8 +223,8 @@ function ShopppingKart() {
       showSpinner();
       await getItem();
       if (cookie.cart === undefined) {
-        setCookie("cart", []);
-      } else cookie.cart;
+        setCookie("cart", [], { path: "/" });
+      }
       hideSpinner();
     };
 
@@ -246,9 +244,13 @@ function ShopppingKart() {
         setCookie("cart", mergedCart);
       }
       const cart: CartItem[] = await getCart();
-      setCartitem(cart);
+      setCartitems(cart);
+      subtotals.current = new Array(cart.length).fill(0);
+      setSubtotal(0);
     } catch (e) {
-      setCartitem(cookie.cart);
+      setCartitems(cookie.cart);
+      subtotals.current = new Array((cookie.cart ?? []).length).fill(0);
+      setSubtotal(0);
     }
   };
 
@@ -259,12 +261,6 @@ function ShopppingKart() {
 
   function typeCoupon(couponCode: string) {
     setApplyCouponCode(couponCode);
-    setTyped(true);
-  }
-
-  function cancelTyped() {
-    setTyped(false);
-    setApplyCouponCode("請輸入優惠碼");
   }
 
   function cancelApplied(couponId: number) {
@@ -273,9 +269,8 @@ function ShopppingKart() {
     );
     if (appliedOneIndex !== -1) {
       const appliedOne = avaliableCoupons[appliedOneIndex];
-      const prevCouponDiscount = couponDiscount;
       setAppliedCoupon((prev) => prev.filter((id) => id !== appliedOne.id));
-      setCouponDiscount(prevCouponDiscount - appliedOne.discount);
+      setCouponDiscount(Math.max(couponDiscount - appliedOne.discount, 0));
       setAvaliableCoupons((prevCoupons) => {
         return prevCoupons.map((coupon) =>
           coupon.id === couponId ? { ...coupon, applied: false } : coupon
@@ -289,21 +284,22 @@ function ShopppingKart() {
     if (foundCoupon) {
       const alreadyExisted = appliedCoupon.includes(foundCoupon.id);
       if (!alreadyExisted) {
-        const prevCouponDiscount = couponDiscount;
         setAppliedCoupon((prev) => [...prev, foundCoupon.id]);
-        setCouponDiscount(prevCouponDiscount + foundCoupon.discount);
+        setCouponDiscount(couponDiscount + foundCoupon.discount);
         setAvaliableCoupons((prevCoupons) => {
           return prevCoupons.map((coupon) =>
             coupon.code === couponCode ? { ...coupon, applied: true } : coupon
           );
         });
       } else {
-        alert("優惠券已存在");
+        showToast("優惠券已存在", "warning");
       }
     } else {
-      alert("優惠券不存在");
+      showToast("優惠券不存在", "error");
     }
   }
+
+  const resetCouponInput = () => setApplyCouponCode("");
 
   return (
     <div className="flex flex-col items-center justify-start my-8 w-full min-h-[70dvh]">
@@ -314,14 +310,14 @@ function ShopppingKart() {
           className="flex-[3] min-w-[250px] md:min-w-[450px] lg:min-w-[600px] w-full max-w-[90dvw] md:max-w-[40dvw] lg:max-w-[60dvw] flex flex-col justify-start ml-4 mr-4 md:mr-8"
         >
           <h1 className="text-4xl font-bold text-midBrown mb-8">購買品項</h1>
-          {CartItem.length < 1 ? (
+          {cartItems.length < 1 ? (
             <div className="flex items-center text-center h-[20dvw] w-full">
               <h1 className="text-xl font-semibold w-full">
                 購物車中沒有商品哦
               </h1>
             </div>
           ) : (
-            CartItem.map((item, index) => (
+            cartItems.map((item, index) => (
               <Card
                 key={item.productId}
                 item={item}
@@ -399,9 +395,10 @@ function ShopppingKart() {
       <div id="coupon" className="w-full lg:max-w-[1200px]">
         <div className="m-4 w-fit rounded-lg overflow-hidden  border-[2px] border-midBrown">
           <input
-            className={`w-[200px] p-2 bg-gray-200 ${typed ? "placeholder:text-black" : ""
-              }`}
-            placeholder={applyCouponCode}
+            className="w-[200px] p-2 bg-gray-200"
+            placeholder="請輸入優惠碼"
+            value={applyCouponCode}
+            onChange={(e) => setApplyCouponCode(e.target.value)}
           />
           <button
             className="bg-midBrown text-white px-4 py-2"
@@ -411,7 +408,7 @@ function ShopppingKart() {
           </button>
           <button
             className="bg-white text-midBrown px-4 py-2"
-            onClick={cancelTyped}
+            onClick={resetCouponInput}
           >
             取消
           </button>

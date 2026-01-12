@@ -23,7 +23,6 @@ export function CreditCard({ handlePaymentMethod }: ChildFormProps) {
 
   const onSubmit = (data: CardInfo) => {
     handlePaymentMethod(data);
-    alert("已儲存付款資訊");
   };
 
   return (

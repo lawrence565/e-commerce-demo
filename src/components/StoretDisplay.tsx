@@ -32,10 +32,15 @@ function StoreDisplay(props: { type: string }) {
 
   const display = products.map((product, index) => {
     return (
-      <div className="mx-4 md:mx-6 my-2 cursor-pointer" key={index}>
+      <div className="mx-4 md:mx-6 my-2 cursor-pointer card-hover" key={index}>
         <Link to={`/stores/${product.category}/${product.id}`}>
           <div className="w-full lg:w-[12dvw] max-w-[250px] rounded-md overflow-hidden border-midBrown border-[5px] aspect-4/3">
-            <img src={`./${product.category}s/${product.name}.webp`} />
+            <img
+              src={`./${product.category}s/${product.name}.webp`}
+              alt={product.title}
+              loading="lazy"
+              className="w-full h-full object-cover"
+            />
           </div>
           <div className="">
             <h1 className="text-xl">{product.title}</h1>
@@ -46,8 +51,8 @@ function StoreDisplay(props: { type: string }) {
     );
   });
 
-  const totalPages =
-    display.length % 9 == 0 ? display.length / 9 : display.length / 9 + 1;
+  const pages = paginate(display, 9);
+  const totalPages = Math.ceil(display.length / 9);
 
   useEffect(() => {
     (async () => {
@@ -64,20 +69,22 @@ function StoreDisplay(props: { type: string }) {
   }, [props.type]);
 
   useEffect(() => {
-    setPageIndex(0);
-  }, [products]);
+    window.scrollTo(0, 0);
+  }, [products, pageIndex]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pageIndex]);
-
-  const pages = paginate(display, 9); // 把 products 中的產品分為 9 個
+    if (pageIndex > totalPages - 1) {
+      setPageIndex(0);
+    }
+  }, [pageIndex, totalPages]);
 
   const handlePreviousPage = () => {
+    if (pages.length === 0) return;
     setPageIndex((prevPage) => Math.max(prevPage - 1, 0));
   };
 
   const handleNextPage = () => {
+    if (pages.length === 0) return;
     setPageIndex((prevPage) => Math.min(prevPage + 1, pages.length - 1));
   };
 
@@ -87,7 +94,11 @@ function StoreDisplay(props: { type: string }) {
         className={`grid grid-cols-2 md:grid-cols-3 justify-center content-start py-4 md:py-0`}
         ref={displayRef}
       >
-        {pages[pageIndex]}
+        {pages[pageIndex] ?? (
+          <div className="col-span-2 md:col-span-3 text-center py-6">
+            目前沒有商品
+          </div>
+        )}
       </div>
       <div
         id="page-indicator"
@@ -95,7 +106,10 @@ function StoreDisplay(props: { type: string }) {
       >
         <div className="rounded-lg flex items-center justify-center border-box relative">
           <div className="prev px-4 text-lg">
-            <button onClick={handlePreviousPage} disabled={pageIndex === 0}>
+            <button
+              onClick={handlePreviousPage}
+              disabled={pageIndex === 0 || pages.length === 0}
+            >
               &#10094;
             </button>
           </div>
@@ -105,11 +119,10 @@ function StoreDisplay(props: { type: string }) {
               onClick={() => {
                 setPageIndex(index);
               }}
-              className={`px-4 cursor-pointer aspect-square flex items-center rounded-lg transition-all ease-in duration-300 ${
-                pageIndex === index
+              className={`px-4 cursor-pointer aspect-square flex items-center rounded-lg transition-all ease-in duration-300 ${pageIndex === index
                   ? "bg-midBrown text-white"
                   : "bg-white text-midBrown"
-              }`}
+                }`}
             >
               {index + 1}
             </div>
@@ -117,7 +130,7 @@ function StoreDisplay(props: { type: string }) {
           <div className="next px-4 text-lg">
             <button
               onClick={handleNextPage}
-              disabled={pageIndex === pages.length - 1}
+              disabled={pages.length === 0 || pageIndex === pages.length - 1}
             >
               &#10095;
             </button>

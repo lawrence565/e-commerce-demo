@@ -6,21 +6,7 @@ import ProductRecomanned from "../components/ProductRecommand";
 import products from "../assets/products.json";
 import { useCookies } from "react-cookie";
 import Modal from "../components/Modal";
-
-interface Product {
-  id: number;
-  title: string;
-  name: string;
-  category: string;
-  price: number;
-  description: string;
-}
-
-type CartItem = {
-  productId: number;
-  category: string;
-  quantity: number;
-};
+import { Product, CartItem } from "../types";
 
 function ProductPage() {
   const { category, itemId } = useParams<{
@@ -33,39 +19,43 @@ function ProductPage() {
   const [isProblemModalOpen, setIsProblemModalOpen] = useState(false);
   const { showSpinner, hideSpinner } = useSpinner();
   const [cookie, setCookie] = useCookies(["cart"]);
+  const [isImageLoading, setIsImageLoading] = useState(false);
   const navigate = useNavigate();
   const imgURL = import.meta.env.VITE_IMAGE_PATH;
 
-  if (!category || !itemId) {
-    return (
-      <div className="h-[100dvh] w-[100dvw] font-bold bg-midBrown text-white">
-        Invalid product or category
-      </div>
-    );
-  }
-
   useEffect(() => {
-    (async () => {
+    let isMounted = true;
+    const fetchProduct = async () => {
+      if (!category || !itemId) return;
+      showSpinner();
       try {
-        if (itemId) {
-          const data = await getSingleProduct(category, parseInt(itemId));
-          if (data) {
-            setProduct(data);
-          }
+        const data = await getSingleProduct(category, parseInt(itemId));
+        if (isMounted && data) {
+          setProduct(data);
+          setIsImageLoading(true);
+        }
+        if (!data) {
+          hideSpinner();
         }
       } catch (e) {
         console.log("Here's some problem: " + e);
-        const data = products.find((product) => {
+        const fallback = products.find((product) => {
           return product.id === parseInt(itemId);
         });
-        setProduct(data);
+        if (isMounted && fallback) {
+          setProduct(fallback);
+          setIsImageLoading(true);
+        } else {
+          hideSpinner();
+        }
       }
-    })();
-  }, [category, itemId]);
-
-  useEffect(() => {
-    showSpinner();
-  }, []);
+    };
+    fetchProduct();
+    return () => {
+      isMounted = false;
+      hideSpinner();
+    };
+  }, [category, itemId, hideSpinner, showSpinner]);
 
   const addToCart = async () => {
     if (product) {
@@ -132,26 +122,50 @@ function ProductPage() {
   };
 
   const add = () => {
-    setAmount(amount + 1);
+    setAmount((prev) => Math.min(prev + 1, 20));
   };
 
   const minus = () => {
-    setAmount(amount - 1);
+    setAmount((prev) => Math.max(prev - 1, 1));
   };
 
-  let title, items, url;
-  if (category === "gadget") {
-    title = "隨身用品";
-    items = "gadgets";
-    url = "/stores/gadgets";
-  } else if (category === "furniture") {
-    title = "手工家具";
-    items = "furnitures";
-    url = "/stores/furnitures";
-  } else if (category === "decoration") {
-    title = "裝飾擺設";
-    items = "decorations";
-    url = "/stores/decorations";
+  const handleImageLoad = () => {
+    if (isImageLoading) {
+      setIsImageLoading(false);
+    }
+    hideSpinner();
+  };
+
+  const handleImageError = () => {
+    setIsImageLoading(false);
+    hideSpinner();
+  };
+
+  const categoryMeta: Record<
+    string,
+    { title: string; items: string; url: string }
+  > = {
+    gadget: { title: "隨身用品", items: "gadgets", url: "/stores/gadgets" },
+    furniture: {
+      title: "手工家具",
+      items: "furnitures",
+      url: "/stores/furnitures",
+    },
+    decoration: {
+      title: "裝飾擺設",
+      items: "decorations",
+      url: "/stores/decorations",
+    },
+  };
+
+  const relatedCategory = category ? categoryMeta[category] : undefined;
+
+  if (!category || !itemId) {
+    return (
+      <div className="h-[100dvh] w-[100dvw] font-bold bg-midBrown text-white">
+        Invalid product or category
+      </div>
+    );
   }
 
   return (
@@ -184,7 +198,9 @@ function ProductPage() {
             <img
               className="h-full w-full object-cover"
               src={`${imgURL}/${product?.category}s/${product?.name}.webp`}
-              onLoad={() => hideSpinner()}
+              alt={product?.title ?? "商品圖片"}
+              onLoad={handleImageLoad}
+              onError={handleImageError}
             />
           </div>
           <div
@@ -236,9 +252,8 @@ function ProductPage() {
                   </div>
                 </div>
                 <div
-                  className={`text-red-500 text-sm text-nowrap ${
-                    amount === 20 ? "" : "invisible"
-                  }`}
+                  className={`text-red-500 text-sm text-nowrap ${amount === 20 ? "" : "invisible"
+                    }`}
                 >
                   已達到購買上限
                 </div>
@@ -298,12 +313,14 @@ function ProductPage() {
           </div>
         </div>
 
-        <ProductRecomanned
-          key="0"
-          title={`${title}`}
-          category={`${items}`}
-          url={`${url}`}
-        />
+        {relatedCategory && (
+          <ProductRecomanned
+            key="0"
+            title={relatedCategory.title}
+            category={relatedCategory.items}
+            url={relatedCategory.url}
+          />
+        )}
       </div>
     </div>
   );

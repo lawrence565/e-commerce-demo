@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { CreditCard, ATM } from "../components/PayMethod";
 import { getCart, postOrder } from "../api/productApi";
 import { useCookies } from "react-cookie";
@@ -7,13 +9,12 @@ import { useNavigate } from "react-router-dom";
 import CheckoutProcess from "../utils/checkoutProcess";
 import taiwanData from "../assets/taiwan.json";
 import "../style/CheckInfo.scss";
+import { useToast } from "../components/Toast";
 
 import {
   CardInfo,
   ATMInfo,
   CartItem,
-  ShippmentInfo,
-  Recipient,
   Order,
 } from "../types";
 
@@ -31,22 +32,53 @@ type AddressData = {
   }[];
 };
 
-type OrderInfo = {
-  recipient: Recipient;
-  shippment: ShippmentInfo;
-  paymentInfo: CardInfo | ATMInfo;
-  comment: string;
+// Zod 驗證 Schema
+const orderInfoSchema = z.object({
+  recipient: z.object({
+    name: z
+      .string()
+      .min(2, "姓名至少需要 2 個字")
+      .max(50, "姓名不能超過 50 個字"),
+    phone: z
+      .string()
+      .regex(/^09\d{8}$/, "請輸入有效的手機號碼 (09xxxxxxxx)"),
+    email: z.string().email("請輸入有效的電子郵件地址"),
+  }),
+  shippment: z.object({
+    city: z.string().min(1, "請選擇縣市"),
+    district: z.string().min(1, "請選擇區域"),
+    road: z.string().min(1, "請選擇路名"),
+    detail: z
+      .string()
+      .min(1, "請輸入詳細地址")
+      .max(100, "地址不能超過 100 個字"),
+  }),
+  comment: z.string().max(500, "備註不能超過 500 個字").optional(),
+});
+
+type OrderInfo = z.infer<typeof orderInfoSchema> & {
+  paymentInfo?: CardInfo | ATMInfo;
 };
 
 import { useCart } from "../context/CartContext";
 
 function CheckoutInfo() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [payMethod, setPayMethod] = useState<string>();
   const [paymentInfo, setPaymentInfo] = useState<CardInfo | ATMInfo>();
   const [addressData, setAddressData] = useState<AddressData[]>([]);
   const [cookies, setCookie, removeCookie] = useCookies(["cart", "order"]);
-  const { register, control, getValues } = useForm<OrderInfo>({
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<OrderInfo>({
+    resolver: zodResolver(orderInfoSchema),
+    mode: "onBlur",
     defaultValues: {
       recipient: {
         name: "",
@@ -59,10 +91,10 @@ function CheckoutInfo() {
         road: "",
         detail: "",
       },
-      paymentInfo: paymentInfo,
       comment: "",
     },
   });
+
   const { total, subtotal, discount, couponDiscount } = useCart();
   const watchCity = useWatch({
     control,
@@ -86,7 +118,7 @@ function CheckoutInfo() {
   function handlePayMethod(data: CardInfo | ATMInfo) {
     try {
       setPaymentInfo(data);
-      alert("成功儲存付款資訊");
+      showToast("成功儲存付款資訊", "success");
     } catch (e) {
       console.log(e);
     }
@@ -100,52 +132,44 @@ function CheckoutInfo() {
     }
   }
 
-  const handleCheckout = async () => {
-    let data: OrderInfo = getValues();
-    console.log("Form: ", data);
+  const handleCheckout = async (data: OrderInfo) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
-    await (async () => {
-      if (paymentInfo !== undefined && paymentInfo) {
-        data.paymentInfo = paymentInfo;
-        try {
-          const products = await getItem();
-          console.log(products);
+    if (!paymentInfo) {
+      showToast("請選擇並輸入付款資訊", "warning");
+      setIsSubmitting(false);
+      return;
+    }
 
-          const order: Order = {
-            products: products,
-            price: total,
-            paymentInfo: data.paymentInfo,
-            recipient: data.recipient,
-            shippment: data.shippment,
-            comment: data.comment,
-          };
-          console.log("order: ", order);
+    try {
+      const products = await getItem();
+      console.log(products);
 
-          const responce = await postOrder(order);
-          if (responce) removeCookie("cart");
-        } catch (e) {
-          alert("建立訂單失敗");
-          console.log("建立訂單失敗", e);
-        } finally {
-          const order: Order = {
-            products: cookies.cart,
-            price: total,
-            paymentInfo: data.paymentInfo,
-            recipient: data.recipient,
-            shippment: data.shippment,
-            comment: data.comment,
-          };
-          setCookie("order", order);
-        }
-      } else {
-        alert("請輸入付款資訊");
-        return;
+      const order: Order = {
+        products: products,
+        price: total,
+        paymentInfo: paymentInfo,
+        recipient: data.recipient,
+        shippment: data.shippment,
+        comment: data.comment || "",
+      };
+      console.log("order: ", order);
+
+      const responce = await postOrder(order);
+      if (responce) {
+        removeCookie("cart");
+        showToast("訂單建立成功！", "success");
       }
-    })();
 
-    if (cookies.order.products.length > 0) {
+      setCookie("order", order);
       removeCookie("cart");
       navigate("/finishOrder");
+    } catch (e) {
+      showToast("建立訂單失敗，請稍後再試", "error");
+      console.log("建立訂單失敗", e);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -223,7 +247,7 @@ function CheckoutInfo() {
 
             <div id="shippment" className="mt-8 w-full">
               <h2 className="text-2xl font-semibold mb-2">寄送資訊</h2>
-              <form className="w-full">
+              <form className="w-full" onSubmit={handleSubmit(handleCheckout)}>
                 <div className="flex">
                   <div className="flex-1 flex flex-col mr-2">
                     <label className="inline-block mr-2" htmlFor="name">
@@ -233,11 +257,12 @@ function CheckoutInfo() {
                     <input
                       id="name"
                       placeholder="請輸入收件人姓名"
-                      className="w-full border-2 border-midBrown rounded-md bg-gray-100 my-2 pl-2"
-                      {...register("recipient.name", {
-                        required: { value: true, message: "請填入收件人姓名" },
-                      })}
+                      className={`w-full border-2 ${errors.recipient?.name ? 'border-red-500' : 'border-midBrown'} rounded-md bg-gray-100 my-2 pl-2`}
+                      {...register("recipient.name")}
                     />
+                    {errors.recipient?.name && (
+                      <span className="text-red-500 text-sm">{errors.recipient.name.message}</span>
+                    )}
                   </div>
                   <div className="flex-1 flex flex-col">
                     <label className="inline-block mr-2 " htmlFor="phone">
@@ -247,11 +272,12 @@ function CheckoutInfo() {
                     <input
                       id="phone"
                       placeholder="請輸入電話號碼"
-                      className="w-full border-2 border-midBrown rounded-md bg-gray-100 my-2 pl-2"
-                      {...register("recipient.phone", {
-                        required: { value: true, message: "請填入收件人電話" },
-                      })}
+                      className={`w-full border-2 ${errors.recipient?.phone ? 'border-red-500' : 'border-midBrown'} rounded-md bg-gray-100 my-2 pl-2`}
+                      {...register("recipient.phone")}
                     />
+                    {errors.recipient?.phone && (
+                      <span className="text-red-500 text-sm">{errors.recipient.phone.message}</span>
+                    )}
                   </div>
                 </div>
                 <div>
@@ -262,14 +288,12 @@ function CheckoutInfo() {
                   <input
                     id="email"
                     placeholder="請輸入電子郵件"
-                    className="w-full border-2 border-midBrown rounded-md bg-gray-100 my-2 pl-2"
-                    {...register("recipient.email", {
-                      required: {
-                        value: true,
-                        message: "請填入收件人電子郵件",
-                      },
-                    })}
+                    className={`w-full border-2 ${errors.recipient?.email ? 'border-red-500' : 'border-midBrown'} rounded-md bg-gray-100 my-2 pl-2`}
+                    {...register("recipient.email")}
                   />
+                  {errors.recipient?.email && (
+                    <span className="text-red-500 text-sm">{errors.recipient.email.message}</span>
+                  )}
                 </div>
 
                 <div id="address" className="mt-2">
@@ -279,10 +303,8 @@ function CheckoutInfo() {
                         <span className="text-red-500">*</span>縣/市
                       </label>
                       <select
-                        className="h-[40px] border-2 border-midBrown mr-2 md:pl-2 rounded-md bg-gray-100"
-                        {...register("shippment.city", {
-                          required: { value: true, message: "*" },
-                        })}
+                        className={`h-[40px] border-2 ${errors.shippment?.city ? 'border-red-500' : 'border-midBrown'} mr-2 md:pl-2 rounded-md bg-gray-100`}
+                        {...register("shippment.city")}
                       >
                         <option value="">請選擇縣市</option>
                         {addressData?.map((city, index) => {
@@ -293,16 +315,17 @@ function CheckoutInfo() {
                           );
                         })}
                       </select>
+                      {errors.shippment?.city && (
+                        <span className="text-red-500 text-sm">{errors.shippment.city.message}</span>
+                      )}
                     </div>
                     <div className="flex-1 flex flex-col">
                       <label className="inline-block mr-2 mb-2">
                         <span className="text-red-500">*</span>鄉鎮市區
                       </label>
                       <select
-                        className="h-[40px] border-2 border-midBrown mr-2 md:pl-2 rounded-md bg-gray-100"
-                        {...register("shippment.district", {
-                          required: { value: true, message: "*" },
-                        })}
+                        className={`h-[40px] border-2 ${errors.shippment?.district ? 'border-red-500' : 'border-midBrown'} mr-2 md:pl-2 rounded-md bg-gray-100`}
+                        {...register("shippment.district")}
                       >
                         <option value="">請選擇鄉鎮市區</option>
                         {addressData
@@ -318,16 +341,17 @@ function CheckoutInfo() {
                             );
                           })}
                       </select>
+                      {errors.shippment?.district && (
+                        <span className="text-red-500 text-sm">{errors.shippment.district.message}</span>
+                      )}
                     </div>
                     <div className="flex-1 flex flex-col">
                       <label className="inline-block mr-2 md:pl-2 mb-2">
                         <span className="text-red-500">*</span>街道名
                       </label>
                       <select
-                        className="h-[40px] border-2 border-midBrown rounded-md bg-gray-100"
-                        {...register("shippment.road", {
-                          required: { value: true, message: "*" },
-                        })}
+                        className={`h-[40px] border-2 ${errors.shippment?.road ? 'border-red-500' : 'border-midBrown'} rounded-md bg-gray-100`}
+                        {...register("shippment.road")}
                       >
                         <option value="">請選擇路名</option>
                         {addressData
@@ -343,6 +367,9 @@ function CheckoutInfo() {
                             );
                           })}
                       </select>
+                      {errors.shippment?.road && (
+                        <span className="text-red-500 text-sm">{errors.shippment.road.message}</span>
+                      )}
                     </div>
                   </div>
                   <div className="flex flex-col">
@@ -357,38 +384,42 @@ function CheckoutInfo() {
                       type="text"
                       id="addressDetail"
                       placeholder="請輸入地址"
-                      className="w-full border-2 border-midBrown rounded-md bg-gray-100 h-[40px] pl-2"
-                      {...register("shippment.detail", {
-                        required: { value: true, message: "*" },
-                      })}
+                      className={`w-full border-2 ${errors.shippment?.detail ? 'border-red-500' : 'border-midBrown'} rounded-md bg-gray-100 h-[40px] pl-2`}
+                      {...register("shippment.detail")}
                     />
+                    {errors.shippment?.detail && (
+                      <span className="text-red-500 text-sm">{errors.shippment.detail.message}</span>
+                    )}
                   </div>
                 </div>
 
-                <div id="comment" className="flex flex-col">
+                <div id="comment" className="flex flex-col mt-4">
                   <label
                     className="inline-block mr-2 mb-2"
-                    htmlFor="addressDetail"
+                    htmlFor="orderComment"
                   >
                     訂單備註
                   </label>
                   <textarea
-                    id="addressDetail"
+                    id="orderComment"
                     placeholder="可以留下您的需求或備註"
                     className="w-full border-2 border-midBrown rounded-md bg-gray-100 h-[120px] pl-2 pt-1"
-                    {...register("comment", {
-                      required: { value: true, message: "*" },
-                    })}
+                    {...register("comment")}
                   />
+                  {errors.comment && (
+                    <span className="text-red-500 text-sm">{errors.comment.message}</span>
+                  )}
                 </div>
 
                 <div className="flex justify-center m-4 rounded-lg">
                   <button
-                    type="button"
-                    onClick={handleCheckout}
-                    className="hover:bg-midBrown hover:text-white bg-white text-midBrown p-2 rounded-md border-2 border-midBrown transition-all ease-in duration-100"
+                    type="submit"
+                    disabled={isSubmitting}
+                    className={`${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-midBrown hover:text-white'} bg-white text-midBrown p-2 rounded-md border-2 border-midBrown transition-all ease-in duration-100 btn-interactive`}
                   >
-                    <h1 className="text-lg">完成訂單</h1>
+                    <h1 className="text-lg">
+                      {isSubmitting ? "處理中..." : "完成訂單"}
+                    </h1>
                   </button>
                 </div>
               </form>
