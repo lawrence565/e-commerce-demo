@@ -342,6 +342,7 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
   };
 
   const handleCheckoutClick = async () => {
+    window.location.href = "#/blank";
     // 追蹤開始結帳事件
     if (CartItem.length > 0) {
       const items = await Promise.all(
@@ -506,11 +507,15 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
             </div>
           </div>
           <div className="w-3/5 h-fit bg-white p-2 ml-[20%] mt-4 text-end rounded-md flex justify-center">
-            <Link to="/blank" onClick={handleCheckoutClick}>
-              <button className="w-full h-full font-bold text-midBrown">
-                結帳
-              </button>
-            </Link>
+            {/* <Link to="/blank" >
+              
+            </Link> */}
+            <button
+              className="w-full h-full font-bold text-midBrown"
+              onClick={handleCheckoutClick}
+            >
+              結帳
+            </button>
           </div>
         </div>
       </div>
