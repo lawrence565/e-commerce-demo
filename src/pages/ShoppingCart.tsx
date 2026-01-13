@@ -138,8 +138,7 @@ function Card(props: {
             quantity: amount,
           },
         ]);
-        // reload 以取得最新資料
-        window.location.href = "https://www.google.com.tw";
+
         return;
       }
       getItem();
@@ -373,8 +372,6 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
       );
       if (validItems.length > 0) {
         trackBeginCheckout(validItems);
-        // 跳轉到結帳頁（完整 reload）
-        window.location.href = "https://www.google.com.tw";
       }
     }
   };
