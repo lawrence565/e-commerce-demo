@@ -18,7 +18,7 @@ export default defineConfig({
   build: {
     outDir: "dist",
     assetsDir: "assets",
-    sourcemap: true, // 產生 source map 檔
+    sourcemap: true,
   },
   resolve: {
     alias: {
