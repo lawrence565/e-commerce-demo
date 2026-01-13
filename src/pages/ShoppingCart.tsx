@@ -10,7 +10,7 @@ import {
   syncCart,
 } from "../api/productApi";
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import "../style/CartStyle.scss";
 import { useCookies } from "react-cookie";
 import { useSpinner } from "../utils/SpinnerContext";
