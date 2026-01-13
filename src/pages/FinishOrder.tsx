@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { getSingleProduct } from "../api/productApi";
 import { useEffect } from "react";
@@ -27,6 +27,7 @@ type Recipient = {
 };
 
 function finishOrder(): JSX.Element {
+  const navigate = useNavigate();
   const [cookie] = useCookies(["order"]);
   const [remarks, setRemarks] = useState<JSX.Element[]>([]);
   const fakeproducts: CartItem[] = [
@@ -140,13 +141,13 @@ function finishOrder(): JSX.Element {
           //   currency: "TWD",
           //   items: validItems,
           // });
-          // 完成後回首頁（完整 reload）
-          window.location.href = "/blank";
+          // 完成後導向 blank 頁面
+          navigate("/blank");
         }
       }
     }
     fetchDetails();
-  }, [products]);
+  }, [products, cookie.order, navigate]);
 
   return (
     <div className="flex justify-center">

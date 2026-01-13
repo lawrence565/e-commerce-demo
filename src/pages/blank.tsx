@@ -11,7 +11,7 @@ function Blank() {
       items: [],
     });
 
-    window.location.href = "www.google.com";
+    window.location.href = "https://www.google.com";
   }, []);
 
   return <div>測試頁面</div>;
