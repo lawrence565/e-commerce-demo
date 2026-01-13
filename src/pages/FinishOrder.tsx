@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { getSingleProduct } from "../api/productApi";
 import { useEffect } from "react";
-import { trackPurchase } from "../utils/gaEventTracking";
+// import { trackPurchase } from "../utils/gaEventTracking";
 
 type CartItem = {
   productId: number;
