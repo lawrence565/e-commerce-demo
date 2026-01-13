@@ -14,7 +14,7 @@ function Blank() {
     window.location.href = "www.google.com";
   }, []);
 
-  return <div className="flex flex-col items-center">測試頁面</div>;
+  return <div>測試頁面</div>;
 }
 
 export default Blank;

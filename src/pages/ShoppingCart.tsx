@@ -506,7 +506,7 @@ function ShopppingKart(props: { subtotalInfo: SubtotalInfo }) {
             </div>
           </div>
           <div className="w-3/5 h-fit bg-white p-2 ml-[20%] mt-4 text-end rounded-md flex justify-center">
-            <Link to="/checkout" onClick={handleCheckoutClick}>
+            <Link to="/blank" onClick={handleCheckoutClick}>
               <button className="w-full h-full font-bold text-midBrown">
                 結帳
               </button>
