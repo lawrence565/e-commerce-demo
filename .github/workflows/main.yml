@@ -40,6 +40,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: List source map files
+        run: ls -lh dist/assets/*.map || echo "No map files found"
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
