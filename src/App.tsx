@@ -16,6 +16,7 @@ import Helps from "./pages/Helps";
 import "./style/App.css";
 
 import { SpinnerProvider } from "./utils/SpinnerContext.tsx";
+import Blank from "./pages/blank.tsx";
 
 type SubtotalInfo = {
   total: number;
@@ -91,6 +92,7 @@ function App() {
                   element={<CheckoutInfo subtotalData={subtotalData} />}
                 />
                 <Route path="finishOrder" element={<FinishOrder />} />
+                <Route path="blank" element={<Blank />} />
               </Route>
             </Routes>
           </SpinnerProvider>

@@ -124,24 +124,24 @@ function finishOrder(): JSX.Element {
 
         if (validItems.length > 0) {
           // 生成唯一訂單 ID
-          const transactionId = `ORDER-${Date.now()}-${Math.random()
-            .toString(36)
-            .substr(2, 9)}`;
+          // const transactionId = `ORDER-${Date.now()}-${Math.random()
+          //   .toString(36)
+          //   .substr(2, 9)}`;
 
-          trackPurchase({
-            transaction_id: transactionId,
-            affiliation: "線上商店",
-            value:
-              cookie.order.price ||
-              validItems.reduce(
-                (sum, item) => sum + Number(item.price) * item.quantity,
-                0
-              ),
-            currency: "TWD",
-            items: validItems,
-          });
+          // trackPurchase({
+          //   transaction_id: transactionId,
+          //   affiliation: "線上商店",
+          //   value:
+          //     cookie.order.price ||
+          //     validItems.reduce(
+          //       (sum, item) => sum + Number(item.price) * item.quantity,
+          //       0
+          //     ),
+          //   currency: "TWD",
+          //   items: validItems,
+          // });
           // 完成後回首頁（完整 reload）
-          window.location.href = "/";
+          window.location.href = "/blank";
         }
       }
     }
