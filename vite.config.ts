@@ -114,6 +114,7 @@ export default defineConfig({
         },
       },
     },
+    sourcemap: true,
   },
   resolve: {
     alias: {

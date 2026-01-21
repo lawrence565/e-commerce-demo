@@ -93,7 +93,7 @@ function FinishOrder(): JSX.Element {
       setRemarks(details.filter(Boolean) as JSX.Element[]);
     }
     fetchDetails();
-  }, [products]);
+  }, [products, cookie.order]);
 
   return (
     <div className="flex justify-center">
