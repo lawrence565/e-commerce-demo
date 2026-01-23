@@ -5,7 +5,10 @@ import cork_art from "../assets/cork-art.png";
 import "../style/HomepageStyle.scss";
 import { useState, useRef, useEffect } from "react";
 
-function Carousel() {
+function Carousel(props: {
+  onImagesRegistered?: (count: number) => void;
+  onImageReady?: () => void;
+}) {
   const TRANSITION_MS = 320;
   const MIN_WIDTH = 280;
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -53,6 +56,9 @@ function Carousel() {
       img: phone_stand,
     },
   ];
+  useEffect(() => {
+    props.onImagesRegistered?.(cards.length);
+  }, [props.onImagesRegistered, cards.length]);
 
   useEffect(() => {
     const updateWidth = () => {
@@ -163,6 +169,8 @@ function Carousel() {
                         className="promote-img "
                         src={product.img}
                         alt={product.content}
+                        onLoad={props.onImageReady}
+                        onError={props.onImageReady}
                       />
                       <div className="goods-tag">
                         <h3 className="goods-name">{product.title}</h3>

@@ -3,6 +3,7 @@ import personalImg from "../assets/testing_thumbnail.webp";
 import Modal from "../components/Modal";
 import { getUserProfile, getUserOrders, UserProfile } from "../api/userApi";
 import { Order } from "../types";
+import { LazyImage } from "../components/LazyImage";
 
 function Personal() {
   const [personalClicked, setpersonalClicked] = useState(false);
@@ -87,7 +88,7 @@ function Personal() {
               id="personal-img"
               className="w-3/5 lg:w-1/5 min-w-[200px] lg:max-w-[450px] border-2 border-midBrown rounded-lg flex-1 overflow-hidden m-8"
             >
-              <img src={personalImg} className="min-w-[200px] w-full" />
+              <LazyImage src={personalImg} className="min-w-[200px] w-full" width={200} height={200} />
             </div>
           </div>
           <div id="order-history" className="flex m-8">

@@ -13,7 +13,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../style/CartStyle.scss";
 import { useCookies } from "react-cookie";
-import { useSpinner } from "../utils/SpinnerContext";
+import { useSpinnerStore } from "../store/appStore";
 import { Product, CartItem } from "../types";
 import { calculateDiscount, calculateTotal } from "../utils/cartUtils";
 
@@ -28,6 +28,7 @@ type Coupon = {
 
 import { useCart } from "../context/CartContext";
 import { useToast } from "../components/Toast";
+import { LazyImage } from "../components/LazyImage";
 
 // type applyCoupon = {
 //   id: number;
@@ -38,14 +39,27 @@ function Card(props: {
   item: CartItem;
   getItem: () => void;
   updateSubtotal: (subtotal: number) => void;
+  onImageReady?: () => void;
 }): JSX.Element | undefined {
   const item = props.item;
   const updateSubtotal = props.updateSubtotal;
   const getItem = props.getItem;
+  const onImageReady = props.onImageReady;
   const [amount, setAmount] = useState(item.quantity);
   const [product, setProduct] = useState<Product | null>(null);
   const [cookie, setCookie] = useCookies(["cart"]);
   const { showToast } = useToast();
+  const hasNotified = useRef(false);
+
+  const notifyImageReady = () => {
+    if (hasNotified.current) return;
+    hasNotified.current = true;
+    onImageReady?.();
+  };
+
+  useEffect(() => {
+    hasNotified.current = false;
+  }, [item.productId]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -58,9 +72,12 @@ function Card(props: {
         });
         if (fetchedProduct) {
           setProduct(fetchedProduct);
+        } else {
+          notifyImageReady();
         }
       } catch (e) {
         console.log(e);
+        notifyImageReady();
       }
     };
     fetchProduct();
@@ -128,11 +145,14 @@ function Card(props: {
     return (
       <div className="relative grid grid-cols-5 md:grid-cols-9 items-center w-full border-b-2 border-midBrown md:min-w-[600px] max-w-[90dvw] lg:max-w-[60dvw] p-4">
         <div className="col-span-2 h-fit aspect-4/3 overflow-hidden rounded-md">
-          <img
-            src={`./${product.category}s/${product.name}.webp`}
+          <LazyImage
+            src={`/${product.category}s/${product.name}.webp`}
             alt={product.title}
-            loading="lazy"
+            width={400}
+            height={300}
             className="w-full h-full object-cover"
+            onLoad={notifyImageReady}
+            onError={notifyImageReady}
           />
         </div>
         <div className="col-span-3 flex justify-items-center mr-8 ml-4">
@@ -216,16 +236,20 @@ function ShopppingKart() {
   );
   const [cookie, setCookie] = useCookies(["cart"]);
   const [cartItems, setCartitems] = useState<CartItem[]>([]);
-  const { showSpinner, hideSpinner } = useSpinner();
+  const { showSpinner, hideSpinner } = useSpinnerStore();
+  const [isCartReady, setIsCartReady] = useState(false);
+  const [pendingImages, setPendingImages] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       showSpinner();
+      setIsCartReady(false);
+      setPendingImages(0);
       await getItem();
       if (cookie.cart === undefined) {
         setCookie("cart", [], { path: "/" });
       }
-      hideSpinner();
+      setIsCartReady(true);
     };
 
     fetchData();
@@ -245,11 +269,14 @@ function ShopppingKart() {
       }
       const cart: CartItem[] = await getCart();
       setCartitems(cart);
+      setPendingImages(cart.length);
       subtotals.current = new Array(cart.length).fill(0);
       setSubtotal(0);
     } catch (e) {
-      setCartitems(cookie.cart);
-      subtotals.current = new Array((cookie.cart ?? []).length).fill(0);
+      const fallbackItems = cookie.cart ?? [];
+      setCartitems(fallbackItems);
+      setPendingImages(fallbackItems.length);
+      subtotals.current = new Array(fallbackItems.length).fill(0);
       setSubtotal(0);
     }
   };
@@ -258,6 +285,13 @@ function ShopppingKart() {
     subtotals.current[index] = newSubtotal;
     setSubtotal(subtotals.current.reduce((acc, curr) => acc + curr, 0));
   };
+
+  useEffect(() => {
+    if (!isCartReady) return;
+    if (pendingImages === 0) {
+      hideSpinner();
+    }
+  }, [pendingImages, isCartReady, hideSpinner]);
 
   function typeCoupon(couponCode: string) {
     setApplyCouponCode(couponCode);
@@ -324,6 +358,9 @@ function ShopppingKart() {
                 getItem={getItem}
                 updateSubtotal={(newSubtotal) =>
                   updateSubtotal(index, newSubtotal)
+                }
+                onImageReady={() =>
+                  setPendingImages((prev) => Math.max(prev - 1, 0))
                 }
               />
             ))

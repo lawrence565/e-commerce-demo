@@ -3,11 +3,11 @@ import { Suspense } from "react";
 import NavBar from "./components/Navbar.tsx";
 import Footer from "./components/Footer.tsx";
 
-import { useSpinner } from "./utils/SpinnerContext.tsx";
+import { useSpinnerStore } from "./store/appStore";
 import Spinner from "./utils/Spinner.tsx";
 
 function Layout() {
-  const { isLoading } = useSpinner();
+  const { isLoading } = useSpinnerStore();
 
   return (
     <>

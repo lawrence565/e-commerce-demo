@@ -1,12 +1,13 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getSingleProduct, postCart } from "../api/productApi";
-import { useSpinner } from "../utils/SpinnerContext";
+import { useSpinnerStore } from "../store/appStore";
 import ProductRecomanned from "../components/ProductRecommand";
 import products from "../assets/products.json";
 import { useCookies } from "react-cookie";
 import Modal from "../components/Modal";
 import { Product, CartItem } from "../types";
+import { LazyImage } from "../components/LazyImage";
 
 function ProductPage() {
   const { category, itemId } = useParams<{
@@ -17,11 +18,10 @@ function ProductPage() {
   const [product, setProduct] = useState<Product>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProblemModalOpen, setIsProblemModalOpen] = useState(false);
-  const { showSpinner, hideSpinner } = useSpinner();
+  const { showSpinner, hideSpinner } = useSpinnerStore();
   const [cookie, setCookie] = useCookies(["cart"]);
   const [isImageLoading, setIsImageLoading] = useState(false);
   const navigate = useNavigate();
-  const imgURL = import.meta.env.VITE_IMAGE_PATH;
 
   useEffect(() => {
     let isMounted = true;
@@ -195,13 +195,18 @@ function ProductPage() {
             id="product-img"
             className="flex-1 aspect-4/3 md:aspect-square h-[30dvh] md:h-[50dvh] rounded-2xl overflow-hidden mx-6"
           >
-            <img
-              className="h-full w-full object-cover"
-              src={`${imgURL}/${product?.category}s/${product?.name}.webp`}
-              alt={product?.title ?? "商品圖片"}
-              onLoad={handleImageLoad}
-              onError={handleImageError}
-            />
+            {product && (
+              <LazyImage
+                className="h-full w-full object-cover"
+                src={`/${product.category}s/${product.name}.webp`}
+                alt={product.title ?? "商品圖片"}
+                width={400}
+                height={300}
+                fill
+                onLoad={handleImageLoad}
+                onError={handleImageError}
+              />
+            )}
           </div>
           <div
             id="product-desc"

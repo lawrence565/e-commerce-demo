@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getProducts } from "../api/productApi";
+import { useSpinnerStore } from "../store/appStore";
+import { LazyImage } from "./LazyImage";
 
 interface Product {
   id: number;
@@ -29,17 +31,35 @@ function StoreDisplay(props: { type: string }) {
   const displayRef = useRef<HTMLDivElement>(null);
   const [pageIndex, setPageIndex] = useState(0);
   const [products, setProducts] = useState<Product[]>([]);
+  const [isDataReady, setIsDataReady] = useState(false);
+  const [pendingImages, setPendingImages] = useState(0);
+  const { showSpinner, hideSpinner } = useSpinnerStore();
+  const pageSize = 9;
+
+  const getPageImageCount = (index: number, total: number) => {
+    if (total <= 0) return 0;
+    const start = index * pageSize;
+    if (start >= total) return 0;
+    return Math.min(pageSize, total - start);
+  };
 
   const display = products.map((product, index) => {
     return (
       <div className="mx-4 md:mx-6 my-2 cursor-pointer card-hover" key={index}>
         <Link to={`/stores/${product.category}/${product.id}`}>
           <div className="w-full lg:w-[12dvw] max-w-[250px] rounded-md overflow-hidden border-midBrown border-[5px] aspect-4/3">
-            <img
-              src={`./${product.category}s/${product.name}.webp`}
+            <LazyImage
+              src={`/${product.category}s/${product.name}.webp`}
               alt={product.title}
-              loading="lazy"
+              width={400}
+              height={300}
               className="w-full h-full object-cover"
+              onLoad={() =>
+                setPendingImages((prev) => Math.max(prev - 1, 0))
+              }
+              onError={() =>
+                setPendingImages((prev) => Math.max(prev - 1, 0))
+              }
             />
           </div>
           <div className="">
@@ -51,22 +71,44 @@ function StoreDisplay(props: { type: string }) {
     );
   });
 
-  const pages = paginate(display, 9);
-  const totalPages = Math.ceil(display.length / 9);
+  const pages = paginate(display, pageSize);
+  const totalPages = Math.ceil(display.length / pageSize);
 
   useEffect(() => {
+    let isMounted = true;
     (async () => {
-      let items;
-      if (props.type === "gadgets") {
-        items = await getProducts("gadget");
-      } else if (props.type === "furnitures") {
-        items = await getProducts("furniture");
-      } else if (props.type === "decorations") {
-        items = await getProducts("decoration");
+      try {
+        showSpinner();
+        setIsDataReady(false);
+        setPendingImages(0);
+        setPageIndex(0);
+        let items;
+        if (props.type === "gadgets") {
+          items = await getProducts("gadget");
+        } else if (props.type === "furnitures") {
+          items = await getProducts("furniture");
+        } else if (props.type === "decorations") {
+          items = await getProducts("decoration");
+        }
+        if (!isMounted) return;
+        const nextProducts = items ?? [];
+        setPendingImages(getPageImageCount(0, nextProducts.length));
+        setProducts(nextProducts);
+      } catch (error) {
+        console.error("Failed to load products:", error);
+        if (!isMounted) return;
+        setPendingImages(0);
+        setProducts([]);
+      } finally {
+        if (isMounted) {
+          setIsDataReady(true);
+        }
       }
-      setProducts(items ?? []);
     })();
-  }, [props.type]);
+    return () => {
+      isMounted = false;
+    };
+  }, [props.type, showSpinner]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -74,18 +116,33 @@ function StoreDisplay(props: { type: string }) {
 
   useEffect(() => {
     if (pageIndex > totalPages - 1) {
-      setPageIndex(0);
+      const nextIndex = 0;
+      setPageIndex(nextIndex);
+      if (isDataReady) {
+        setPendingImages(getPageImageCount(nextIndex, products.length));
+      }
     }
-  }, [pageIndex, totalPages]);
+  }, [pageIndex, totalPages, isDataReady, products.length]);
+
+  useEffect(() => {
+    if (!isDataReady) return;
+    if (pendingImages === 0) {
+      hideSpinner();
+    }
+  }, [pendingImages, isDataReady, hideSpinner]);
 
   const handlePreviousPage = () => {
     if (pages.length === 0) return;
-    setPageIndex((prevPage) => Math.max(prevPage - 1, 0));
+    const nextIndex = Math.max(pageIndex - 1, 0);
+    setPageIndex(nextIndex);
+    setPendingImages(getPageImageCount(nextIndex, products.length));
   };
 
   const handleNextPage = () => {
     if (pages.length === 0) return;
-    setPageIndex((prevPage) => Math.min(prevPage + 1, pages.length - 1));
+    const nextIndex = Math.min(pageIndex + 1, pages.length - 1);
+    setPageIndex(nextIndex);
+    setPendingImages(getPageImageCount(nextIndex, products.length));
   };
 
   return (
@@ -120,8 +177,8 @@ function StoreDisplay(props: { type: string }) {
                 setPageIndex(index);
               }}
               className={`px-4 cursor-pointer aspect-square flex items-center rounded-lg transition-all ease-in duration-300 ${pageIndex === index
-                  ? "bg-midBrown text-white"
-                  : "bg-white text-midBrown"
+                ? "bg-midBrown text-white"
+                : "bg-white text-midBrown"
                 }`}
             >
               {index + 1}

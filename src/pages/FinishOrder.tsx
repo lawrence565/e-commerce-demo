@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { getSingleProduct } from "../api/productApi";
 import { useEffect } from "react";
+import { LazyImage } from "../components/LazyImage";
 
 type CartItem = {
   productId: number;
@@ -67,9 +68,12 @@ function FinishOrder(): JSX.Element {
               id="product-img-info"
               className="w-fit flex justify-center rounded-sm overflow-hidden aspect-4/3 object-cover"
             >
-              <img
+              <LazyImage
                 className="rounded-lg w-24"
-                src={`./${product.category}s/${product.name}.webp`}
+                src={`/${product.category}s/${product.name}.webp`}
+                alt={product.title}
+                width={96}
+                height={96}
               />
             </div>
           </td>

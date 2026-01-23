@@ -4,22 +4,13 @@ import ProductRecomanned from "../components/ProductRecommand.tsx";
 import ReviewCarousel from "../components/ReviewCarousel.tsx";
 import down_arrow from "../assets/down_arrow.svg";
 import Stores from "../assets/stores.json";
+import { LazyImage } from "../components/LazyImage";
 import Modal from "../components/Modal.tsx";
 import "../style/HomepageStyle.scss";
-import { useSpinner } from "../utils/SpinnerContext.tsx";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function Homepage(): JSX.Element {
-  const { showSpinner, hideSpinner } = useSpinner();
   const [storeClicked, setStoreClicked] = useState(false);
-
-  useEffect(() => {
-    showSpinner();
-
-    setTimeout(() => {
-      hideSpinner();
-    }, 800);
-  }, []);
 
   const showStoredModal = () => {
     setStoreClicked(true);
@@ -100,8 +91,13 @@ function Homepage(): JSX.Element {
                     <h1 className="text-nowrap text-[1.3rem] md:text-[1rem] lg:text-[1.2rem] font-semibold">
                       {store.name}
                     </h1>
-                    <div className="store-img-container aspect-[4/3] overflow-hidden rounded-md my-2">
-                      <img src={store.img} />
+                    <div className="store-img-container overflow-hidden rounded-md my-2">
+                      <LazyImage
+                        src={store.img}
+                        alt={store.name}
+                        width={400}
+                        height={300}
+                      />
                     </div>
                     <p className="text-base">{store.description}</p>
                   </div>

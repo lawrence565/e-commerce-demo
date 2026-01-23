@@ -15,6 +15,8 @@ function ProductRecomanned(props: {
   title: string;
   category: string;
   url: string;
+  onImagesRegistered?: (count: number) => void;
+  onImageReady?: () => void;
 }) {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [width, setWidth] = useState(300);
@@ -22,9 +24,11 @@ function ProductRecomanned(props: {
   const [extendedProducts, setExtendedProducts] = useState<Array<Product[]>>(
     []
   );
+  const [isDataReady, setIsDataReady] = useState(false);
   const [startX, setStartX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const hasRegisteredImages = useRef(false);
   const cardPerPage: number = 4;
   const groupedProducts: Array<Product[]> = [];
   for (let i = 0; i < products.length; i += cardPerPage) {
@@ -34,15 +38,23 @@ function ProductRecomanned(props: {
   const carouselRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     (async () => {
+      setIsDataReady(false);
       let items: Product[] = [];
-      if (props.category === "gadgets") {
-        items = await getProducts("gadget");
-      } else if (props.category === "furnitures") {
-        items = await getProducts("furniture");
-      } else if (props.category === "decorations") {
-        items = await getProducts("decoration");
+      try {
+        if (props.category === "gadgets") {
+          items = await getProducts("gadget");
+        } else if (props.category === "furnitures") {
+          items = await getProducts("furniture");
+        } else if (props.category === "decorations") {
+          items = await getProducts("decoration");
+        }
+        setProducts(items ?? []);
+      } catch (error) {
+        console.error("Failed to load products:", error);
+        setProducts([]);
+      } finally {
+        setIsDataReady(true);
       }
-      setProducts(items ?? []);
     })();
   }, [props.category]);
 
@@ -56,6 +68,20 @@ function ProductRecomanned(props: {
       ]);
     }
   }, [products]);
+  useEffect(() => {
+    if (!isDataReady || hasRegisteredImages.current) return;
+    if (extendedProducts.length === 0) {
+      hasRegisteredImages.current = true;
+      props.onImagesRegistered?.(0);
+      return;
+    }
+    const count = extendedProducts.flat().length;
+    hasRegisteredImages.current = true;
+    props.onImagesRegistered?.(count);
+  }, [isDataReady, extendedProducts, props.onImagesRegistered]);
+  useEffect(() => {
+    hasRegisteredImages.current = false;
+  }, [props.category]);
 
   // 透過 isTransitioning 控制動畫
   useEffect(() => {
@@ -174,9 +200,11 @@ function ProductRecomanned(props: {
                             <div className="product-img-container">
                               <img
                                 className="rounded-lg"
-                                src={`./${product.category}s/${product.name}.webp`}
+                                src={`/${product.category}s/${product.name}.webp`}
                                 alt={product.title}
                                 loading="lazy"
+                                onLoad={props.onImageReady}
+                                onError={props.onImageReady}
                               />
                             </div>
                             <h3 className="product-title text-xl">

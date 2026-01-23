@@ -1,13 +1,16 @@
 import banner from "../assets/banner.webp";
+import { LazyImage } from "../components/LazyImage";
 
 function About() {
   return (
     <div className="flex flex-col items-center">
       <div className="banner-container h-[25dvh] overflow-hidden relative">
-        <img
+        <LazyImage
           className="relative top-[-70%]"
           src={banner}
           alt="Banner for the brand"
+          width={1200}
+          height={400}
         />
       </div>
       <div className="max-w-[800px] mb-8 mt-4">

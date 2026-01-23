@@ -6,7 +6,6 @@ import ScrollToTop from "./utils/ScrollToTop";
 import "./style/App.css";
 import "./style/animations.css";
 
-import { SpinnerProvider } from "./utils/SpinnerContext.tsx";
 import { CartProvider } from "./context/CartContext";
 import { useCartCookie } from "./utils/useCartCookie";
 import { ErrorBoundary } from "./components/ErrorBoundary";
@@ -49,46 +48,41 @@ function App() {
       <HashRouter>
         <ScrollToTop />
         <CookiesProvider>
-          <SpinnerProvider>
-            <CartProvider>
-              <ToastProvider>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <Routes>
-                    <Route path="/" element={<Layout />}>
-                      <Route index element={<Homepage />} />
-                      <Route path="about" element={<About />} />
-                      <Route path="personal" element={<Personal />} />
-                      <Route path="stores" element={<Store />}>
-                        <Route path=":category" element={<Store />} />
-                      </Route>
-                      <Route
-                        path="stores/:category/:itemId"
-                        element={<Product />}
-                      />
-                      <Route
-                        path="business/:function"
-                        element={<Business />}
-                      ></Route>
-                      <Route path="help/:functions" element={<Helps />}></Route>
-                      <Route path="shoppingcart" element={<ShopppingCart />} />
-                      <Route path="checkout" element={<CheckoutInfo />} />
-                      <Route path="finishOrder" element={<FinishOrder />} />
+          <CartProvider>
+            <ToastProvider>
+              <Suspense fallback={<PageLoadingFallback />}>
+                <Routes>
+                  <Route path="/" element={<Layout />}>
+                    <Route index element={<Homepage />} />
+                    <Route path="about" element={<About />} />
+                    <Route path="personal" element={<Personal />} />
+                    <Route path="stores" element={<Store />}>
+                      <Route path=":category" element={<Store />} />
                     </Route>
-                    <Route path="merchant" element={<MerchantLayout />}>
-                      <Route
-                        index
-                        element={<Navigate to="dashboard" replace />}
-                      />
-                      <Route path="dashboard" element={<MerchantDashboard />} />
-                      <Route path="products" element={<MerchantProducts />} />
-                      <Route path="posts" element={<MerchantPosts />} />
-                    </Route>
-                    <Route path="login" element={<Login />} />
-                  </Routes>
-                </Suspense>
-              </ToastProvider>
-            </CartProvider>
-          </SpinnerProvider>
+                    <Route
+                      path="stores/:category/:itemId"
+                      element={<Product />}
+                    />
+                    <Route
+                      path="business/:function"
+                      element={<Business />}
+                    ></Route>
+                    <Route path="help/:functions" element={<Helps />}></Route>
+                    <Route path="shoppingcart" element={<ShopppingCart />} />
+                    <Route path="checkout" element={<CheckoutInfo />} />
+                    <Route path="finishOrder" element={<FinishOrder />} />
+                  </Route>
+                  <Route path="merchant" element={<MerchantLayout />}>
+                    <Route index element={<Navigate to="dashboard" replace />} />
+                    <Route path="dashboard" element={<MerchantDashboard />} />
+                    <Route path="products" element={<MerchantProducts />} />
+                    <Route path="posts" element={<MerchantPosts />} />
+                  </Route>
+                  <Route path="login" element={<Login />} />
+                </Routes>
+              </Suspense>
+            </ToastProvider>
+          </CartProvider>
         </CookiesProvider>
       </HashRouter>
     </ErrorBoundary>
