@@ -198,7 +198,6 @@ function ProductPage() {
                 alt={product.title ?? "商品圖片"}
                 width={400}
                 height={300}
-                fill
                 skeletonAnimation="wave"
                 onLoad={handleImageLoad}
                 onError={handleImageError}

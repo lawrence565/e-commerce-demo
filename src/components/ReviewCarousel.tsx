@@ -1,6 +1,14 @@
 import reviews from "../assets/customer-review.json";
-import { useState, useEffect, useRef, useMemo, type TouchEvent } from "react";
 import thumbnail from "../assets/testing_thumbnail.webp";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "./ui/Carousel";
+import Autoplay from "embla-carousel-autoplay";
+import { useRef } from "react";
 
 interface Review {
   id: number;
@@ -10,153 +18,56 @@ interface Review {
 }
 
 function ReviewCarousel() {
-  const TRANSITION_MS = 320;
-  const MIN_WIDTH = 280;
-  const [currentIndex, setCurrentIndex] = useState(1);
-  const [width, setWidth] = useState(300);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
   const typedReviews = reviews as Review[];
-  const extendedReviews = useMemo(() => {
-    if (typedReviews.length === 0) return [];
-    return [
-      typedReviews[typedReviews.length - 1],
-      ...typedReviews,
-      typedReviews[0],
-    ];
-  }, [typedReviews]);
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const reviewCarouselRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const updateWidth = () => {
-      if (reviewCarouselRef.current) {
-        const measuredWidth =
-          reviewCarouselRef.current.getBoundingClientRect().width;
-        setWidth(Math.max(measuredWidth, MIN_WIDTH));
-      }
-    };
-
-    updateWidth();
-    window.addEventListener("resize", updateWidth);
-    return () => {
-      window.removeEventListener("resize", updateWidth);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (carouselRef.current) {
-      if (isTransitioning) {
-        // 若是在變換頁面時，啟用動畫
-        carouselRef.current.style.transition = `transform ${TRANSITION_MS}ms ease-in-out`;
-      } else {
-        // 否則禁用動畫
-        carouselRef.current.style.transition = "none";
-      }
-      carouselRef.current.style.transform = `translateX(-${
-        currentIndex * 100
-      }%)`;
-    }
-    setIsTransitioning(false);
-  }, [currentIndex, isTransitioning]);
-
-  useEffect(() => {
-    if (isTransitioning) {
-      if (currentIndex === extendedReviews.length - 1) {
-        setTimeout(() => {
-          setIsTransitioning(false);
-          setCurrentIndex(1);
-        }, TRANSITION_MS);
-      } else if (currentIndex === 0) {
-        setTimeout(() => {
-          setIsTransitioning(false);
-          setCurrentIndex(extendedReviews.length - 2);
-        }, TRANSITION_MS);
-      } else {
-        setIsTransitioning(false);
-      }
-    }
-  }, [currentIndex, isTransitioning, extendedReviews.length]);
-
-  const previous = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentIndex(currentIndex - 1);
-  };
-
-  const next = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentIndex(currentIndex + 1);
-  };
-
-  const handleTouchStart = (e: TouchEvent) => {
-    setStartX(e.touches[0].clientX);
-    setIsDragging(true);
-  };
-
-  const handleTouchEnd = (e: TouchEvent) => {
-    if (!isDragging) return;
-    const endX = e.changedTouches[0].clientX;
-    if (startX - endX > 50) {
-      next();
-    } else if (endX - startX > 50) {
-      previous();
-    }
-    setIsDragging(false);
-  };
+  const plugin = useRef(
+    Autoplay({ delay: 6000, stopOnInteraction: true })
+  );
 
   return (
-    <div
-      className="Review-Carousel flex items-center"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
-      <button className="text-black arrow previous" onClick={previous}>
-        &#10094;
-      </button>
-      <div
-        className="overflow-hidden"
-        style={{
-          width: `${width}px`,
+    <Carousel
+        plugins={[plugin.current]}
+        className="w-full relative"
+        opts={{
+            align: "center",
+            loop: true,
         }}
-      >
-        <div
-          id="review-carousel"
-          className="flex justify-start"
-          ref={carouselRef}
-        >
-          {extendedReviews.map((review, index: number) => {
-            return (
-              <div
-                key={index}
-                className="flex-shrink-0 customer-review md:my-8 flex items-center justify-center text-white w-[80vw] md:w-[50vw] h-[20dvh]"
-                ref={reviewCarouselRef}
-              >
-                <div className="customer-img-container w-[50px] h-[50px] md:w-[100px] md:h-[100px] rounded-[50%] border-midBrown overflow-hidden object-cover mx-2 md:mx-8 flex-2">
-                  <img src={thumbnail} />
-                </div>
-                <div className="customer-review w-3/5 flex-3">
-                  <div className="customer-title h-2/5">
-                    <h1 className="customer-title text-xl md:text-3xl pb-2 md:pb-4">
-                      {review.name}
-                    </h1>
-                  </div>
-                  <div className="customer-content h-3/5 w-full align-middle">
-                    <p className="text-base md:text-xl">{review.comment}</p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+    >
+        <CarouselContent className="-ml-2 md:-ml-4">
+            {typedReviews.map((review, index) => (
+                <CarouselItem key={index} className="pl-2 md:pl-4 basis-full md:basis-[80%] lg:basis-[70%]">
+                    <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10 p-4">
+                        <div className="shrink-0 relative">
+                            <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-clay/30 p-1">
+                                <img 
+                                    src={thumbnail} 
+                                    alt={review.name} 
+                                    className="w-full h-full object-cover rounded-full"
+                                />
+                            </div>
+                            <div className="absolute -bottom-2 -right-2 bg-paper p-2 rounded-full shadow-sm text-clay-deep">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M14.017 21L14.017 18C14.017 16.8954 13.1216 16 12.017 16H9C9.00012 13.1706 11.6668 10.3708 17.017 10.3708V7.8708C11.1378 7.8708 6.54109 11.2307 6.50049 15.937C6.49528 16.5408 6.50049 21 6.50049 21H14.017ZM24.017 21L24.017 18C24.017 16.8954 23.1216 16 22.017 16H19C19.0001 13.1706 21.6668 10.3708 27.017 10.3708V7.8708C21.1378 7.8708 16.5411 11.2307 16.5005 15.937C16.4953 16.5408 16.5005 21 16.5005 21H24.017Z" transform="translate(-5)"/>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <div className="text-center md:text-left">
+                            <h3 className="text-xl md:text-2xl font-serif font-bold mb-3">{review.name}</h3>
+                            <p className="text-lg md:text-xl leading-relaxed opacity-90 italic">"{review.comment}"</p>
+                        </div>
+                    </div>
+                </CarouselItem>
+            ))}
+        </CarouselContent>
+        <div className="flex justify-center gap-4 mt-8 md:hidden">
+             <CarouselPrevious className="static transform-none" />
+             <CarouselNext className="static transform-none" />
         </div>
-      </div>
-
-      <button className="text-black arrow next" onClick={next}>
-        &#10095;
-      </button>
-    </div>
+        <div className="hidden md:block">
+            <CarouselPrevious className="-left-4 bg-white/10 hover:bg-white/20 text-white border-transparent" />
+            <CarouselNext className="-right-4 bg-white/10 hover:bg-white/20 text-white border-transparent" />
+        </div>
+    </Carousel>
   );
 }
 

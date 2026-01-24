@@ -1,15 +1,14 @@
 import { Routes, Route, HashRouter, Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { CookiesProvider } from "react-cookie";
+import Spinner from "./utils/Spinner";
 import Layout from "./Layout";
 import ScrollToTop from "./utils/ScrollToTop";
-import "./style/animations.css";
 
 import { CartProvider } from "./context/CartProvider";
 import { useCartCookie } from "./utils/useCartCookie";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { ToastProvider } from "./components/Toast";
-import { ProductListSkeleton } from "./components/Skeleton";
 
 // Lazy loaded pages
 const Homepage = lazy(() => import("./pages/Homepage"));
@@ -28,17 +27,6 @@ const MerchantProducts = lazy(() => import("./pages/Merchant/Products"));
 const MerchantPosts = lazy(() => import("./pages/Merchant/Posts"));
 const Login = lazy(() => import("./pages/Login"));
 
-// 頁面載入 Fallback
-function PageLoadingFallback() {
-  return (
-    <div className="min-h-[50vh] flex items-center justify-center p-8">
-      <div className="w-full max-w-[1200px]">
-        <ProductListSkeleton count={6} />
-      </div>
-    </div>
-  );
-}
-
 function CartCookieSync() {
   useCartCookie();
   return null;
@@ -53,7 +41,7 @@ function App() {
           <CartCookieSync />
           <CartProvider>
             <ToastProvider>
-              <Suspense fallback={<PageLoadingFallback />}>
+              <Suspense fallback={<Spinner />}>
                 <Routes>
                   <Route path="/" element={<Layout />}>
                     <Route index element={<Homepage />} />

@@ -1,17 +1,19 @@
+import { useRef, useEffect } from "react";
 import phone_stand from "../assets/phone-stand.png";
 import ornament from "../assets/ornament.png";
 import ratten_bag from "../assets/ratten-bag.png";
 import cork_art from "../assets/cork-art.png";
-import "../style/HomepageStyle.scss";
-import { useState, useRef, useEffect, type TouchEvent } from "react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "./ui/Carousel";
+import { Card } from "./ui/Card";
+import Autoplay from "embla-carousel-autoplay";
 
 const CAROUSEL_CARDS = [
-  {
-    id: 4,
-    title: "軟木藝術品",
-    content: "獨特的軟木藝術品，增添藝術氣息。",
-    img: cork_art,
-  },
   {
     id: 1,
     title: "木製手機架",
@@ -36,189 +38,58 @@ const CAROUSEL_CARDS = [
     content: "獨特的軟木藝術品，增添藝術氣息。",
     img: cork_art,
   },
-  {
-    id: 1,
-    title: "木製手機架",
-    content: "使用台東漂流木結合原住民雕刻文化打造的特色手機架",
-    img: phone_stand,
-  },
 ];
 
-function Carousel(props: {
+function HeroCarousel(props: {
   onImagesRegistered?: (count: number) => void;
   onImageReady?: () => void;
 }) {
   const { onImagesRegistered, onImageReady } = props;
-  const TRANSITION_MS = 320;
-  const MIN_WIDTH = 280;
-  const [currentIndex, setCurrentIndex] = useState(1);
-  const [width, setWidth] = useState(300);
-  const [startX, setStartX] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const cardCarouselRef = useRef<HTMLDivElement>(null);
-  const cards = CAROUSEL_CARDS;
-  useEffect(() => {
-    onImagesRegistered?.(cards.length);
-  }, [onImagesRegistered, cards.length]);
+  const plugin = useRef(
+    Autoplay({ delay: 5000, stopOnInteraction: true })
+  );
 
   useEffect(() => {
-    const updateWidth = () => {
-      if (cardCarouselRef.current) {
-        const measuredWidth = cardCarouselRef.current.getBoundingClientRect().width;
-        setWidth(Math.max(measuredWidth, MIN_WIDTH));
-      }
-    };
-
-    updateWidth();
-    window.addEventListener("resize", updateWidth);
-    return () => {
-      window.removeEventListener("resize", updateWidth);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (carouselRef.current) {
-      if (isTransitioning) {
-        // 若是在變換頁面時，啟用動畫
-        carouselRef.current.style.transition = `transform ${TRANSITION_MS}ms ease-in-out`;
-      } else {
-        // 否則禁用動畫
-        carouselRef.current.style.transition = "none";
-      }
-      carouselRef.current.style.transform = `translateX(-${
-        currentIndex * 100
-      }%)`;
-    }
-    setIsTransitioning(false);
-  }, [currentIndex, isTransitioning]);
-
-  useEffect(() => {
-    if (isTransitioning) {
-      if (currentIndex === cards.length - 1) {
-        setTimeout(() => {
-          setIsTransitioning(false);
-          setCurrentIndex(1);
-        }, TRANSITION_MS);
-      } else if (currentIndex === 0) {
-        setTimeout(() => {
-          setIsTransitioning(false);
-          setCurrentIndex(cards.length - 2);
-        }, TRANSITION_MS);
-      } else {
-        setIsTransitioning(false);
-      }
-    }
-  }, [currentIndex, isTransitioning, cards.length]);
-
-  const previous = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentIndex(currentIndex - 1);
-  };
-
-  const next = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentIndex(currentIndex + 1);
-  };
-
-  const handleTouchStart = (e: TouchEvent) => {
-    setStartX(e.touches[0].clientX);
-    setIsDragging(true);
-  };
-
-  const handleTouchEnd = (e: TouchEvent) => {
-    if (!isDragging) return;
-    const endX = e.changedTouches[0].clientX;
-    if (startX - endX > 50) {
-      next();
-    } else if (endX - startX > 50) {
-      previous();
-    }
-    setIsDragging(false);
-  };
+    onImagesRegistered?.(CAROUSEL_CARDS.length);
+  }, [onImagesRegistered]);
 
   return (
-    <>
-      <div
-        className="promotion-img-container w-full flex flex-col items-center justify-center"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-      >
-        <div className="carousel flex items-center justify-center w-full lg:mt-10 lg:mb-6">
-          <button className="arrow left" onClick={previous}>
-            &#10094;
-          </button>
-
-          <div className="carousel-slide md:mx-8">
-            <div
-              className="flex rounded-md"
-              ref={carouselRef}
-              style={{ width: `${width}px` }}
-            >
-              {cards.map((product, index) => {
-                return (
-                  <div
-                    key={index}
-                    className={`card ${
-                      index === currentIndex ? "active" : ""
-                    } bg-white`}
-                    ref={cardCarouselRef}
-                  >
-                    <div className="img-container rounded-lg overflow-hidden relative">
-                      <img
-                        className="promote-img "
-                        src={product.img}
-                        alt={product.content}
-                        onLoad={onImageReady}
-                        onError={onImageReady}
-                      />
-                      <div className="goods-tag">
-                        <h3 className="goods-name">{product.title}</h3>
-                        <p className="goods-disc">{product.content}</p>
-                      </div>
-                    </div>
+    <Carousel
+      plugins={[plugin.current]}
+      className="w-full max-w-xl mx-auto"
+      opts={{
+        align: "start",
+        loop: true,
+      }}
+    >
+      <CarouselContent>
+        {CAROUSEL_CARDS.map((item, index) => (
+          <CarouselItem key={index}>
+            <div className="p-1">
+              <Card variant="plain" className="relative aspect-[4/3] overflow-hidden rounded-xl">
+                 <img
+                    src={item.img}
+                    alt={item.title}
+                    className="object-cover w-full h-full transform transition-transform duration-700 hover:scale-105"
+                    onLoad={onImageReady}
+                  />
+                  
+                  {/* Glass Overlay for Text */}
+                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent pt-12 text-paper">
+                    <h3 className="text-xl font-bold font-serif mb-1">{item.title}</h3>
+                    <p className="text-sm text-paper/90 line-clamp-2">{item.content}</p>
                   </div>
-                );
-              })}
+              </Card>
             </div>
-          </div>
-
-          <button className="arrow right" onClick={next}>
-            &#10095;
-          </button>
-        </div>
-        <div className="page-indicater flex items-center">
-          <div
-            className={`dot ${currentIndex === 1 ? "active" : ""}`}
-            onClick={() => {
-              setCurrentIndex(0);
-            }}
-          ></div>
-          <div
-            className={`dot ${currentIndex === 2 ? "active" : ""}`}
-            onClick={() => {
-              setCurrentIndex(1);
-            }}
-          ></div>
-          <div
-            className={`dot ${currentIndex === 3 ? "active" : ""}`}
-            onClick={() => {
-              setCurrentIndex(2);
-            }}
-          ></div>
-          <div
-            className={`dot ${currentIndex === 4 ? "active" : ""}`}
-            onClick={() => {
-              setCurrentIndex(3);
-            }}
-          ></div>
-        </div>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <div className="hidden md:block">
+        <CarouselPrevious className="left-2 bg-paper/80 hover:bg-paper" />
+        <CarouselNext className="right-2 bg-paper/80 hover:bg-paper" />
       </div>
-    </>
+    </Carousel>
   );
 }
 
-export default Carousel;
+export default HeroCarousel;

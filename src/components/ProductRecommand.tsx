@@ -1,6 +1,14 @@
-import { useState, useEffect, useRef, useMemo, type TouchEvent } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { getProducts } from "../api/productApi";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "./ui/Carousel";
+import { Card } from "./ui/Card";
 
 interface Product {
   id: number;
@@ -11,6 +19,8 @@ interface Product {
   price: number;
 }
 
+import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
+
 function ProductRecomanned(props: {
   title: string;
   category: string;
@@ -19,30 +29,11 @@ function ProductRecomanned(props: {
   onImageReady?: () => void;
 }) {
   const { title, category, url, onImagesRegistered, onImageReady } = props;
-  const [currentIndex, setCurrentIndex] = useState(1);
-  const [width, setWidth] = useState(300);
   const [products, setProducts] = useState<Product[]>([]);
-  const [extendedProducts, setExtendedProducts] = useState<Array<Product[]>>(
-    []
-  );
-  const [isDataReady, setIsDataReady] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const hasRegisteredImages = useRef(false);
-  const cardPerPage: number = 4;
-  const groupedProducts = useMemo(() => {
-    const groups: Array<Product[]> = [];
-    for (let i = 0; i < products.length; i += cardPerPage) {
-      groups.push(products.slice(i, i + cardPerPage));
-    }
-    return groups;
-  }, [products, cardPerPage]);
-  const cardCarouselRef = useRef<HTMLDivElement>(null);
-  const carouselRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     (async () => {
-      setIsDataReady(false);
       let items: Product[] = [];
       try {
         if (category === "gadgets") {
@@ -56,187 +47,76 @@ function ProductRecomanned(props: {
       } catch (error) {
         console.error("Failed to load products:", error);
         setProducts([]);
-      } finally {
-        setIsDataReady(true);
       }
     })();
   }, [category]);
 
-  // 渲染 Carousel 頁面
   useEffect(() => {
-    if (groupedProducts.length > 0) {
-      setExtendedProducts([
-        groupedProducts[groupedProducts.length - 1],
-        ...groupedProducts,
-        groupedProducts[0],
-      ]);
+    if (products.length > 0 && !hasRegisteredImages.current) {
+        onImagesRegistered?.(products.length);
+        hasRegisteredImages.current = true;
     }
-  }, [groupedProducts]);
-  useEffect(() => {
-    if (!isDataReady || hasRegisteredImages.current) return;
-    if (extendedProducts.length === 0) {
-      hasRegisteredImages.current = true;
-      onImagesRegistered?.(0);
-      return;
-    }
-    const count = extendedProducts.flat().length;
-    hasRegisteredImages.current = true;
-    onImagesRegistered?.(count);
-  }, [isDataReady, extendedProducts, onImagesRegistered]);
-  useEffect(() => {
-    hasRegisteredImages.current = false;
-  }, [category]);
+  }, [products, onImagesRegistered]);
 
-  // 透過 isTransitioning 控制動畫
-  useEffect(() => {
-    if (carouselRef.current) {
-      if (isTransitioning) {
-        // 若是在變換頁面時，啟用動畫
-        carouselRef.current.style.transition = "transform 0.3s ease-in-out";
-      } else {
-        // 否則禁用動畫
-        carouselRef.current.style.transition = "none";
-      }
-      carouselRef.current.style.transform = `translateX(-${currentIndex * 100
-        }%)`;
-    }
-    setIsTransitioning(false);
-  }, [currentIndex, isTransitioning]);
-
-  useEffect(() => {
-    if (isTransitioning) {
-      if (currentIndex === extendedProducts.length - 1) {
-        setTimeout(() => {
-          setIsTransitioning(false);
-          setCurrentIndex(1);
-        }, 300);
-      } else if (currentIndex === 0) {
-        setTimeout(() => {
-          setIsTransitioning(false);
-          setCurrentIndex(extendedProducts.length - 2);
-        }, 300);
-      } else {
-        setIsTransitioning(false);
-      }
-    }
-  }, [currentIndex, isTransitioning, extendedProducts.length]);
-
-  const previous = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentIndex(currentIndex - 1);
-  };
-
-  const next = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentIndex(currentIndex + 1);
-  };
-
-  const handleTouchStart = (e: TouchEvent) => {
-    setStartX(e.touches[0].clientX);
-    setIsDragging(true);
-  };
-
-  const handleTouchEnd = (e: TouchEvent) => {
-    if (!isDragging) return;
-    const endX = e.changedTouches[0].clientX;
-    if (startX - endX > 50) {
-      next();
-    } else if (endX - startX > 50) {
-      previous();
-    }
-    setIsDragging(false);
-  };
 
   const scrollToTop = () => {
     window.scrollTo(0, 0);
   };
 
-  useEffect(() => {
-    const updateWidth = () => {
-      if (cardCarouselRef.current) {
-        setWidth(cardCarouselRef.current.getBoundingClientRect().width);
-      }
-    };
-    updateWidth();
-
-    window.addEventListener("resize", updateWidth);
-    return () => {
-      window.removeEventListener("resize", updateWidth);
-    };
-  }, [extendedProducts.length]);
-
   return (
-    <div className="text-midBrown my-4">
-      <h2 className="text-2xl font-semibold">{title}</h2>
-      <hr className="text-midBrown" />
-      <div
-        className="product-carousel flex items-center my-4 md:my-8 mb-0"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-      >
-        <button className="text-black arrow previous" onClick={previous}>
-          &#10094;
-        </button>
-        <div
-          className="overflow-hidden sm:mx-8"
-          style={{ width: `${width}px` }}
-        >
-          <div ref={carouselRef} className="rounded-lg md:rounded-xl flex">
-            {extendedProducts.map((products, index) => {
-              // 渲染分組
-              return (
-                <div
-                  key={index}
-                  ref={cardCarouselRef}
-                  className="grid grid-cols-2 flex-shrink-0 md:flex"
-                >
-                  {products.map((product, index: number) => {
-                    // 渲染卡片
-                    return (
-                      <Link
-                        to={`/stores/${product.category}/${product.id}`}
-                        key={index}
-                      >
-                        <div className="product-card">
-                          <div className="product w-[35dvw] md:w-[20dvw] md:max-w-[180px] lg:max-w-[250px] m-2 h-fit">
-                            <div className="product-img-container">
-                              <img
-                                className="rounded-lg"
-                                src={`/${product.category}s/${product.name}.webp`}
-                                alt={product.title}
-                                loading="lazy"
-                                onLoad={onImageReady}
-                                onError={onImageReady}
-                              />
-                            </div>
-                            <h3 className="product-title text-xl">
-                              {product.title}
-                            </h3>
-                            <p className="product-content text-sm">
-                              {product.description}
-                            </p>
-                          </div>
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              );
-            })}
-          </div>
+    <div className="my-8">
+      <div className="flex items-center justify-between mb-6 px-1">
+        <h2 className="text-2xl font-bold font-serif text-ink">{title}</h2>
+        <div className="hidden md:flex gap-2">
+             {/* Controls are integrated into the carousel below */}
         </div>
-        <button className="text-black arrow next" onClick={next}>
-          &#10095;
-        </button>
       </div>
-      <div className="mb-6 mx-4 lg:mx-16 flex justify-end">
-        <div className="w-fit">
-          <Link to={`${url}`} onClick={scrollToTop}>
-            <p className="underline cursor-pointer">查看更多</p>
-          </Link>
-        </div>
+      
+      <Carousel
+        plugins={[WheelGesturesPlugin()]}
+        opts={{
+          align: "start",
+          loop: false,
+          dragFree: true,
+          containScroll: "trimSnaps",
+        }}
+        className="w-full relative group"
+      >
+        <CarouselContent className="-ml-4 pb-4">
+          {products.map((product, index) => (
+            <CarouselItem key={index} className="pl-4 basis-[45%] md:basis-[30%] lg:basis-[22%] xl:basis-[18%]">
+               <Link to={`/stores/${product.category}/${product.id}`} className="block h-full">
+                  <Card 
+                    variant="plain" 
+                    className="h-full group/card hover:bg-white/50 transition-colors p-2 rounded-2xl border border-transparent hover:border-clay/20"
+                  >
+                    <div className="aspect-square rounded-xl overflow-hidden bg-sand/20 mb-3 relative">
+                      <img
+                        className="w-full h-full object-cover transform transition-transform duration-500 group-hover/card:scale-105"
+                        src={`/${product.category}s/${product.name}.webp`}
+                        alt={product.title}
+                        loading="lazy"
+                        onLoad={onImageReady}
+                        onError={onImageReady}
+                      />
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-bold text-ink mb-1 truncate">{product.title}</h3>
+                        <p className="text-sm text-ink/60 line-clamp-2 leading-relaxed">{product.description}</p>
+                    </div>
+                  </Card>
+               </Link>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious title="Previous" className="left-0 -translate-x-1/2 bg-paper/80 backdrop-blur-sm border-sand shadow-sm hover:bg-white text-ink disabled:opacity-0 transition-opacity" />
+        <CarouselNext title="Next" className="right-0 translate-x-1/2 bg-paper/80 backdrop-blur-sm border-sand shadow-sm hover:bg-white text-ink disabled:opacity-0 transition-opacity" />
+      </Carousel>
+
+      <div className="mt-4 flex justify-end px-1">
+         <Link to={`${url}`} onClick={scrollToTop} className="text-sm font-medium text-clay-deep hover:text-ink transition-colors border-b border-clay/30 hover:border-ink pb-0.5">
+            查看更多
+         </Link>
       </div>
     </div>
   );

@@ -1,2 +1,78 @@
 @import "tailwindcss";
-@import "./style/App.css";
+
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+@theme {
+  /* Colors */
+  --color-ink: #1f1c19;
+  --color-paper: #f7f4ee;
+  --color-sand: #ece3d5;
+  --color-clay: #a0937d;
+  --color-clay-deep: #6f6250;
+  --color-sun: #f3c96a;
+  
+  /* Legacy compatibility */
+  --color-midBrown: #a0937d;
+
+  /* Shadows */
+  --shadow-soft: 0 12px 30px rgba(26, 24, 22, 0.08);
+  --shadow-crisp: 0 6px 16px rgba(26, 24, 22, 0.12);
+
+  /* Radius */
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  /* Fonts */
+  --font-serif: "Fraunces", "Noto Serif TC", serif;
+  --font-sans: "Space Grotesk", "Noto Sans TC", sans-serif;
+
+  /* Animations */
+  --animate-fade-in: fade-in 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-fade-in-up: fade-in-up 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-scale-in: scale-in 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+}
+
+/* Base Styles */
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(243, 201, 106, 0.35), transparent 55%),
+    radial-gradient(900px 500px at 100% 10%, rgba(160, 147, 125, 0.3), transparent 60%),
+    linear-gradient(180deg, #fdfbf7 0%, #f3eee4 55%, #efe7da 100%);
+  min-height: 100vh;
+}
+
+/* Utilities for compatibility or specific needs */
+@utility headline-serif {
+  font-family: var(--font-serif);
+}
+
+@utility app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+@utility section {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(24px, 4vw, 56px) clamp(16px, 3vw, 32px);
+}
+
