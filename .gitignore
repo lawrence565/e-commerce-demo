@@ -56,10 +56,6 @@ coverage/
 *.ipr
 *.iws
 
-# Temporary lock files
-package-lock.json
-pnpm-lock.yaml
-
 # Storybook
 storybook-static/
 
