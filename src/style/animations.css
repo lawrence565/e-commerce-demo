@@ -41,11 +41,58 @@
   }
 }
 
+/* 骨架屏脈動動畫 */
+.skeleton-pulse {
+  animation: skeleton-pulse 2s ease-in-out infinite;
+}
+
+/* 骨架屏波浪動畫 */
+@keyframes skeleton-wave {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.skeleton-wave {
+  background: linear-gradient(
+    90deg,
+    #e5e5e5 0%,
+    #f0f0f0 20%,
+    #e5e5e5 40%,
+    #f0f0f0 60%,
+    #e5e5e5 80%,
+    #e5e5e5 100%
+  );
+  background-size: 1000px 100%;
+  animation: skeleton-wave 1.5s ease-in-out infinite;
+}
+
+/* 骨架屏旋轉動畫 */
+.skeleton-spin {
+  background: conic-gradient(from 0deg, #e5e5e5, #f0f0f0, #e5e5e5);
+  animation: skeleton-spin 2s linear infinite;
+}
+
+@keyframes skeleton-spin {
+  0% {
+    background-position: 0 0;
+    opacity: 0.6;
+  }
+  100% {
+    background-position: 360deg;
+    opacity: 0.8;
+  }
+}
+
 /* ============================================
    按鈕互動效果
    ============================================ */
 .btn-interactive {
-  transition: transform var(--transition-fast) var(--ease-out),
+  transition:
+    transform var(--transition-fast) var(--ease-out),
     box-shadow var(--transition-fast) var(--ease-out);
 }
 
@@ -70,7 +117,8 @@
    卡片懸浮效果
    ============================================ */
 .card-hover {
-  transition: transform var(--transition-normal) var(--ease-out),
+  transition:
+    transform var(--transition-normal) var(--ease-out),
     box-shadow var(--transition-normal) var(--ease-out);
 }
 

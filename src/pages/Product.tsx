@@ -27,6 +27,7 @@ function ProductPage() {
     let isMounted = true;
     const fetchProduct = async () => {
       if (!category || !itemId) return;
+      setProduct(undefined);
       showSpinner();
       try {
         const data = await getSingleProduct(category, parseInt(itemId));
@@ -76,7 +77,7 @@ function ProductPage() {
           console.log(cart);
           const index = cart.findIndex(
             (product: { productId: number }) =>
-              product.productId === cartItem.productId
+              product.productId === cartItem.productId,
           );
           if (index === -1) {
             if (JSON.stringify(cart[0]) === "") {
@@ -197,12 +198,14 @@ function ProductPage() {
           >
             {product && (
               <LazyImage
+                key={`/${product.category}s/${product.name}.webp`}
                 className="h-full w-full object-cover"
                 src={`/${product.category}s/${product.name}.webp`}
                 alt={product.title ?? "商品圖片"}
                 width={400}
                 height={300}
                 fill
+                skeletonAnimation="wave"
                 onLoad={handleImageLoad}
                 onError={handleImageError}
               />
@@ -224,7 +227,7 @@ function ProductPage() {
                 {product?.description}
               </p>
             </div>
-            <div className="font-bold text-3xl md:text-4xl mr-4 md:mr-8 mb-6 md:mb-8 text-end">{`$ ${product?.price}`}</div>
+            <div className="font-bold text-3xl md:text-4xl mr-4 md:mr-8 mb-6 md:mb-8 text-end">{`$ ${product?.price ?? "XXXXX"}`}</div>
             <div
               id="amount&buy"
               className="flex-1 w-full flex items-cneter justify-between mb-1 md:mb-4"
@@ -257,8 +260,9 @@ function ProductPage() {
                   </div>
                 </div>
                 <div
-                  className={`text-red-500 text-sm text-nowrap ${amount === 20 ? "" : "invisible"
-                    }`}
+                  className={`text-red-500 text-sm text-nowrap ${
+                    amount === 20 ? "" : "invisible"
+                  }`}
                 >
                   已達到購買上限
                 </div>

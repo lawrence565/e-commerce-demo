@@ -15,16 +15,19 @@ interface Product {
 
 function paginate(
   array: JSX.Element[],
-  pageSize: number
+  pageSize: number,
 ): Array<Array<JSX.Element>> {
-  return array.reduce((acc, value, i) => {
-    const pageIndex = Math.floor(i / pageSize); // 判斷每一個元素在哪個頁面並加入
-    if (!acc[pageIndex]) {
-      acc[pageIndex] = []; //若沒有資料則清空後再加入
-    }
-    acc[pageIndex].push(value);
-    return acc;
-  }, [] as Array<Array<JSX.Element>>);
+  return array.reduce(
+    (acc, value, i) => {
+      const pageIndex = Math.floor(i / pageSize); // 判斷每一個元素在哪個頁面並加入
+      if (!acc[pageIndex]) {
+        acc[pageIndex] = []; //若沒有資料則清空後再加入
+      }
+      acc[pageIndex].push(value);
+      return acc;
+    },
+    [] as Array<Array<JSX.Element>>,
+  );
 }
 
 function StoreDisplay(props: { type: string }) {
@@ -54,12 +57,9 @@ function StoreDisplay(props: { type: string }) {
               width={400}
               height={300}
               className="w-full h-full object-cover"
-              onLoad={() =>
-                setPendingImages((prev) => Math.max(prev - 1, 0))
-              }
-              onError={() =>
-                setPendingImages((prev) => Math.max(prev - 1, 0))
-              }
+              skeletonAnimation="wave"
+              onLoad={() => setPendingImages((prev) => Math.max(prev - 1, 0))}
+              onError={() => setPendingImages((prev) => Math.max(prev - 1, 0))}
             />
           </div>
           <div className="">
@@ -176,10 +176,11 @@ function StoreDisplay(props: { type: string }) {
               onClick={() => {
                 setPageIndex(index);
               }}
-              className={`px-4 cursor-pointer aspect-square flex items-center rounded-lg transition-all ease-in duration-300 ${pageIndex === index
-                ? "bg-midBrown text-white"
-                : "bg-white text-midBrown"
-                }`}
+              className={`px-4 cursor-pointer aspect-square flex items-center rounded-lg transition-all ease-in duration-300 ${
+                pageIndex === index
+                  ? "bg-midBrown text-white"
+                  : "bg-white text-midBrown"
+              }`}
             >
               {index + 1}
             </div>

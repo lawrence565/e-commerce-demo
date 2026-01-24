@@ -88,7 +88,13 @@ function Personal() {
               id="personal-img"
               className="w-3/5 lg:w-1/5 min-w-[200px] lg:max-w-[450px] border-2 border-midBrown rounded-lg flex-1 overflow-hidden m-8"
             >
-              <LazyImage src={personalImg} className="min-w-[200px] w-full" width={200} height={200} />
+              <LazyImage
+                src={personalImg}
+                className="min-w-[200px] w-full"
+                width={200}
+                height={200}
+                skeletonAnimation="wave"
+              />
             </div>
           </div>
           <div id="order-history" className="flex m-8">
@@ -100,9 +106,14 @@ function Personal() {
               <div className="m-4 lg:m-8 flex flex-col justify-center items-center border-2 border-midBrown rounded-xl p-4">
                 {orders.length > 0 ? (
                   orders.map((order, index) => (
-                    <div key={index} className="w-full border-b-2 border-gray-200 py-4 last:border-b-0">
+                    <div
+                      key={index}
+                      className="w-full border-b-2 border-gray-200 py-4 last:border-b-0"
+                    >
                       <div className="flex justify-between items-center mb-2">
-                        <h3 className="text-xl font-semibold">訂單 #{index + 1}</h3>
+                        <h3 className="text-xl font-semibold">
+                          訂單 #{index + 1}
+                        </h3>
                         <span className="text-lg font-bold text-midBrown">
                           NT$ {order.price}
                         </span>

@@ -66,7 +66,7 @@ function Card(props: {
       try {
         const fetchedProduct = await getSingleProduct(
           item.category,
-          item.productId
+          item.productId,
         ).then((data) => {
           return data;
         });
@@ -94,7 +94,7 @@ function Card(props: {
 
     const cart = cookie.cart;
     const index = cart.findIndex(
-      (product: CartItem) => product.productId === id
+      (product: CartItem) => product.productId === id,
     );
     if (index != -1) {
       cart[index].quantity += 1;
@@ -108,7 +108,7 @@ function Card(props: {
     await editCartItem(id, newAmount);
     const cart = cookie.cart;
     const index = cart.findIndex(
-      (product: CartItem) => product.productId === id
+      (product: CartItem) => product.productId === id,
     );
     if (index != -1) {
       cart[index].quantity -= 1;
@@ -127,7 +127,7 @@ function Card(props: {
       const cart = cookie.cart;
       try {
         const deleteIndex = cart.findIndex(
-          (item: CartItem) => item.productId === id
+          (item: CartItem) => item.productId === id,
         );
         if (deleteIndex != -1) {
           console.log("Can't find target");
@@ -151,6 +151,7 @@ function Card(props: {
             width={400}
             height={300}
             className="w-full h-full object-cover"
+            skeletonAnimation="wave"
             onLoad={notifyImageReady}
             onError={notifyImageReady}
           />
@@ -232,7 +233,7 @@ function ShopppingKart() {
     coupons.map((coupon) => ({
       ...coupon,
       applied: false,
-    }))
+    })),
   );
   const [cookie, setCookie] = useCookies(["cart"]);
   const [cartItems, setCartitems] = useState<CartItem[]>([]);
@@ -299,7 +300,7 @@ function ShopppingKart() {
 
   function cancelApplied(couponId: number) {
     const appliedOneIndex = avaliableCoupons.findIndex(
-      (coupon) => coupon.id === couponId
+      (coupon) => coupon.id === couponId,
     );
     if (appliedOneIndex !== -1) {
       const appliedOne = avaliableCoupons[appliedOneIndex];
@@ -307,7 +308,7 @@ function ShopppingKart() {
       setCouponDiscount(Math.max(couponDiscount - appliedOne.discount, 0));
       setAvaliableCoupons((prevCoupons) => {
         return prevCoupons.map((coupon) =>
-          coupon.id === couponId ? { ...coupon, applied: false } : coupon
+          coupon.id === couponId ? { ...coupon, applied: false } : coupon,
         );
       });
     }
@@ -322,7 +323,7 @@ function ShopppingKart() {
         setCouponDiscount(couponDiscount + foundCoupon.discount);
         setAvaliableCoupons((prevCoupons) => {
           return prevCoupons.map((coupon) =>
-            coupon.code === couponCode ? { ...coupon, applied: true } : coupon
+            coupon.code === couponCode ? { ...coupon, applied: true } : coupon,
           );
         });
       } else {
@@ -390,7 +391,7 @@ function ShopppingKart() {
             <div className="w-4/5 mx-4">
               {appliedCoupon.map((couponId, index) => {
                 const applied = couponList.find(
-                  (coupon) => coupon.id === couponId
+                  (coupon) => coupon.id === couponId,
                 );
                 if (applied) {
                   return (

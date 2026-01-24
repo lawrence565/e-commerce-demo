@@ -57,7 +57,7 @@ function FinishOrder(): JSX.Element {
   async function detail(item: CartItem): Promise<JSX.Element | undefined> {
     const product: Product | undefined = await getSingleProduct(
       item.category,
-      item.productId
+      item.productId,
     );
 
     if (product) {
@@ -74,6 +74,7 @@ function FinishOrder(): JSX.Element {
                 alt={product.title}
                 width={96}
                 height={96}
+                skeletonAnimation="wave"
               />
             </div>
           </td>

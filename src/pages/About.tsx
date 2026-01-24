@@ -11,6 +11,7 @@ function About() {
           alt="Banner for the brand"
           width={1200}
           height={400}
+          skeletonAnimation="wave"
         />
       </div>
       <div className="max-w-[800px] mb-8 mt-4">

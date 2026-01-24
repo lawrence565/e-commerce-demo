@@ -97,6 +97,7 @@ function Homepage(): JSX.Element {
                         alt={store.name}
                         width={400}
                         height={300}
+                        skeletonAnimation="wave"
                       />
                     </div>
                     <p className="text-base">{store.description}</p>
