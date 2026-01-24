@@ -1,5 +1,5 @@
 import reviews from "../assets/customer-review.json";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, type TouchEvent } from "react";
 import thumbnail from "../assets/testing_thumbnail.webp";
 
 interface Review {
@@ -17,7 +17,15 @@ function ReviewCarousel() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [startX, setStartX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const [extendedReviews, setExtendedReviews] = useState<Review[]>([]);
+  const typedReviews = reviews as Review[];
+  const extendedReviews = useMemo(() => {
+    if (typedReviews.length === 0) return [];
+    return [
+      typedReviews[typedReviews.length - 1],
+      ...typedReviews,
+      typedReviews[0],
+    ];
+  }, [typedReviews]);
   const carouselRef = useRef<HTMLDivElement>(null);
   const reviewCarouselRef = useRef<HTMLDivElement>(null);
 
@@ -35,13 +43,7 @@ function ReviewCarousel() {
     return () => {
       window.removeEventListener("resize", updateWidth);
     };
-  }, [extendedReviews]);
-
-  useEffect(() => {
-    if (reviews.length > 0) {
-      setExtendedReviews([reviews[reviews.length - 1], ...reviews, reviews[0]]);
-    }
-  }, [reviews]);
+  }, []);
 
   useEffect(() => {
     if (carouselRef.current) {
@@ -57,7 +59,7 @@ function ReviewCarousel() {
       }%)`;
     }
     setIsTransitioning(false);
-  }, [currentIndex]);
+  }, [currentIndex, isTransitioning]);
 
   useEffect(() => {
     if (isTransitioning) {
@@ -89,12 +91,12 @@ function ReviewCarousel() {
     setCurrentIndex(currentIndex + 1);
   };
 
-  const handleTouchStart = (e: React.TouchEvent) => {
+  const handleTouchStart = (e: TouchEvent) => {
     setStartX(e.touches[0].clientX);
     setIsDragging(true);
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
+  const handleTouchEnd = (e: TouchEvent) => {
     if (!isDragging) return;
     const endX = e.changedTouches[0].clientX;
     if (startX - endX > 50) {

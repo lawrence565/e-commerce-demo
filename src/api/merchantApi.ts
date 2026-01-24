@@ -26,8 +26,8 @@ export const getMerchantStats = async (): Promise<MerchantStats> => {
     try {
         const response = await client.get("merchant/stats");
         return response.data.data;
-    } catch (e) {
-        console.warn("Failed to fetch merchant stats, using mock data");
+    } catch (error) {
+        console.warn("Failed to fetch merchant stats, using mock data", error);
         return mockStats;
     }
 };
@@ -36,8 +36,8 @@ export const getMerchantProducts = async (): Promise<Product[]> => {
     try {
         const response = await client.get("merchant/products");
         return response.data.data;
-    } catch (e) {
-        console.warn("Failed to fetch merchant products, using mock data");
+    } catch (error) {
+        console.warn("Failed to fetch merchant products, using mock data", error);
         return [];
     }
 };

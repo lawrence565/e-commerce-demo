@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
@@ -6,7 +6,7 @@ function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = (e: FormEvent) => {
         e.preventDefault();
         // Mock login logic
         console.log("Login with:", email, password);

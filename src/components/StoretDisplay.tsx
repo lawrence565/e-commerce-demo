@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, type ReactElement } from "react";
 import { Link } from "react-router-dom";
 import { getProducts } from "../api/productApi";
 import { useSpinnerStore } from "../store/appStore";
@@ -14,9 +14,9 @@ interface Product {
 }
 
 function paginate(
-  array: JSX.Element[],
+  array: ReactElement[],
   pageSize: number,
-): Array<Array<JSX.Element>> {
+): Array<Array<ReactElement>> {
   return array.reduce(
     (acc, value, i) => {
       const pageIndex = Math.floor(i / pageSize); // 判斷每一個元素在哪個頁面並加入
@@ -26,7 +26,7 @@ function paginate(
       acc[pageIndex].push(value);
       return acc;
     },
-    [] as Array<Array<JSX.Element>>,
+    [] as Array<Array<ReactElement>>,
   );
 }
 

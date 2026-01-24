@@ -3,12 +3,52 @@ import ornament from "../assets/ornament.png";
 import ratten_bag from "../assets/ratten-bag.png";
 import cork_art from "../assets/cork-art.png";
 import "../style/HomepageStyle.scss";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, type TouchEvent } from "react";
+
+const CAROUSEL_CARDS = [
+  {
+    id: 4,
+    title: "軟木藝術品",
+    content: "獨特的軟木藝術品，增添藝術氣息。",
+    img: cork_art,
+  },
+  {
+    id: 1,
+    title: "木製手機架",
+    content: "使用台東漂流木結合原住民雕刻文化打造的特色手機架",
+    img: phone_stand,
+  },
+  {
+    id: 2,
+    title: "裝飾品",
+    content: "精美的裝飾品，適合擺放在任何地方。",
+    img: ornament,
+  },
+  {
+    id: 3,
+    title: "籐包",
+    content: "手工製作的籐包，既時尚又實用。",
+    img: ratten_bag,
+  },
+  {
+    id: 4,
+    title: "軟木藝術品",
+    content: "獨特的軟木藝術品，增添藝術氣息。",
+    img: cork_art,
+  },
+  {
+    id: 1,
+    title: "木製手機架",
+    content: "使用台東漂流木結合原住民雕刻文化打造的特色手機架",
+    img: phone_stand,
+  },
+];
 
 function Carousel(props: {
   onImagesRegistered?: (count: number) => void;
   onImageReady?: () => void;
 }) {
+  const { onImagesRegistered, onImageReady } = props;
   const TRANSITION_MS = 320;
   const MIN_WIDTH = 280;
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -18,47 +58,10 @@ function Carousel(props: {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
   const cardCarouselRef = useRef<HTMLDivElement>(null);
-  const cards = [
-    {
-      id: 4,
-      title: "軟木藝術品",
-      content: "獨特的軟木藝術品，增添藝術氣息。",
-      img: cork_art,
-    },
-    {
-      id: 1,
-      title: "木製手機架",
-      content: "使用台東漂流木結合原住民雕刻文化打造的特色手機架",
-      img: phone_stand,
-    },
-    {
-      id: 2,
-      title: "裝飾品",
-      content: "精美的裝飾品，適合擺放在任何地方。",
-      img: ornament,
-    },
-    {
-      id: 3,
-      title: "籐包",
-      content: "手工製作的籐包，既時尚又實用。",
-      img: ratten_bag,
-    },
-    {
-      id: 4,
-      title: "軟木藝術品",
-      content: "獨特的軟木藝術品，增添藝術氣息。",
-      img: cork_art,
-    },
-    {
-      id: 1,
-      title: "木製手機架",
-      content: "使用台東漂流木結合原住民雕刻文化打造的特色手機架",
-      img: phone_stand,
-    },
-  ];
+  const cards = CAROUSEL_CARDS;
   useEffect(() => {
-    props.onImagesRegistered?.(cards.length);
-  }, [props.onImagesRegistered, cards.length]);
+    onImagesRegistered?.(cards.length);
+  }, [onImagesRegistered, cards.length]);
 
   useEffect(() => {
     const updateWidth = () => {
@@ -89,7 +92,7 @@ function Carousel(props: {
       }%)`;
     }
     setIsTransitioning(false);
-  }, [currentIndex]);
+  }, [currentIndex, isTransitioning]);
 
   useEffect(() => {
     if (isTransitioning) {
@@ -121,12 +124,12 @@ function Carousel(props: {
     setCurrentIndex(currentIndex + 1);
   };
 
-  const handleTouchStart = (e: React.TouchEvent) => {
+  const handleTouchStart = (e: TouchEvent) => {
     setStartX(e.touches[0].clientX);
     setIsDragging(true);
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
+  const handleTouchEnd = (e: TouchEvent) => {
     if (!isDragging) return;
     const endX = e.changedTouches[0].clientX;
     if (startX - endX > 50) {
@@ -169,8 +172,8 @@ function Carousel(props: {
                         className="promote-img "
                         src={product.img}
                         alt={product.content}
-                        onLoad={props.onImageReady}
-                        onError={props.onImageReady}
+                        onLoad={onImageReady}
+                        onError={onImageReady}
                       />
                       <div className="goods-tag">
                         <h3 className="goods-name">{product.title}</h3>

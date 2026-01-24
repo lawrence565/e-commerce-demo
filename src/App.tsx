@@ -3,10 +3,9 @@ import { lazy, Suspense } from "react";
 import { CookiesProvider } from "react-cookie";
 import Layout from "./Layout";
 import ScrollToTop from "./utils/ScrollToTop";
-import "./style/App.css";
 import "./style/animations.css";
 
-import { CartProvider } from "./context/CartContext";
+import { CartProvider } from "./context/CartProvider";
 import { useCartCookie } from "./utils/useCartCookie";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { ToastProvider } from "./components/Toast";
@@ -40,14 +39,18 @@ function PageLoadingFallback() {
   );
 }
 
-function App() {
+function CartCookieSync() {
   useCartCookie();
+  return null;
+}
 
+function App() {
   return (
     <ErrorBoundary>
       <HashRouter>
         <ScrollToTop />
         <CookiesProvider>
+          <CartCookieSync />
           <CartProvider>
             <ToastProvider>
               <Suspense fallback={<PageLoadingFallback />}>

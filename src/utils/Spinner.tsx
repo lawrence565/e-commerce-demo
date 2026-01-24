@@ -1,4 +1,4 @@
-const Spinner: React.FC = () => {
+const Spinner = () => {
   return (
     <div className="background">
       <div className="spinner">

@@ -53,8 +53,8 @@ export const getUserProfile = async (): Promise<UserProfile> => {
     try {
         const response = await client.get("user/profile");
         return response.data.data;
-    } catch (e) {
-        console.warn("Failed to fetch user profile, using mock data");
+    } catch (error) {
+        console.warn("Failed to fetch user profile, using mock data", error);
         return mockProfile;
     }
 };
@@ -67,8 +67,8 @@ export const getUserOrders = async (): Promise<Order[]> => {
     try {
         const response = await client.get("user/orders");
         return response.data.data;
-    } catch (e) {
-        console.warn("Failed to fetch user orders, using mock data");
+    } catch (error) {
+        console.warn("Failed to fetch user orders, using mock data", error);
         return mockOrders;
     }
 };

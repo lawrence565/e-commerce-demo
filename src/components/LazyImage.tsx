@@ -1,4 +1,9 @@
-import { useEffect, useState, ImgHTMLAttributes } from "react";
+import {
+  useEffect,
+  useState,
+  ImgHTMLAttributes,
+  type SyntheticEvent,
+} from "react";
 
 type SkeletonAnimationType = "shimmer" | "pulse" | "spin" | "wave";
 
@@ -33,13 +38,13 @@ export function LazyImage({
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
 
-  const handleLoad = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+  const handleLoad = (event: SyntheticEvent<HTMLImageElement, Event>) => {
     setIsLoaded(true);
     onLoad?.(event);
   };
 
   const handleError = (
-    event: React.SyntheticEvent<HTMLImageElement, Event>,
+    event: SyntheticEvent<HTMLImageElement, Event>,
   ) => {
     setHasError(true);
     setIsLoaded(true);

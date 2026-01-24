@@ -13,7 +13,7 @@ export interface CustomerProfile {
   birthday?: string;
   gender?: string;
   membershipTierName?: string;
-  [key: string]: any; // 允許額外的自訂欄位
+  [key: string]: unknown; // 允許額外的自訂欄位
 }
 
 /**
@@ -37,7 +37,7 @@ const checkECFunctions = (): boolean => {
 export const ecLogin = (
   customerId: string,
   profile?: CustomerProfile,
-  additionalProfile?: Record<string, any>
+  additionalProfile?: Record<string, unknown>
 ): boolean => {
   if (!checkECFunctions()) return false;
 
@@ -137,9 +137,9 @@ export const getCurrentCustomerId = (): string | null => {
 
   // 也可以從 dataLayer 中尋找
   if (window.dataLayer) {
-    const customerData = window.dataLayer.find(
-      (item: any) => item.ecCustomerId
-    );
+    const customerData = window.dataLayer.find((item): item is {
+      ecCustomerId?: string;
+    } => typeof item === "object" && item !== null && "ecCustomerId" in item);
     if (customerData?.ecCustomerId) {
       return customerData.ecCustomerId;
     }
@@ -163,7 +163,7 @@ declare global {
     ecLogout?: () => void;
     checkEcCustStatus?: () => void;
     ecCustomerId?: string;
-    selfBuildProfile?: Record<string, any>;
-    dataLayer: any[];
+    selfBuildProfile?: Record<string, unknown>;
+    dataLayer: Array<Record<string, unknown>>;
   }
 }

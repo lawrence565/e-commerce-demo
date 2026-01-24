@@ -9,7 +9,13 @@ import {
   editCartItem,
   syncCart,
 } from "../api/productApi";
-import { useState, useRef, useEffect } from "react";
+import {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  type ReactElement,
+} from "react";
 import { Link } from "react-router-dom";
 import "../style/CartStyle.scss";
 import { useCookies } from "react-cookie";
@@ -26,8 +32,8 @@ type Coupon = {
   applied: boolean;
 };
 
-import { useCart } from "../context/CartContext";
-import { useToast } from "../components/Toast";
+import { useCart } from "../context/useCart";
+import { useToast } from "../context/ToastContext";
 import { LazyImage } from "../components/LazyImage";
 
 // type applyCoupon = {
@@ -40,7 +46,7 @@ function Card(props: {
   getItem: () => void;
   updateSubtotal: (subtotal: number) => void;
   onImageReady?: () => void;
-}): JSX.Element | undefined {
+}): ReactElement | undefined {
   const item = props.item;
   const updateSubtotal = props.updateSubtotal;
   const getItem = props.getItem;
@@ -51,11 +57,11 @@ function Card(props: {
   const { showToast } = useToast();
   const hasNotified = useRef(false);
 
-  const notifyImageReady = () => {
+  const notifyImageReady = useCallback(() => {
     if (hasNotified.current) return;
     hasNotified.current = true;
     onImageReady?.();
-  };
+  }, [onImageReady]);
 
   useEffect(() => {
     hasNotified.current = false;
@@ -81,7 +87,7 @@ function Card(props: {
       }
     };
     fetchProduct();
-  }, [item]);
+  }, [item.category, item.productId, notifyImageReady]);
 
   useEffect(() => {
     updateSubtotal(amount * (product?.price ?? 0));
@@ -122,7 +128,7 @@ function Card(props: {
       getItem();
       showToast(`${name}已從購物車移除`, "success");
     } catch (error) {
-      console.log("deleting item " + name);
+      console.error("deleting item " + name, error);
     } finally {
       const cart = cookie.cart;
       try {
@@ -241,6 +247,27 @@ function ShopppingKart() {
   const [isCartReady, setIsCartReady] = useState(false);
   const [pendingImages, setPendingImages] = useState(0);
 
+  const getItem = useCallback(async () => {
+    try {
+      const mergedCart = await syncCart(cookie.cart);
+      if (mergedCart && mergedCart.length !== cookie.cart.length) {
+        setCookie("cart", mergedCart);
+      }
+      const cart: CartItem[] = await getCart();
+      setCartitems(cart);
+      setPendingImages(cart.length);
+      subtotals.current = new Array(cart.length).fill(0);
+      setSubtotal(0);
+    } catch (error) {
+      console.error("Failed to sync cart", error);
+      const fallbackItems = cookie.cart ?? [];
+      setCartitems(fallbackItems);
+      setPendingImages(fallbackItems.length);
+      subtotals.current = new Array(fallbackItems.length).fill(0);
+      setSubtotal(0);
+    }
+  }, [cookie.cart, setCookie, setSubtotal]);
+
   useEffect(() => {
     const fetchData = async () => {
       showSpinner();
@@ -254,33 +281,13 @@ function ShopppingKart() {
     };
 
     fetchData();
-  }, [cookie.cart.length]);
+  }, [cookie.cart, getItem, setCookie, showSpinner]);
 
   useEffect(() => {
     const newDiscount = calculateDiscount(subtotal);
     setDiscount(newDiscount);
     setTotal(calculateTotal(subtotal, newDiscount, couponDiscount));
-  }, [subtotal, couponDiscount]);
-
-  const getItem = async () => {
-    try {
-      const mergedCart = await syncCart(cookie.cart);
-      if (mergedCart && mergedCart.length !== cookie.cart.length) {
-        setCookie("cart", mergedCart);
-      }
-      const cart: CartItem[] = await getCart();
-      setCartitems(cart);
-      setPendingImages(cart.length);
-      subtotals.current = new Array(cart.length).fill(0);
-      setSubtotal(0);
-    } catch (e) {
-      const fallbackItems = cookie.cart ?? [];
-      setCartitems(fallbackItems);
-      setPendingImages(fallbackItems.length);
-      subtotals.current = new Array(fallbackItems.length).fill(0);
-      setSubtotal(0);
-    }
-  };
+  }, [subtotal, couponDiscount, setDiscount, setTotal]);
 
   const updateSubtotal = (index: number, newSubtotal: number) => {
     subtotals.current[index] = newSubtotal;

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, type TouchEvent } from "react";
 import { Link } from "react-router-dom";
 import { getProducts } from "../api/productApi";
 
@@ -18,6 +18,7 @@ function ProductRecomanned(props: {
   onImagesRegistered?: (count: number) => void;
   onImageReady?: () => void;
 }) {
+  const { title, category, url, onImagesRegistered, onImageReady } = props;
   const [currentIndex, setCurrentIndex] = useState(1);
   const [width, setWidth] = useState(300);
   const [products, setProducts] = useState<Product[]>([]);
@@ -30,10 +31,13 @@ function ProductRecomanned(props: {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const hasRegisteredImages = useRef(false);
   const cardPerPage: number = 4;
-  const groupedProducts: Array<Product[]> = [];
-  for (let i = 0; i < products.length; i += cardPerPage) {
-    groupedProducts.push(products.slice(i, i + cardPerPage));
-  }
+  const groupedProducts = useMemo(() => {
+    const groups: Array<Product[]> = [];
+    for (let i = 0; i < products.length; i += cardPerPage) {
+      groups.push(products.slice(i, i + cardPerPage));
+    }
+    return groups;
+  }, [products, cardPerPage]);
   const cardCarouselRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -41,11 +45,11 @@ function ProductRecomanned(props: {
       setIsDataReady(false);
       let items: Product[] = [];
       try {
-        if (props.category === "gadgets") {
+        if (category === "gadgets") {
           items = await getProducts("gadget");
-        } else if (props.category === "furnitures") {
+        } else if (category === "furnitures") {
           items = await getProducts("furniture");
-        } else if (props.category === "decorations") {
+        } else if (category === "decorations") {
           items = await getProducts("decoration");
         }
         setProducts(items ?? []);
@@ -56,7 +60,7 @@ function ProductRecomanned(props: {
         setIsDataReady(true);
       }
     })();
-  }, [props.category]);
+  }, [category]);
 
   // 渲染 Carousel 頁面
   useEffect(() => {
@@ -67,21 +71,21 @@ function ProductRecomanned(props: {
         groupedProducts[0],
       ]);
     }
-  }, [products]);
+  }, [groupedProducts]);
   useEffect(() => {
     if (!isDataReady || hasRegisteredImages.current) return;
     if (extendedProducts.length === 0) {
       hasRegisteredImages.current = true;
-      props.onImagesRegistered?.(0);
+      onImagesRegistered?.(0);
       return;
     }
     const count = extendedProducts.flat().length;
     hasRegisteredImages.current = true;
-    props.onImagesRegistered?.(count);
-  }, [isDataReady, extendedProducts, props.onImagesRegistered]);
+    onImagesRegistered?.(count);
+  }, [isDataReady, extendedProducts, onImagesRegistered]);
   useEffect(() => {
     hasRegisteredImages.current = false;
-  }, [props.category]);
+  }, [category]);
 
   // 透過 isTransitioning 控制動畫
   useEffect(() => {
@@ -97,7 +101,7 @@ function ProductRecomanned(props: {
         }%)`;
     }
     setIsTransitioning(false);
-  }, [currentIndex]);
+  }, [currentIndex, isTransitioning]);
 
   useEffect(() => {
     if (isTransitioning) {
@@ -129,12 +133,12 @@ function ProductRecomanned(props: {
     setCurrentIndex(currentIndex + 1);
   };
 
-  const handleTouchStart = (e: React.TouchEvent) => {
+  const handleTouchStart = (e: TouchEvent) => {
     setStartX(e.touches[0].clientX);
     setIsDragging(true);
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
+  const handleTouchEnd = (e: TouchEvent) => {
     if (!isDragging) return;
     const endX = e.changedTouches[0].clientX;
     if (startX - endX > 50) {
@@ -161,11 +165,11 @@ function ProductRecomanned(props: {
     return () => {
       window.removeEventListener("resize", updateWidth);
     };
-  }, [products, extendedProducts]);
+  }, [extendedProducts.length]);
 
   return (
     <div className="text-midBrown my-4">
-      <h2 className="text-2xl font-semibold">{props.title}</h2>
+      <h2 className="text-2xl font-semibold">{title}</h2>
       <hr className="text-midBrown" />
       <div
         className="product-carousel flex items-center my-4 md:my-8 mb-0"
@@ -203,8 +207,8 @@ function ProductRecomanned(props: {
                                 src={`/${product.category}s/${product.name}.webp`}
                                 alt={product.title}
                                 loading="lazy"
-                                onLoad={props.onImageReady}
-                                onError={props.onImageReady}
+                                onLoad={onImageReady}
+                                onError={onImageReady}
                               />
                             </div>
                             <h3 className="product-title text-xl">
@@ -229,7 +233,7 @@ function ProductRecomanned(props: {
       </div>
       <div className="mb-6 mx-4 lg:mx-16 flex justify-end">
         <div className="w-fit">
-          <Link to={`${props.url}`} onClick={scrollToTop}>
+          <Link to={`${url}`} onClick={scrollToTop}>
             <p className="underline cursor-pointer">查看更多</p>
           </Link>
         </div>

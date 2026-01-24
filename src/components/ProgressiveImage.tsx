@@ -121,11 +121,3 @@ export function IntersectionImage({
  * 產生低解析度佔位圖的 URL
  * 用於搭配後端圖片處理服務
  */
-export function getPlaceholderUrl(originalUrl: string, width: number = 20): string {
-    // 假設後端支援查詢參數調整圖片大小
-    // 可根據實際 CDN/圖片服務調整
-    const url = new URL(originalUrl, window.location.origin);
-    url.searchParams.set("w", width.toString());
-    url.searchParams.set("q", "10"); // 低品質
-    return url.toString();
-}

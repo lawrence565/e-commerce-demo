@@ -17,7 +17,7 @@ export const getSingleProduct = async (category: string, id: number) => {
       });
 
     return data.data[0];
-  } catch (e) {
+  } catch {
     let data: Product;
     const responce = products.find((product) => {
       return product.id === id;
@@ -37,7 +37,7 @@ export const getProducts = async (category: string) => {
         return data.data;
       });
     return data.data;
-  } catch (e) {
+  } catch {
     const data: Product[] = products.filter((product) => {
       return product.category === category;
     });

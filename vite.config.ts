@@ -9,8 +9,10 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
+      minify: false,
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
       workbox: {
+        mode: "development",
         // allow larger route chunks (CheckoutInfo) to be precached
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         // 離線快取策略
@@ -85,6 +87,9 @@ export default defineConfig({
   base: process.env.VITE_BASE_URL,
   server: {
     allowedHosts: [
+      "localhost",
+      "127.0.0.1",
+      "::1",
       "3dc3-2407-4d00-1c00-8841-3968-6998-2fc0-9572.ngrok-free.app",
     ],
     strictPort: true,
@@ -92,11 +97,8 @@ export default defineConfig({
   },
   css: {
     postcss: "./postcss.config.js",
-    // 使用 modern Sass API
     preprocessorOptions: {
-      scss: {
-        api: "modern-compiler",
-      },
+      scss: {},
     },
   },
   build: {

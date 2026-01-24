@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, type ReactElement } from "react";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { getSingleProduct } from "../api/productApi";
-import { useEffect } from "react";
 import { LazyImage } from "../components/LazyImage";
 
 type CartItem = {
@@ -26,9 +25,9 @@ type Recipient = {
   email: string;
 };
 
-function FinishOrder(): JSX.Element {
+function FinishOrder(): ReactElement {
   const [cookie] = useCookies(["order"]);
-  const [remarks, setRemarks] = useState<JSX.Element[]>([]);
+  const [remarks, setRemarks] = useState<ReactElement[]>([]);
   const fakeproducts: CartItem[] = [
     { productId: 2, category: "gadget", quantity: 3 },
     { productId: 27, category: "furniture", quantity: 2 },
@@ -54,7 +53,7 @@ function FinishOrder(): JSX.Element {
     recipient = fakeRecipient;
   }
 
-  async function detail(item: CartItem): Promise<JSX.Element | undefined> {
+  async function detail(item: CartItem): Promise<ReactElement | undefined> {
     const product: Product | undefined = await getSingleProduct(
       item.category,
       item.productId,
@@ -95,7 +94,7 @@ function FinishOrder(): JSX.Element {
   useEffect(() => {
     async function fetchDetails() {
       const details = await Promise.all(products.map((item) => detail(item)));
-      setRemarks(details.filter(Boolean) as JSX.Element[]);
+      setRemarks(details.filter(Boolean) as ReactElement[]);
     }
     fetchDetails();
   }, [products, cookie.order]);

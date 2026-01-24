@@ -7,9 +7,9 @@ import Stores from "../assets/stores.json";
 import { LazyImage } from "../components/LazyImage";
 import Modal from "../components/Modal.tsx";
 import "../style/HomepageStyle.scss";
-import { useState } from "react";
+import { useState, type ReactElement } from "react";
 
-function Homepage(): JSX.Element {
+function Homepage(): ReactElement {
   const [storeClicked, setStoreClicked] = useState(false);
 
   const showStoredModal = () => {

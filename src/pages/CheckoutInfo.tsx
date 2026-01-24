@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -9,14 +9,9 @@ import { useNavigate } from "react-router-dom";
 import CheckoutProcess from "../utils/checkoutProcess";
 import taiwanData from "../assets/taiwan.json";
 import "../style/CheckInfo.scss";
-import { useToast } from "../components/Toast";
+import { useToast } from "../context/ToastContext";
 
-import {
-  CardInfo,
-  ATMInfo,
-  CartItem,
-  Order,
-} from "../types";
+import { CardInfo, ATMInfo, CartItem, Order } from "../types";
 
 type AddressData = {
   CityName: string;
@@ -39,9 +34,7 @@ const orderInfoSchema = z.object({
       .string()
       .min(2, "姓名至少需要 2 個字")
       .max(50, "姓名不能超過 50 個字"),
-    phone: z
-      .string()
-      .regex(/^09\d{8}$/, "請輸入有效的手機號碼 (09xxxxxxxx)"),
+    phone: z.string().regex(/^09\d{8}$/, "請輸入有效的手機號碼 (09xxxxxxxx)"),
     email: z.string().email("請輸入有效的電子郵件地址"),
   }),
   shippment: z.object({
@@ -60,7 +53,7 @@ type OrderInfo = z.infer<typeof orderInfoSchema> & {
   paymentInfo?: CardInfo | ATMInfo;
 };
 
-import { useCart } from "../context/CartContext";
+import { useCart } from "../context/useCart";
 
 function CheckoutInfo() {
   const navigate = useNavigate();
@@ -105,15 +98,15 @@ function CheckoutInfo() {
     name: "shippment.district",
   });
 
-  const getItem = async () => {
+  const getItem = useCallback(async () => {
     let cart: CartItem[];
     try {
       cart = await getCart();
-    } catch (e) {
+    } catch {
       cart = cookies.cart;
     }
     return cart;
-  };
+  }, [cookies.cart]);
 
   function handlePayMethod(data: CardInfo | ATMInfo) {
     try {
@@ -176,7 +169,7 @@ function CheckoutInfo() {
   useEffect(() => {
     setAddressData(taiwanData);
     getItem();
-  }, []);
+  }, [getItem]);
 
   return (
     <>
@@ -257,11 +250,13 @@ function CheckoutInfo() {
                     <input
                       id="name"
                       placeholder="請輸入收件人姓名"
-                      className={`w-full border-2 ${errors.recipient?.name ? 'border-red-500' : 'border-midBrown'} rounded-md bg-gray-100 my-2 pl-2`}
+                      className={`w-full border-2 ${errors.recipient?.name ? "border-red-500" : "border-midBrown"} rounded-md bg-gray-100 my-2 pl-2`}
                       {...register("recipient.name")}
                     />
                     {errors.recipient?.name && (
-                      <span className="text-red-500 text-sm">{errors.recipient.name.message}</span>
+                      <span className="text-red-500 text-sm">
+                        {errors.recipient.name.message}
+                      </span>
                     )}
                   </div>
                   <div className="flex-1 flex flex-col">
@@ -272,11 +267,13 @@ function CheckoutInfo() {
                     <input
                       id="phone"
                       placeholder="請輸入電話號碼"
-                      className={`w-full border-2 ${errors.recipient?.phone ? 'border-red-500' : 'border-midBrown'} rounded-md bg-gray-100 my-2 pl-2`}
+                      className={`w-full border-2 ${errors.recipient?.phone ? "border-red-500" : "border-midBrown"} rounded-md bg-gray-100 my-2 pl-2`}
                       {...register("recipient.phone")}
                     />
                     {errors.recipient?.phone && (
-                      <span className="text-red-500 text-sm">{errors.recipient.phone.message}</span>
+                      <span className="text-red-500 text-sm">
+                        {errors.recipient.phone.message}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -288,11 +285,13 @@ function CheckoutInfo() {
                   <input
                     id="email"
                     placeholder="請輸入電子郵件"
-                    className={`w-full border-2 ${errors.recipient?.email ? 'border-red-500' : 'border-midBrown'} rounded-md bg-gray-100 my-2 pl-2`}
+                    className={`w-full border-2 ${errors.recipient?.email ? "border-red-500" : "border-midBrown"} rounded-md bg-gray-100 my-2 pl-2`}
                     {...register("recipient.email")}
                   />
                   {errors.recipient?.email && (
-                    <span className="text-red-500 text-sm">{errors.recipient.email.message}</span>
+                    <span className="text-red-500 text-sm">
+                      {errors.recipient.email.message}
+                    </span>
                   )}
                 </div>
 
@@ -303,7 +302,7 @@ function CheckoutInfo() {
                         <span className="text-red-500">*</span>縣/市
                       </label>
                       <select
-                        className={`h-[40px] border-2 ${errors.shippment?.city ? 'border-red-500' : 'border-midBrown'} mr-2 md:pl-2 rounded-md bg-gray-100`}
+                        className={`h-[40px] border-2 ${errors.shippment?.city ? "border-red-500" : "border-midBrown"} mr-2 md:pl-2 rounded-md bg-gray-100`}
                         {...register("shippment.city")}
                       >
                         <option value="">請選擇縣市</option>
@@ -316,7 +315,9 @@ function CheckoutInfo() {
                         })}
                       </select>
                       {errors.shippment?.city && (
-                        <span className="text-red-500 text-sm">{errors.shippment.city.message}</span>
+                        <span className="text-red-500 text-sm">
+                          {errors.shippment.city.message}
+                        </span>
                       )}
                     </div>
                     <div className="flex-1 flex flex-col">
@@ -324,7 +325,7 @@ function CheckoutInfo() {
                         <span className="text-red-500">*</span>鄉鎮市區
                       </label>
                       <select
-                        className={`h-[40px] border-2 ${errors.shippment?.district ? 'border-red-500' : 'border-midBrown'} mr-2 md:pl-2 rounded-md bg-gray-100`}
+                        className={`h-[40px] border-2 ${errors.shippment?.district ? "border-red-500" : "border-midBrown"} mr-2 md:pl-2 rounded-md bg-gray-100`}
                         {...register("shippment.district")}
                       >
                         <option value="">請選擇鄉鎮市區</option>
@@ -342,7 +343,9 @@ function CheckoutInfo() {
                           })}
                       </select>
                       {errors.shippment?.district && (
-                        <span className="text-red-500 text-sm">{errors.shippment.district.message}</span>
+                        <span className="text-red-500 text-sm">
+                          {errors.shippment.district.message}
+                        </span>
                       )}
                     </div>
                     <div className="flex-1 flex flex-col">
@@ -350,14 +353,14 @@ function CheckoutInfo() {
                         <span className="text-red-500">*</span>街道名
                       </label>
                       <select
-                        className={`h-[40px] border-2 ${errors.shippment?.road ? 'border-red-500' : 'border-midBrown'} rounded-md bg-gray-100`}
+                        className={`h-[40px] border-2 ${errors.shippment?.road ? "border-red-500" : "border-midBrown"} rounded-md bg-gray-100`}
                         {...register("shippment.road")}
                       >
                         <option value="">請選擇路名</option>
                         {addressData
                           .find((city) => city.CityName === watchCity)
                           ?.AreaList?.find(
-                            (area) => area.AreaName === watchDistrict
+                            (area) => area.AreaName === watchDistrict,
                           )
                           ?.RoadList.map((road) => {
                             return (
@@ -368,7 +371,9 @@ function CheckoutInfo() {
                           })}
                       </select>
                       {errors.shippment?.road && (
-                        <span className="text-red-500 text-sm">{errors.shippment.road.message}</span>
+                        <span className="text-red-500 text-sm">
+                          {errors.shippment.road.message}
+                        </span>
                       )}
                     </div>
                   </div>
@@ -384,11 +389,13 @@ function CheckoutInfo() {
                       type="text"
                       id="addressDetail"
                       placeholder="請輸入地址"
-                      className={`w-full border-2 ${errors.shippment?.detail ? 'border-red-500' : 'border-midBrown'} rounded-md bg-gray-100 h-[40px] pl-2`}
+                      className={`w-full border-2 ${errors.shippment?.detail ? "border-red-500" : "border-midBrown"} rounded-md bg-gray-100 h-[40px] pl-2`}
                       {...register("shippment.detail")}
                     />
                     {errors.shippment?.detail && (
-                      <span className="text-red-500 text-sm">{errors.shippment.detail.message}</span>
+                      <span className="text-red-500 text-sm">
+                        {errors.shippment.detail.message}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -407,7 +414,9 @@ function CheckoutInfo() {
                     {...register("comment")}
                   />
                   {errors.comment && (
-                    <span className="text-red-500 text-sm">{errors.comment.message}</span>
+                    <span className="text-red-500 text-sm">
+                      {errors.comment.message}
+                    </span>
                   )}
                 </div>
 
@@ -415,7 +424,7 @@ function CheckoutInfo() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-midBrown hover:text-white'} bg-white text-midBrown p-2 rounded-md border-2 border-midBrown transition-all ease-in duration-100 btn-interactive`}
+                    className={`${isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-midBrown hover:text-white"} bg-white text-midBrown p-2 rounded-md border-2 border-midBrown transition-all ease-in duration-100 btn-interactive`}
                   >
                     <h1 className="text-lg">
                       {isSubmitting ? "處理中..." : "完成訂單"}

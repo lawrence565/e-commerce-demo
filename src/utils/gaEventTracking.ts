@@ -156,7 +156,7 @@ export const trackViewCart = (items: GAItem[], value?: number): void => {
  */
 export const trackCustomEvent = (
   eventName: string,
-  eventParams?: Record<string, any>
+  eventParams?: Record<string, unknown>
 ): void => {
   if (!checkDataLayer()) return;
 
@@ -171,6 +171,6 @@ export const trackCustomEvent = (
 // 擴展 Window 介面以支援 dataLayer
 declare global {
   interface Window {
-    dataLayer: any[];
+    dataLayer: Array<Record<string, unknown>>;
   }
 }
