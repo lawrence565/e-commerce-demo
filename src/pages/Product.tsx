@@ -170,8 +170,8 @@ function ProductPage() {
   }
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="min-h-[70dvh] max-w-[1200px] my-8 flex flex-col justify-center items-center">
+    <div className="section">
+      <div className="flex flex-col gap-10">
         <Modal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
@@ -188,18 +188,12 @@ function ProductPage() {
         >
           <p>出現某些錯誤，請稍後再試</p>
         </Modal>
-        <div
-          id="product"
-          className="flex flex-col md:flex-row justify-center items-center h-fit mb-4 sm:mb-6 md:mb-8"
-        >
-          <div
-            id="product-img"
-            className="flex-1 aspect-4/3 md:aspect-square h-[30dvh] md:h-[50dvh] rounded-2xl overflow-hidden mx-6"
-          >
+        <div className="surface-card p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center">
+          <div className="flex-1 w-full">
             {product && (
               <LazyImage
                 key={`/${product.category}s/${product.name}.webp`}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover rounded-2xl"
                 src={`/${product.category}s/${product.name}.webp`}
                 alt={product.title ?? "商品圖片"}
                 width={400}
@@ -211,76 +205,51 @@ function ProductPage() {
               />
             )}
           </div>
-          <div
-            id="product-desc"
-            className="flex-1 mx-4 md:mx-8 h-[40dvh] flex flex-col mt-6 sm:mt-0"
-          >
-            <div className="h-full">
-              <h1 className="text-2xl md:text-4xl mx-4 mt-2 md:mt-0 mb-2 md:mb-6 font-bold">
+          <div className="flex-1 w-full space-y-6">
+            <div>
+              <span className="chip">人氣商品</span>
+              <h1 className="text-3xl md:text-4xl font-bold mt-3">
                 {product?.title}
               </h1>
-              <hr />
-              <h3 className="text-xl md:text-2xl font-semibold mx-4 my-2 md:my-4">
-                商品簡介：
-              </h3>
-              <p className="mx-4 my-2 md:my-4 min-h-[50px]">
+              <p className="text-base text-black/70 mt-3">
                 {product?.description}
               </p>
             </div>
-            <div className="font-bold text-3xl md:text-4xl mr-4 md:mr-8 mb-6 md:mb-8 text-end">{`$ ${product?.price ?? "XXXXX"}`}</div>
-            <div
-              id="amount&buy"
-              className="flex-1 w-full flex items-cneter justify-between mb-1 md:mb-4"
-            >
-              <div className="mr-2 sm:mx-4">
-                <div
-                  id="amount"
-                  className="w-fit sm:ml-4 flex rounded-md border-[1px] border-midBrown"
+            <div className="text-3xl font-bold text-right">{`$ ${
+              product?.price ?? "XXXXX"
+            }`}</div>
+            <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+              <div className="flex items-center gap-2">
+                <button
+                  className="nav-pill w-10 h-10 flex items-center justify-center"
+                  onClick={minus}
+                  disabled={amount === 1}
                 >
-                  <div className="w-8 flex justify-center items-centerp-2 text-midBrown cursor-pointer">
-                    <button
-                      onClick={minus}
-                      disabled={amount === 1}
-                      className="h-full w-full"
-                    >
-                      &#10094;
-                    </button>
-                  </div>
-                  <div className="w-12 flex justify-center items-center p-2 bg-midBrown text-white">
-                    {amount}
-                  </div>
-                  <div className="w-8 flex justify-center items-centerp-2 text-midBrown cursor-pointer">
-                    <button
-                      onClick={add}
-                      disabled={amount === 20}
-                      className="h-full w-full"
-                    >
-                      &#10095;
-                    </button>
-                  </div>
+                  &#10094;
+                </button>
+                <div className="nav-pill w-12 h-10 flex items-center justify-center font-semibold">
+                  {amount}
                 </div>
-                <div
-                  className={`text-red-500 text-sm text-nowrap ${
+                <button
+                  className="nav-pill w-10 h-10 flex items-center justify-center"
+                  onClick={add}
+                  disabled={amount === 20}
+                >
+                  &#10095;
+                </button>
+                <span
+                  className={`text-xs text-red-500 ${
                     amount === 20 ? "" : "invisible"
                   }`}
                 >
                   已達到購買上限
-                </div>
+                </span>
               </div>
-              <div
-                id="pay-or-kart"
-                className="flex text-lg font-semibold h-fit"
-              >
-                <button
-                  className="bg-midBrown text-white px-4 py-2 mx-1 sm:mx-2 rounded-md text-nowrap"
-                  onClick={addToCart}
-                >
+              <div className="flex flex-wrap gap-3">
+                <button className="cta-primary" onClick={addToCart}>
                   加入購物車
                 </button>
-                <button
-                  className="bg-white text-midBrown px-4 py-2 mx-1 sm:mx-2 rounded-md border-midBrown border-[2px] text-nowrap"
-                  onClick={buyNow}
-                >
+                <button className="cta-secondary" onClick={buyNow}>
                   立即購買
                 </button>
               </div>
@@ -288,47 +257,62 @@ function ProductPage() {
           </div>
         </div>
 
-        <div
-          id="info"
-          className="w-[90dvw] md:w-4/5 flex flex-col md:flex-row justify-center items-start m-4 md:m-8"
-        >
-          <div id="product-info" className="flex-1 mx-4">
-            <h1 className="text-xl font-bold">商品相關資訊</h1>
-            <div className="py-2">
-              <h3 className="text-lg font-semibold">商品數量</h3>
-              <p>每個產品內含一份</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="surface-card p-6">
+            <h2 className="text-xl font-semibold mb-4">商品相關資訊</h2>
+            <div className="space-y-3 text-sm text-black/70">
+              <div>
+                <h3 className="text-base font-semibold text-black">
+                  商品數量
+                </h3>
+                <p>每個產品內含一份</p>
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-black">
+                  工藝材質
+                </h3>
+                <p>嚴選台灣職人材料，手工製作，細節可見。</p>
+              </div>
             </div>
           </div>
-          <div id="buyer-info" className="flex-1 mx-4">
-            <h1 className="text-xl  font-bold">購買須知</h1>
-            <div className="py-2">
-              <h3 className="text-lg font-semibold">個人資料保護</h3>
-              <p>
-                為保障個資安全，您所訂購的商品之出貨標籤上，我們將會遮蔽部份姓名。如造成您的收貨困擾，請見諒。
-              </p>
-            </div>
-            <div className="py-2">
-              <h3 className="text-lg font-semibold">配送時間</h3>
-              <p>
-                由訂購完成當日起，商品會於3-5個工作天內配送至您指定的收貨地址。
-              </p>
-            </div>
-            <div className="py-2">
-              <h3 className="text-lg font-semibold">退貨辦理</h3>
-              <p>
-                商品配送到府後，請儘速檢視商品。若有商品缺漏、或運送過程中有損毀等情形，請於收貨24小時內透過官方Line聯絡客服，由客服人員確認並協助您進行處理。
-              </p>
+          <div className="surface-card p-6">
+            <h2 className="text-xl font-semibold mb-4">購買須知</h2>
+            <div className="space-y-3 text-sm text-black/70">
+              <div>
+                <h3 className="text-base font-semibold text-black">
+                  個人資料保護
+                </h3>
+                <p>
+                  為保障個資安全，出貨標籤會遮蔽部分姓名，如造成不便請見諒。
+                </p>
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-black">
+                  配送時間
+                </h3>
+                <p>訂購完成後 3-5 個工作天內送達指定地址。</p>
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-black">
+                  退貨辦理
+                </h3>
+                <p>
+                  收貨後 24 小時內如有問題請透過官方 Line 聯絡客服。
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
         {relatedCategory && (
-          <ProductRecomanned
-            key="0"
-            title={relatedCategory.title}
-            category={relatedCategory.items}
-            url={relatedCategory.url}
-          />
+          <div className="surface-card p-6">
+            <ProductRecomanned
+              key="0"
+              title={relatedCategory.title}
+              category={relatedCategory.items}
+              url={relatedCategory.url}
+            />
+          </div>
         )}
       </div>
     </div>

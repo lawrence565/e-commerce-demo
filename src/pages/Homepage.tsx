@@ -6,7 +6,6 @@ import down_arrow from "../assets/down_arrow.svg";
 import Stores from "../assets/stores.json";
 import { LazyImage } from "../components/LazyImage";
 import Modal from "../components/Modal.tsx";
-import "../style/HomepageStyle.scss";
 import { useState, type ReactElement } from "react";
 
 function Homepage(): ReactElement {
@@ -31,15 +30,43 @@ function Homepage(): ReactElement {
         <p>功能製作中，敬請期待</p>
       </Modal>
       <div className="homepage-contanier">
-        <div className="lg:h-2/5 lg:min-h-[350px] mt-8">
-          <Carousel />
-        </div>
+        <section className="section">
+          <div className="hero-grid">
+            <div className="hero-card space-y-4">
+              <span className="chip">Cultural Market 2026</span>
+              <h1 className="section-title headline-serif">
+                用設計與工藝，打造日常的溫度
+              </h1>
+              <p className="section-subtitle">
+                探索在地創作者的作品與故事。從生活小物到手工家具，讓每個角落都更有品味。
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Link to="/stores" className="cta-primary">
+                  立即選購
+                </Link>
+                <Link to="/about" className="cta-secondary">
+                  了解品牌
+                </Link>
+              </div>
+            </div>
+            <div className="surface-card p-4 md:p-6">
+              <Carousel />
+            </div>
+          </div>
+        </section>
 
-        <div className="product-recommand flex flex-col justify-center items-center">
-          <div className="md:max-w-[1200px] lg:max-w-[1400px] m-4">
-            <h1 className="text-3xl my-4 text-midBrown font-semibold">
-              產品推薦
-            </h1>
+        <section className="section">
+          <div className="flex items-end justify-between flex-wrap gap-4">
+            <div>
+              <h2 className="section-title">精選推薦</h2>
+              <p className="section-subtitle">編輯嚴選，快速找到本月熱門。</p>
+            </div>
+            <Link to="/stores" className="cta-secondary flex items-center gap-2">
+              查看全部
+              <img src={down_arrow} className="w-5" />
+            </Link>
+          </div>
+          <div className="mt-6">
             <ProductRecomanned
               key="0"
               title="隨身用品"
@@ -59,54 +86,61 @@ function Homepage(): ReactElement {
               url="/stores/decorations"
             />
           </div>
+        </section>
 
-          <div>
-            <Link
-              to="/stores"
-              className="flex flex-col justify-center items-center"
-            >
-              <h1 className="text-midBrown font-semibold text-lg">查看更多</h1>
-              <img src={down_arrow} className="text-midBrown w-8" />
-            </Link>
-          </div>
-        </div>
-
-        <div className="customer-review bg-midBrown w-full my-8">
-          <div className="flex items-center justify-center max-w-[1200px]:">
-            <ReviewCarousel key="0" />
-          </div>
-        </div>
-
-        <div className="flex justify-center ">
-          <div className="store-introduce m-8 max-w-[1200px]">
-            <h1 className="text-midBrown text-3xl font-bold">商家介紹</h1>
-            <div className="store-card-container flex flex-col md:flex-row justify-center items-start">
-              {Stores.map((store, index: number) => {
-                return (
-                  <div
-                    className="bg-midbrown max-w-[300px] w-[70dvw] md:w-[20dvw] m-4 cursor-pointer"
-                    key={index}
-                    onClick={showStoredModal}
-                  >
-                    <h1 className="text-nowrap text-[1.3rem] md:text-[1rem] lg:text-[1.2rem] font-semibold">
-                      {store.name}
-                    </h1>
-                    <div className="store-img-container overflow-hidden rounded-md my-2">
-                      <LazyImage
-                        src={store.img}
-                        alt={store.name}
-                        width={400}
-                        height={300}
-                        skeletonAnimation="wave"
-                      />
-                    </div>
-                    <p className="text-base">{store.description}</p>
-                  </div>
-                );
-              })}
+        <section className="section">
+          <div className="surface-card p-6 md:p-10 bg-[#2c2722] text-white">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div>
+                <h2 className="section-title headline-serif text-white">
+                  顧客心聲
+                </h2>
+                <p className="section-subtitle text-white/70">
+                  真實好評，讓你安心選購。
+                </p>
+              </div>
+            </div>
+            <div className="mt-6">
+              <ReviewCarousel key="0" />
             </div>
           </div>
-        </div>
+        </section>
+
+        <section className="section">
+          <div className="flex items-end justify-between flex-wrap gap-4">
+            <div>
+              <h2 className="section-title">職人商家</h2>
+              <p className="section-subtitle">
+                每一家都有自己的風格與故事。
+              </p>
+            </div>
+          </div>
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+            {Stores.map((store, index: number) => {
+              return (
+                <button
+                  className="surface-card p-5 text-left transition-transform hover:-translate-y-1 focus-ring"
+                  key={index}
+                  onClick={showStoredModal}
+                >
+                  <h3 className="text-lg font-semibold">{store.name}</h3>
+                  <div className="mt-3 rounded-xl overflow-hidden">
+                    <LazyImage
+                      src={store.img}
+                      alt={store.name}
+                      width={400}
+                      height={300}
+                      skeletonAnimation="wave"
+                    />
+                  </div>
+                  <p className="text-sm mt-3 text-black/70">
+                    {store.description}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+        </section>
       </div>
     </>
   );

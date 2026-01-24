@@ -344,19 +344,20 @@ function ShopppingKart() {
   const resetCouponInput = () => setApplyCouponCode("");
 
   return (
-    <div className="flex flex-col items-center justify-start my-8 w-full min-h-[70dvh]">
-      {<CheckoutProcess step={1} />}
-      <div className="flex flex-col md:flex-row items-start justify-between my-8 max-w-[1200px] h-fit w-full">
+    <div className="section">
+      <CheckoutProcess step={1} />
+      <div className="flex flex-col md:flex-row items-start justify-between gap-6 mt-6">
         <div
           id="items"
-          className="flex-[3] min-w-[250px] md:min-w-[450px] lg:min-w-[600px] w-full max-w-[90dvw] md:max-w-[40dvw] lg:max-w-[60dvw] flex flex-col justify-start ml-4 mr-4 md:mr-8"
+          className="flex-[3] w-full flex flex-col justify-start"
         >
-          <h1 className="text-4xl font-bold text-midBrown mb-8">購買品項</h1>
+          <h1 className="text-3xl font-bold mb-6">購買品項</h1>
           {cartItems.length < 1 ? (
-            <div className="flex items-center text-center h-[20dvw] w-full">
-              <h1 className="text-xl font-semibold w-full">
-                購物車中沒有商品哦
-              </h1>
+            <div className="surface-card p-8 text-center">
+              <h1 className="text-lg font-semibold">購物車中沒有商品哦</h1>
+              <p className="text-sm text-black/60 mt-2">
+                先去商店逛逛吧！
+              </p>
             </div>
           ) : (
             cartItems.map((item, index) => (
@@ -376,39 +377,36 @@ function ShopppingKart() {
         </div>
         <div
           id="subtotal"
-          className="flex-1 min-w-[300px] w-full max-w-[90dvw] md:max-w-[25dvw] lg:max-w-[20dvw] rounded-lg bg-midBrown p-6 m-4 h-fit"
+          className="surface-card p-6 w-full md:max-w-[320px]"
         >
-          <h1 className="font-semibold text-3xl text-white mb-4 lg:max-w-[15dvw] ml-2">
-            購買明細
-          </h1>
-          <hr />
-          <div className="flex flex-col justify-center items-center my-4">
-            <div className="subtotal">
-              <h3>商品原價：</h3>
-              <h3>{`NT$ ${subtotal}`}</h3>
+          <h1 className="font-semibold text-2xl mb-4">購買明細</h1>
+          <div className="flex flex-col gap-3 text-sm text-black/70">
+            <div className="flex justify-between">
+              <span>商品原價</span>
+              <span>{`NT$ ${subtotal}`}</span>
             </div>
-            <div className="subtotal">
-              <h3>折扣：</h3>
-              <h3>{`- NT$ ${discount}`}</h3>
+            <div className="flex justify-between">
+              <span>折扣</span>
+              <span>{`- NT$ ${discount}`}</span>
             </div>
-            <div className="subtotal">
-              <h3>優惠券：</h3>
-              <h3>{`- NT$ ${couponDiscount}`}</h3>
+            <div className="flex justify-between">
+              <span>優惠券</span>
+              <span>{`- NT$ ${couponDiscount}`}</span>
             </div>
-            <div className="w-4/5 mx-4">
+            <div className="space-y-2">
               {appliedCoupon.map((couponId, index) => {
                 const applied = couponList.find(
                   (coupon) => coupon.id === couponId,
                 );
                 if (applied) {
                   return (
-                    <div className="w-full flex text-white justify-between">
+                    <div className="w-full flex justify-between text-sm">
                       <p key={index}>{applied.name}</p>
                       <div className="flex">
                         <p key={index + appliedCoupon.length}>
                           {`- ${applied.discount}`}
                         </p>
-                        <div className="ml-4 bg-white text-midBrown rounded-lg p-[2px]">
+                        <div className="ml-2 bg-white text-midBrown rounded-lg p-[2px] border">
                           <button onClick={() => cancelApplied(applied.id)}>
                             ✗
                           </button>
@@ -420,53 +418,46 @@ function ShopppingKart() {
               })}
             </div>
           </div>
-          <hr />
-          <div className="flex justify-center w-9/10 m-2">
-            <div className="flex text-white w-full justify-between max-w-[350px]">
-              <h1 className="font-semibold text-2xl">結帳金額：</h1>
-              <h1 className="text-end text-2xl">{total}</h1>
-            </div>
+          <div className="flex justify-between items-center mt-6 text-lg font-semibold">
+            <span>結帳金額</span>
+            <span>{total}</span>
           </div>
-          <div className="w-3/5 h-fit bg-white p-2 ml-[20%] mt-4 text-end rounded-md flex justify-center">
-            <Link to="/checkout">
-              <button className="w-full h-full font-bold text-midBrown">
-                結帳
-              </button>
-            </Link>
-          </div>
+          <Link to="/checkout" className="block mt-6">
+            <button className="cta-primary w-full">結帳</button>
+          </Link>
         </div>
       </div>
 
-      <div id="coupon" className="w-full lg:max-w-[1200px]">
-        <div className="m-4 w-fit rounded-lg overflow-hidden  border-[2px] border-midBrown">
+      <div id="coupon" className="mt-8">
+        <div className="surface-card w-fit overflow-hidden flex flex-wrap gap-0">
           <input
-            className="w-[200px] p-2 bg-gray-200"
+            className="w-[200px] p-2 bg-white/60"
             placeholder="請輸入優惠碼"
             value={applyCouponCode}
             onChange={(e) => setApplyCouponCode(e.target.value)}
           />
           <button
-            className="bg-midBrown text-white px-4 py-2"
+            className="cta-primary rounded-none"
             onClick={() => checkCoupon(applyCouponCode)}
           >
             套用
           </button>
           <button
-            className="bg-white text-midBrown px-4 py-2"
+            className="cta-secondary rounded-none"
             onClick={resetCouponInput}
           >
             取消
           </button>
         </div>
 
-        <div id="avaliable" className="m-4">
-          <table className="w-full max-w-[800px]">
-            <thead className="w-full bg-midBrown">
-              <tr className="w-full text-white">
-                <th className="w-1/4 text-lg font-semibold py-[2px]">名稱</th>
-                <th className="w-1/5 text-lg font-semibold py-[2px]">折扣</th>
-                <th className="w-1/5 text-lg font-semibold py-[2px]">到期日</th>
-                <th className="w-fit text-lg font-semibold py-[2px]">選擇</th>
+        <div id="avaliable" className="mt-6 surface-card p-4">
+          <table className="w-full max-w-[800px] text-sm">
+            <thead className="w-full">
+              <tr className="w-full text-black/70">
+                <th className="w-1/4 text-left font-semibold py-2">名稱</th>
+                <th className="w-1/5 text-left font-semibold py-2">折扣</th>
+                <th className="w-1/5 text-left font-semibold py-2">到期日</th>
+                <th className="w-fit text-left font-semibold py-2">選擇</th>
               </tr>
             </thead>
             <tbody>
@@ -474,21 +465,21 @@ function ShopppingKart() {
                 if (!coupon.applied) {
                   return (
                     <tr
-                      className="w-full text-center h-fit mb-2"
+                      className="w-full border-t border-black/10"
                       key={coupon.id}
                     >
-                      <td className="w-2/5 text-start text-base md:text-lg pl-2 py-2">
+                      <td className="w-2/5 text-start py-3">
                         {coupon.name}
                       </td>
-                      <td className="w-1/5 text-base md:text-lg py-2">
+                      <td className="w-1/5 py-3">
                         {coupon.discount}
                       </td>
-                      <td className="w-1/5 text-base md:text-lg py-2">
+                      <td className="w-1/5 py-3">
                         {coupon.expirement}
                       </td>
-                      <td className="w-fit">
+                      <td className="w-fit py-3">
                         <button
-                          className="px-2 rounded-md border-[1px] border-midBrown"
+                          className="cta-secondary"
                           onClick={() => typeCoupon(coupon.code)}
                         >
                           選擇

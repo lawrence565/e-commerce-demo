@@ -10,14 +10,16 @@ function Layout() {
   const { isLoading } = useSpinnerStore();
 
   return (
-    <>
+    <div className="app-shell">
       {isLoading && <Spinner />}
       <NavBar />
-      <Suspense fallback={<Spinner />}>
-        <Outlet />
-      </Suspense>
+      <main className="app-main">
+        <Suspense fallback={<Spinner />}>
+          <Outlet />
+        </Suspense>
+      </main>
       <Footer />
-    </>
+    </div>
   );
 }
 

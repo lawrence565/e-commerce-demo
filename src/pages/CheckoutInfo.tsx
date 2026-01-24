@@ -173,18 +173,16 @@ function CheckoutInfo() {
 
   return (
     <>
-      <div className="flex flex-col items-center m-4 md:m-8 ">
-        {<CheckoutProcess step={2} />}
-        <div className="max-w-[1200px] w-full flex flex-col md:flex-row items-center md:items-start my-4">
+      <div className="section">
+        <CheckoutProcess step={2} />
+        <div className="w-full flex flex-col md:flex-row items-start gap-8 mt-6">
           <div
             id="CheckoutInfo"
-            className="flex-[3] flex flex-col md:min-w-[500px] lg:min-w-[600px] md:max-w-[40dvw] lg:max-w-[60dvw] md:mr-12"
+            className="flex-[3] flex flex-col"
           >
             <div id="payment">
-              <div className="my-4">
-                <h1 className="text-3xl font-semibold mb-2">輸入購買資料</h1>
-                <hr />
-              </div>
+              <div className="surface-card p-6 md:p-8">
+                <h1 className="text-3xl font-semibold mb-4">輸入購買資料</h1>
               <div className="mt-4 w-full">
                 <h2 className="text-2xl font-semibold mb-2">付款方式</h2>
                 <form id="payMethod">
@@ -236,11 +234,12 @@ function CheckoutInfo() {
                   </label>
                 </form>
               </div>
+              </div>
             </div>
 
-            <div id="shippment" className="mt-8 w-full">
-              <h2 className="text-2xl font-semibold mb-2">寄送資訊</h2>
-              <form className="w-full" onSubmit={handleSubmit(handleCheckout)}>
+            <div id="shippment" className="mt-6 w-full surface-card p-6 md:p-8">
+              <h2 className="text-2xl font-semibold mb-4">寄送資訊</h2>
+              <form className="w-full space-y-4" onSubmit={handleSubmit(handleCheckout)}>
                 <div className="flex">
                   <div className="flex-1 flex flex-col mr-2">
                     <label className="inline-block mr-2" htmlFor="name">
@@ -420,11 +419,11 @@ function CheckoutInfo() {
                   )}
                 </div>
 
-                <div className="flex justify-center m-4 rounded-lg">
+                <div className="flex justify-center mt-6">
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`${isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-midBrown hover:text-white"} bg-white text-midBrown p-2 rounded-md border-2 border-midBrown transition-all ease-in duration-100 btn-interactive`}
+                    className={`cta-primary ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
                   >
                     <h1 className="text-lg">
                       {isSubmitting ? "處理中..." : "完成訂單"}
@@ -435,35 +434,25 @@ function CheckoutInfo() {
             </div>
           </div>
 
-          <div
-            id="subtotal"
-            className="flex-1 min-w-[300px] w-full max-w-[90dvw] md:max-w-[25dvw] lg:max-w-[20dvw] rounded-lg bg-midBrown p-6 md:m-4 h-fit "
-          >
-            <h1 className="font-semibold text-3xl text-white mb-4 lg:max-w-[15dvw] ml-2">
-              購買明細
-            </h1>
-            <hr />
-            <div className="flex flex-col justify-center items-center my-4">
-              <div className="subtotal">
-                <h3>商品原價：</h3>
-                <h3>{`NT$ ${subtotal}`}</h3>
+          <div id="subtotal" className="surface-card p-6 w-full md:max-w-[320px]">
+            <h1 className="font-semibold text-2xl mb-4">購買明細</h1>
+            <div className="flex flex-col gap-3 text-sm text-black/70">
+              <div className="flex justify-between">
+                <span>商品原價</span>
+                <span>{`NT$ ${subtotal}`}</span>
               </div>
-              <div className="subtotal">
-                <h3>折扣：</h3>
-                <h3>{`- NT$ ${discount}`}</h3>
+              <div className="flex justify-between">
+                <span>折扣</span>
+                <span>{`- NT$ ${discount}`}</span>
               </div>
-              <div className="subtotal">
-                <h3>優惠券：</h3>
-                <h3>{`- NT$ ${couponDiscount}`}</h3>
+              <div className="flex justify-between">
+                <span>優惠券</span>
+                <span>{`- NT$ ${couponDiscount}`}</span>
               </div>
-              <div className="flex justify-center w-9/10 m-2">
-                <div className="flex text-white w-full justify-between max-w-[350px]">
-                  <h1 className="font-semibold text-2xl">結帳金額：</h1>
-                  <h1 className="text-end text-2xl">
-                    {subtotal - couponDiscount - discount}
-                  </h1>
-                </div>
-              </div>
+            </div>
+            <div className="flex justify-between items-center mt-6 text-lg font-semibold">
+              <span>結帳金額</span>
+              <span>{subtotal - couponDiscount - discount}</span>
             </div>
           </div>
         </div>

@@ -52,51 +52,46 @@ function Store() {
   }, [currentType]);
 
   return (
-    <div className="flex justify-center items-center min-h-[70dvh]">
-      <div className="max-w-[1200px] min-h-[50dvh] my-6 lg:my-16 flex flex-col md:flex-row justify-center">
-        <div
+    <div className="section">
+      <div className="flex flex-col md:flex-row gap-6">
+        <aside
           id="category-indicator-conponents"
-          className="md:w-[20dvw] xl:w-[15dvw] bg-midBrown rounded-lg px-4 md:px-8 py-4 lg:py-8 mx-4 flex-shrink-0"
+          className="surface-card p-6 md:w-[240px] h-fit"
           style={
             displayHeight && displayHeight > 0
               ? { minHeight: `${displayHeight}px` }
               : undefined
           }
         >
-          <div className="text-white">
-            <h1 className="font-bold text-3xl lg:text-2xl text-center lg:text-start mb-3 lg:mb-1">
-              商品類別
-            </h1>
-            <hr />
-          </div>
-          <div className="flex md:flex-col justify-center pt-4 md:pt-2 p-2 lg:p-4 lg:my-8">
-            <div
-              className={`category-indicator ${
-                currentType === "gadgets" ? "thisType" : ""
+          <h2 className="text-xl font-semibold mb-4">商品類別</h2>
+          <div className="flex md:flex-col gap-3">
+            <button
+              className={`cta-secondary text-left ${
+                currentType === "gadgets" ? "bg-[rgba(160,147,125,0.15)]" : ""
               }`}
               onClick={toGadgets}
             >
               隨身用品
-            </div>
-            <div
-              className={`category-indicator ${
-                currentType === "furnitures" ? "thisType" : ""
+            </button>
+            <button
+              className={`cta-secondary text-left ${
+                currentType === "furnitures" ? "bg-[rgba(160,147,125,0.15)]" : ""
               }`}
               onClick={toFurnitures}
             >
               手工家具
-            </div>
-            <div
-              className={`category-indicator ${
-                currentType === "decorations" ? "thisType" : ""
+            </button>
+            <button
+              className={`cta-secondary text-left ${
+                currentType === "decorations" ? "bg-[rgba(160,147,125,0.15)]" : ""
               }`}
               onClick={toDecorations}
             >
               裝飾擺設
-            </div>
+            </button>
           </div>
-        </div>
-        <div id="store-display" className="h-fit" ref={displayRef}>
+        </aside>
+        <div id="store-display" className="flex-1" ref={displayRef}>
           <StoreDisplay type={currentType} key={category} />
         </div>
       </div>

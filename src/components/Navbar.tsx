@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import mainLogo from "../assets/main-logo.svg";
 import shoppingCartIcon from "../assets/shopping-cart-icon.svg";
 import personalIcon from "../assets/personal-icon.svg";
-import "../style/NavbarStyle.scss";
 import { useState } from "react";
 import { useCartCookie } from "../utils/useCartCookie";
 
@@ -13,101 +12,116 @@ function NavBar() {
   const handleOpen = () => setIsOpen(!isOpen);
 
   return (
-    <nav className="min-h-[5dvh] h-fit border-b-2 border-[#a0937d] flex justify-center relative">
-      <div className="nav-bar grid grid-cols-2 w-full max-w-[1200px] z-20">
-        <div className="logo-container flex items-center">
+    <nav className="nav-shell">
+      <div className="nav-inner flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
           <Link className="w-fit" to="/">
             <img
-              className="h-9 sm:h-10 cursor-pointer mx-4 sm:m-2"
+              className="h-9 sm:h-10 cursor-pointer"
               src={mainLogo}
               alt="The main logo of the website"
             />
           </Link>
+          <span className="hidden sm:inline-flex chip">文創選物</span>
         </div>
-        <div id="normal-navbar" className="flex justify-end mr-4">
-          <div className="hidden md:flex justify-end">
-            <Link className="nav-item" to="/about">
-              關於我們
-            </Link>
-            <Link className="nav-item" to="/stores">
-              商店首頁
-            </Link>
-            <Link className="nav-item" to="/login">
-              登入
-            </Link>
-          </div>
 
+        <div className="hidden md:flex items-center gap-2">
+          <Link className="nav-link" to="/about">
+            關於我們
+          </Link>
+          <Link className="nav-link" to="/stores">
+            商店首頁
+          </Link>
+          <Link className="nav-link" to="/login">
+            登入
+          </Link>
+        </div>
+
+        <div className="flex items-center gap-2">
           <Link
-            className="flex items-center mx-1 relative"
+            className="nav-pill flex items-center gap-2 relative"
             id="shopping-cart"
             to="/shoppingcart"
           >
             <img
-              className="w-8 h-8"
+              className="w-6 h-6"
               src={shoppingCartIcon}
               alt="Shopping Cart Icon"
             />
+            <span className="hidden sm:inline text-sm font-semibold">
+              購物車
+            </span>
             {cart && cart.length > 0 && (
-              <span className="absolute top-[10%] right-[-20%] rounded-lg bg-red-600 w-[1rem] aspect-square flex items-center justify-center">
-                <p className="text-[0.8rem] text-white">{cart.length}</p>
+              <span className="absolute -top-2 -right-2 rounded-full bg-[#d34f4f] text-white w-5 h-5 text-[11px] flex items-center justify-center">
+                {cart.length}
               </span>
             )}
           </Link>
-          <Link className="flex items-center mx-1" id="personal" to="/personal">
-            <img className="w-8 h-8" src={personalIcon} alt="Personal Icon " />
+          <Link className="nav-pill flex items-center gap-2" to="/personal">
+            <img className="w-6 h-6" src={personalIcon} alt="Personal Icon" />
+            <span className="hidden sm:inline text-sm font-semibold">
+              個人頁
+            </span>
           </Link>
-          <div className="flex lg:hidden justify-end">
-            <button
-              className="text-midBrown focus:outline-none"
-              id="menu-button"
-              aria-label="Toggle navigation"
-              onClick={handleOpen}
+          <button
+            className="md:hidden nav-pill focus-ring"
+            id="menu-button"
+            aria-label="Toggle navigation"
+            onClick={handleOpen}
+          >
+            <svg
+              className="h-5 w-5 text-midBrown"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <svg
-                className="h-6 w-6 text-midBrown"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16m-7 6h7"
-                ></path>
-              </svg>
-            </button>
-          </div>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h16m-7 6h7"
+              ></path>
+            </svg>
+          </button>
         </div>
       </div>
+
       <div
-        className={`absolute top-[100%] w-full border-b-4 border-midBrown rounded-md flex flex-col items-center bg-white shadow-lg transition-all transform ${isOpen
-            ? "translate-y-0 opacity-100 z-10 ease-in"
-            : "-translate-y-full opacity-0 -z-10 ease-out"
-          }`}
+        className={`md:hidden absolute left-0 top-full w-full transition-all duration-300 ${
+          isOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
+        }`}
       >
-        <Link
-          className="nav-item text-xl w-full p-2 flex justify-center"
-          to="/about"
-          onClick={() => setIsOpen(false)}
-        >
-          關於我們
-        </Link>
-        <Link
-          className="nav-item text-xl w-full p-2 flex justify-center"
-          to="/stores"
-          onClick={() => setIsOpen(false)}
-        >
-          商店首頁
-        </Link>
-        <Link
-          className="nav-item text-xl w-full p-2 flex justify-center"
-          to="/personal"
-          onClick={() => setIsOpen(false)}
-        >
-          個人頁面
-        </Link>
+        <div className="mx-4 mb-4 surface-card flex flex-col overflow-hidden">
+          <Link
+            className="nav-link py-3 px-4"
+            to="/about"
+            onClick={() => setIsOpen(false)}
+          >
+            關於我們
+          </Link>
+          <Link
+            className="nav-link py-3 px-4"
+            to="/stores"
+            onClick={() => setIsOpen(false)}
+          >
+            商店首頁
+          </Link>
+          <Link
+            className="nav-link py-3 px-4"
+            to="/personal"
+            onClick={() => setIsOpen(false)}
+          >
+            個人頁面
+          </Link>
+          <Link
+            className="nav-link py-3 px-4"
+            to="/login"
+            onClick={() => setIsOpen(false)}
+          >
+            登入
+          </Link>
+        </div>
       </div>
     </nav>
   );
