@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { getProducts } from "../api/productApi";
 import { useSpinnerStore } from "../store/appStore";
 import { LazyImage } from "./LazyImage";
+import { Card } from "./ui/Card";
 
 interface Product {
   id: number;
@@ -19,9 +20,9 @@ function paginate(
 ): Array<Array<ReactElement>> {
   return array.reduce(
     (acc, value, i) => {
-      const pageIndex = Math.floor(i / pageSize); // 判斷每一個元素在哪個頁面並加入
+      const pageIndex = Math.floor(i / pageSize);
       if (!acc[pageIndex]) {
-        acc[pageIndex] = []; //若沒有資料則清空後再加入
+        acc[pageIndex] = [];
       }
       acc[pageIndex].push(value);
       return acc;
@@ -48,24 +49,44 @@ function StoreDisplay(props: { type: string }) {
 
   const display = products.map((product, index) => {
     return (
-      <div className="mx-4 md:mx-6 my-2 cursor-pointer card-hover" key={index}>
+      <div className="p-2" key={index}>
         <Link to={`/stores/${product.category}/${product.id}`}>
-          <div className="w-full lg:w-[12dvw] max-w-[250px] rounded-md overflow-hidden border-midBrown border-[5px] aspect-4/3">
-            <LazyImage
-              src={`/${product.category}s/${product.name}.webp`}
-              alt={product.title}
-              width={400}
-              height={300}
-              className="w-full h-full object-cover"
-              skeletonAnimation="wave"
-              onLoad={() => setPendingImages((prev) => Math.max(prev - 1, 0))}
-              onError={() => setPendingImages((prev) => Math.max(prev - 1, 0))}
-            />
-          </div>
-          <div className="">
-            <h1 className="text-xl">{product.title}</h1>
-            <h2 className="text-lg italic font-bold text-end">{`$ ${product.price}`}</h2>
-          </div>
+          <Card 
+            className="group hover:bg-white/80 transition-all duration-500 h-full flex flex-col p-3 border border-transparent hover:border-sand/30 hover:shadow-lg"
+            variant="glass"
+          >
+             <div className="aspect-[4/3] w-full overflow-hidden rounded-xl bg-sand/10 relative">
+                <LazyImage
+                  src={`/${product.category}s/${product.name}.webp`}
+                  alt={product.title}
+                  width={400}
+                  height={300}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  skeletonAnimation="wave"
+                  onLoad={() => setPendingImages((prev) => Math.max(prev - 1, 0))}
+                  onError={() => setPendingImages((prev) => Math.max(prev - 1, 0))}
+                />
+                
+                {/* Overlay on hover */}
+                <div className="absolute inset-0 bg-ink/0 group-hover:bg-ink/5 transition-colors duration-500" />
+             </div>
+             
+             <div className="mt-4 flex flex-col justify-between flex-1 gap-1 px-1">
+                <div className="flex justify-between items-start gap-2">
+                    <h3 className="text-lg font-bold text-ink leading-tight font-serif group-hover:text-clay-deep transition-colors line-clamp-2">
+                        {product.title}
+                    </h3>
+                </div>
+                <div className="flex items-center justify-between mt-2 pt-3 border-t border-sand/30">
+                    <span className="text-xs text-ink/50 uppercase tracking-wider font-medium">
+                        {props.type === 'gadgets' ? '隨身' : props.type === 'furnitures' ? '家俱' : '裝飾'}
+                    </span>
+                    <span className="text-clay-deep font-bold text-lg font-mono">
+                        ${product.price}
+                    </span>
+                </div>
+             </div>
+          </Card>
         </Link>
       </div>
     );
@@ -148,53 +169,51 @@ function StoreDisplay(props: { type: string }) {
   return (
     <div className="h-fit">
       <div
-        className={`grid grid-cols-2 md:grid-cols-3 justify-center content-start py-4 md:py-0`}
+        className={`grid grid-cols-2 lg:grid-cols-3 gap-4 content-start py-4 md:py-0`}
         ref={displayRef}
       >
         {pages[pageIndex] ?? (
-          <div className="col-span-2 md:col-span-3 text-center py-6">
+          <div className="col-span-2 lg:col-span-3 text-center py-12 text-ink/50 font-serif text-xl">
             目前沒有商品
           </div>
         )}
       </div>
-      <div
-        id="page-indicator"
-        className="flex items-center justify-center my-4"
-      >
-        <div className="rounded-lg flex items-center justify-center border-box relative">
-          <div className="prev px-4 text-lg">
+      
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center mt-12 mb-8 gap-4">
             <button
               onClick={handlePreviousPage}
               disabled={pageIndex === 0 || pages.length === 0}
+              className="p-2 rounded-full hover:bg-clay/10 disabled:opacity-30 disabled:hover:bg-transparent transition-colors text-ink"
             >
-              &#10094;
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
             </button>
-          </div>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <div
-              key={index}
-              onClick={() => {
-                setPageIndex(index);
-              }}
-              className={`px-4 cursor-pointer aspect-square flex items-center rounded-lg transition-all ease-in duration-300 ${
-                pageIndex === index
-                  ? "bg-midBrown text-white"
-                  : "bg-white text-midBrown"
-              }`}
-            >
-              {index + 1}
+            
+            <div className="flex gap-2">
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setPageIndex(index)}
+                  className={`w-10 h-10 rounded-full font-bold transition-all duration-300 font-serif ${
+                    pageIndex === index
+                      ? "bg-clay text-paper shadow-md scale-110"
+                      : "bg-white text-ink hover:bg-clay/10"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
             </div>
-          ))}
-          <div className="next px-4 text-lg">
+
             <button
               onClick={handleNextPage}
               disabled={pages.length === 0 || pageIndex === pages.length - 1}
+              className="p-2 rounded-full hover:bg-clay/10 disabled:opacity-30 disabled:hover:bg-transparent transition-colors text-ink"
             >
-              &#10095;
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </button>
-          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

@@ -1,23 +1,15 @@
-import "../style/StoreStyle.scss";
 import { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import StoreDisplay from "../components/StoretDisplay";
 
 function Store() {
   const [currentType, setCurrentType] = useState("gadgets");
-  const [displayHeight, setDisplayheight] = useState<number | null>(null);
   const displayRef = useRef<HTMLDivElement>(null);
   const { category } = useParams();
 
-  const toGadgets = () => {
-    setCurrentType("gadgets");
-  };
-  const toFurnitures = () => {
-    setCurrentType("furnitures");
-  };
-  const toDecorations = () => {
-    setCurrentType("decorations");
-  };
+  const toGadgets = () => setCurrentType("gadgets");
+  const toFurnitures = () => setCurrentType("furnitures");
+  const toDecorations = () => setCurrentType("decorations");
 
   useEffect(() => {
     if (category === "gadgets" || !category) {
@@ -29,70 +21,44 @@ function Store() {
     }
   }, [category]);
 
-  useEffect(() => {
-    const setHeight = () => {
-      if (!displayRef.current) return;
-      const height = displayRef.current.getBoundingClientRect().height;
-      setDisplayheight(height);
-    };
-
-    setHeight();
-
-    window.addEventListener("resize", setHeight);
-
-    const observer = new ResizeObserver(setHeight);
-    if (displayRef.current) {
-      observer.observe(displayRef.current);
+  const buttonClass = (type: string) => `
+    text-left px-6 py-3 rounded-full transition-all duration-300 font-medium
+    ${currentType === type 
+      ? "bg-clay text-paper shadow-md font-bold translate-x-1" 
+      : "text-ink hover:bg-clay/10 hover:pl-7"
     }
-
-    return () => {
-      window.removeEventListener("resize", setHeight);
-      observer.disconnect();
-    };
-  }, [currentType]);
+  `;
 
   return (
-    <div className="section">
-      <div className="flex flex-col md:flex-row gap-6">
-        <aside
-          id="category-indicator-conponents"
-          className="surface-card p-6 md:w-[240px] h-fit"
-          style={
-            displayHeight && displayHeight > 0
-              ? { minHeight: `${displayHeight}px` }
-              : undefined
-          }
-        >
-          <h2 className="text-xl font-semibold mb-4">商品類別</h2>
-          <div className="flex md:flex-col gap-3">
-            <button
-              className={`cta-secondary text-left ${
-                currentType === "gadgets" ? "bg-[rgba(160,147,125,0.15)]" : ""
-              }`}
-              onClick={toGadgets}
-            >
-              隨身用品
-            </button>
-            <button
-              className={`cta-secondary text-left ${
-                currentType === "furnitures" ? "bg-[rgba(160,147,125,0.15)]" : ""
-              }`}
-              onClick={toFurnitures}
-            >
-              手工家具
-            </button>
-            <button
-              className={`cta-secondary text-left ${
-                currentType === "decorations" ? "bg-[rgba(160,147,125,0.15)]" : ""
-              }`}
-              onClick={toDecorations}
-            >
-              裝飾擺設
-            </button>
+    <div className="min-h-screen bg-sand/10 pb-20">
+      <div className="section pt-8">
+        <h1 className="text-4xl font-bold font-serif text-ink mb-8 border-b border-sand/30 pb-4">
+            商店首頁
+        </h1>
+        
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* Sidebar */}
+          <aside className="md:w-[240px] flex-shrink-0">
+            <div className="sticky top-24 bg-white/50 backdrop-blur-md rounded-2xl p-6 shadow-sm border border-white/50">
+                <h2 className="text-xl font-bold font-serif text-clay-deep mb-6 px-2">商品類別</h2>
+                <nav className="flex flex-col gap-2">
+                    <button className={buttonClass("gadgets")} onClick={toGadgets}>
+                    隨身用品
+                    </button>
+                    <button className={buttonClass("furnitures")} onClick={toFurnitures}>
+                    手工家具
+                    </button>
+                    <button className={buttonClass("decorations")} onClick={toDecorations}>
+                    裝飾擺設
+                    </button>
+                </nav>
+            </div>
+          </aside>
+
+          {/* Main Content */}
+          <div className="flex-1 min-h-[500px]" ref={displayRef}>
+            <StoreDisplay type={currentType} key={category} />
           </div>
-        </aside>
-        <div id="store-display" className="flex-1" ref={displayRef}>
-          <StoreDisplay type={currentType} key={category} />
         </div>
       </div>
     </div>

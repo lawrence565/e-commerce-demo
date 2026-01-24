@@ -109,8 +109,22 @@ function ProductRecomanned(props: {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious title="Previous" className="left-0 -translate-x-1/2 bg-paper/80 backdrop-blur-sm border-sand shadow-sm hover:bg-white text-ink disabled:opacity-0 transition-opacity" />
-        <CarouselNext title="Next" className="right-0 translate-x-1/2 bg-paper/80 backdrop-blur-sm border-sand shadow-sm hover:bg-white text-ink disabled:opacity-0 transition-opacity" />
+        <CarouselPrevious 
+          title="Previous" 
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm shadow-md border border-sand/50 text-ink hover:bg-white hover:scale-105 transition-all disabled:opacity-0 disabled:pointer-events-none"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </CarouselPrevious>
+        <CarouselNext 
+          title="Next" 
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm shadow-md border border-sand/50 text-ink hover:bg-white hover:scale-105 transition-all disabled:opacity-0 disabled:pointer-events-none"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </CarouselNext>
       </Carousel>
 
       <div className="mt-4 flex justify-end px-1">
