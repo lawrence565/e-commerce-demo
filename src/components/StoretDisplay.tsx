@@ -57,7 +57,7 @@ function StoreDisplay(props: { type: string }) {
           >
              <div className="aspect-[4/3] w-full overflow-hidden rounded-xl bg-sand/10 relative">
                 <LazyImage
-                  src={`/${product.category}s/${product.name}.webp`}
+                  src={`${product.category}s/${product.name}.webp`}
                   alt={product.title}
                   width={400}
                   height={300}

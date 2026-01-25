@@ -18,7 +18,7 @@ type CardProps<T extends ElementType> = CardBaseProps &
 
 const Card = forwardRef(<T extends ElementType = "div">(
   { className, variant = "glass", as, ...props }: CardProps<T>,
-  ref: React.Ref<any>
+  ref: React.Ref<Element>
 ) => {
   const Component = as || "div";
   

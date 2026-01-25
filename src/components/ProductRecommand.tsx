@@ -9,6 +9,7 @@ import {
   CarouselPrevious,
 } from "./ui/Carousel";
 import { Card } from "./ui/Card";
+import { getAssetUrl } from "../utils/imageUtils";
 
 interface Product {
   id: number;
@@ -93,7 +94,7 @@ function ProductRecomanned(props: {
                     <div className="aspect-square rounded-xl overflow-hidden bg-sand/20 mb-3 relative">
                       <img
                         className="w-full h-full object-cover transform transition-transform duration-500 group-hover/card:scale-105"
-                        src={`/${product.category}s/${product.name}.webp`}
+                        src={getAssetUrl(`${product.category}s/${product.name}.webp`)}
                         alt={product.title}
                         loading="lazy"
                         onLoad={onImageReady}

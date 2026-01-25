@@ -4,6 +4,7 @@ import {
   ImgHTMLAttributes,
   type SyntheticEvent,
 } from "react";
+import { getAssetUrl } from "../utils/imageUtils";
 
 type SkeletonAnimationType = "shimmer" | "pulse" | "spin" | "wave";
 
@@ -53,7 +54,11 @@ export function LazyImage({
 
   const paddingTop =
     !fill && width && height ? `${(height / width) * 100}%` : undefined;
-  const normalizedSrc = src?.startsWith("./") ? src.replace("./", "/") : src;
+  
+  // Use getAssetUrl to resolve the path correctly
+  const normalizedSrc = src ? getAssetUrl(src) : undefined;
+  const processedFallback = fallbackSrc ? getAssetUrl(fallbackSrc) : undefined;
+
   const roundedClass = className
     .split(" ")
     .filter((token) => token.startsWith("rounded"))
@@ -90,7 +95,7 @@ export function LazyImage({
         />
       )}
       <img
-        src={hasError ? fallbackSrc : normalizedSrc}
+        src={hasError ? processedFallback : normalizedSrc}
         alt={alt || "圖片"}
         loading="lazy"
         onLoad={handleLoad}
@@ -123,9 +128,12 @@ export function ProductImage({
   width?: number;
   height?: number;
 } & Omit<ImgHTMLAttributes<HTMLImageElement>, "src" | "width" | "height">) {
+  // src needs to be just the path, LazyImage handles the base URL
+  const imagePath = `${category}s/${name}.webp`;
+  
   return (
     <LazyImage
-      src={`./${category}s/${name}.webp`}
+      src={imagePath}
       alt={alt || name}
       fallbackSrc="/placeholder.webp"
       className={className}

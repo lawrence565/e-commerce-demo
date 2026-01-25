@@ -1,7 +1,7 @@
 import coupons from "../assets/coupon.json";
 import couponList from "../assets/couponsList.json";
 import CheckoutProcess from "../utils/checkoutProcess";
-import trashCan from "/trash-can.svg";
+import { getAssetUrl } from "../utils/imageUtils";
 import {
   getSingleProduct,
   getCart,
@@ -17,7 +17,6 @@ import {
   type ReactElement,
 } from "react";
 import { Link } from "react-router-dom";
-import "../style/CartStyle.scss";
 import { useCookies } from "react-cookie";
 import { useSpinnerStore } from "../store/appStore";
 import { Product, CartItem } from "../types";
@@ -35,13 +34,9 @@ type Coupon = {
 import { useCart } from "../context/useCart";
 import { useToast } from "../context/ToastContext";
 import { LazyImage } from "../components/LazyImage";
+import { Card as Surface } from "../components/ui/Card";
 
-// type applyCoupon = {
-//   id: number;
-//   coupon: number;
-// };
-
-function Card(props: {
+function CartItemRow(props: {
   item: CartItem;
   getItem: () => void;
   updateSubtotal: (subtotal: number) => void;
@@ -136,7 +131,6 @@ function Card(props: {
           (item: CartItem) => item.productId === id,
         );
         if (deleteIndex != -1) {
-          console.log("Can't find target");
           cart.splice(deleteIndex, 1);
         }
         getItem();
@@ -149,10 +143,11 @@ function Card(props: {
 
   if (product != null)
     return (
-      <div className="relative grid grid-cols-5 md:grid-cols-9 items-center w-full border-b-2 border-midBrown md:min-w-[600px] max-w-[90dvw] lg:max-w-[60dvw] p-4">
-        <div className="col-span-2 h-fit aspect-4/3 overflow-hidden rounded-md">
+      <div className="relative flex flex-col items-center md:flex-row w-full bg-white/50 backdrop-blur-sm border border-sand/30 rounded-2xl p-4 gap-4 md:gap-6 shadow-sm mb-4">
+        {/* Image */}
+        <div className="w-full md:w-32 aspect-[4/3] rounded-xl overflow-hidden bg-sand/20 flex-shrink-0">
           <LazyImage
-            src={`/${product.category}s/${product.name}.webp`}
+            src={`${product.category}s/${product.name}.webp`}
             alt={product.title}
             width={400}
             height={300}
@@ -162,64 +157,53 @@ function Card(props: {
             onError={notifyImageReady}
           />
         </div>
-        <div className="col-span-3 flex justify-items-center mr-8 ml-4">
-          <div className="h-fit w-full">
-            <h3 className="font-semibold text-2xl mb-4 break-words whitespace-normal line-clamp-2">
-              {product.title}
-            </h3>
-            <p className="text-lg">{`$ ${product.price}`}</p>
-          </div>
-        </div>
-        <div className="col-span-3 md:col-span-2 mt-4 h-fit flex justify-start md:justify-center items-center">
-          <div
-            id="amount"
-            className="w-fit md:ml-4 flex rounded-md border-[1px] border-midBrown"
-          >
-            <div className="w-10 md:w-8 flex justify-center items-center p-2 text-midBrown cursor-pointer">
-              <button
-                onClick={() => minus(product.id)}
-                disabled={amount === 1}
-                className="h-full w-full"
-              >
-                &#10094;
-              </button>
-            </div>
-            <div className="w-14 md:w-12 flex justify-center items-center p-2 bg-midBrown text-white text-xl md:text-lg">
-              {amount}
-            </div>
-            <div className="w-10 md:w-8 flex justify-center items-center p-2 text-midBrown cursor-pointer">
-              <button
-                onClick={() => add(product.id)}
-                disabled={amount === 10}
-                className="h-full w-full"
-              >
-                &#10095;
-              </button>
-            </div>
-          </div>
 
-          <div
-            className={`text-red-500 text-sm ${amount === 20 ? "" : "hidden"}`}
-          >
-            已達到購買上限
-          </div>
-        </div>
-        <div className="col-span-2 md:col-span-1 mt-4 w-full text-nowrap ml-4 text-xl font-semibold">
-          {`NTS ${product.price * amount}`}
-        </div>
+        {/* Details */}
+        <div className="flex-1 flex flex-col md:flex-row items-center justify-between w-full md:w-auto gap-4">
+            <div className="text-center md:text-left">
+                <h3 className="font-bold font-serif text-xl text-ink mb-1 line-clamp-2">
+                {product.title}
+                </h3>
+                <p className="text-clay-deep font-mono font-bold">{`$ ${product.price}`}</p>
+            </div>
 
-        <button
-          id="delete"
-          className="absolute right-0 top-[5%]"
-          onClick={() => deleteItem(product.id, product.title)}
-        >
-          <img className="h-[1.8rem] ml-2" src={trashCan} />
-        </button>
+            {/* Controls */}
+            <div className="flex items-center gap-4 md:ml-auto">
+                <div className="flex items-center gap-2 bg-white rounded-full border border-sand/30 p-1 shadow-sm">
+                    <button
+                        onClick={() => minus(product.id)}
+                        disabled={amount === 1}
+                        className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-sand/20 disabled:opacity-30 transition-colors text-ink font-bold"
+                    >
+                        -
+                    </button>
+                    <span className="w-8 text-center font-bold text-ink">{amount}</span>
+                    <button
+                        onClick={() => add(product.id)}
+                        disabled={amount === 10}
+                        className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-sand/20 disabled:opacity-30 transition-colors text-ink font-bold"
+                    >
+                        +
+                    </button>
+                </div>
+                
+                <div className="text-lg font-bold text-ink w-24 text-right hidden lg:block">
+                     ${product.price * amount}
+                </div>
+
+                <button
+                    onClick={() => deleteItem(product.id, product.title)}
+                    className="p-2 hover:bg-red-50 rounded-full group transition-colors"
+                >
+                    <img className="w-5 h-5 opacity-50 group-hover:opacity-100 transition-opacity" src={getAssetUrl("trash-can.svg")} alt="Remove" />
+                </button>
+            </div>
+        </div>
       </div>
     );
 }
 
-function ShopppingKart() {
+function ShoppingCart() {
   const subtotals = useRef<number[]>([]);
   const {
     total,
@@ -344,24 +328,25 @@ function ShopppingKart() {
   const resetCouponInput = () => setApplyCouponCode("");
 
   return (
-    <div className="section">
+    <div className="section min-h-screen pb-20">
       <CheckoutProcess step={1} />
-      <div className="flex flex-col md:flex-row items-start justify-between gap-6 mt-6">
-        <div
-          id="items"
-          className="flex-[3] w-full flex flex-col justify-start"
-        >
-          <h1 className="text-3xl font-bold mb-6">購買品項</h1>
+      <div className="flex flex-col lg:flex-row items-start justify-between gap-8 mt-12">
+        {/* Cart Items List */}
+        <div id="items" className="flex-[2] w-full">
+          <h1 className="text-3xl font-bold font-serif text-ink mb-6 border-b border-sand/30 pb-4">購買品項</h1>
           {cartItems.length < 1 ? (
-            <div className="surface-card p-8 text-center">
-              <h1 className="text-lg font-semibold">購物車中沒有商品哦</h1>
-              <p className="text-sm text-black/60 mt-2">
+            <Surface className="p-12 text-center" variant="glass">
+              <h1 className="text-xl font-bold text-ink/70">購物車中沒有商品哦</h1>
+              <p className="text-sm text-ink/50 mt-2">
                 先去商店逛逛吧！
               </p>
-            </div>
+              <Link to="/stores" className="inline-block mt-6 px-6 py-2 bg-clay text-paper rounded-full hover:bg-clay-deep transition-colors">
+                前往商店
+              </Link>
+            </Surface>
           ) : (
             cartItems.map((item, index) => (
-              <Card
+              <CartItemRow
                 key={item.productId}
                 item={item}
                 getItem={getItem}
@@ -374,127 +359,111 @@ function ShopppingKart() {
               />
             ))
           )}
-        </div>
-        <div
-          id="subtotal"
-          className="surface-card p-6 w-full md:max-w-[320px]"
-        >
-          <h1 className="font-semibold text-2xl mb-4">購買明細</h1>
-          <div className="flex flex-col gap-3 text-sm text-black/70">
-            <div className="flex justify-between">
-              <span>商品原價</span>
-              <span>{`NT$ ${subtotal}`}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>折扣</span>
-              <span>{`- NT$ ${discount}`}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>優惠券</span>
-              <span>{`- NT$ ${couponDiscount}`}</span>
-            </div>
-            <div className="space-y-2">
-              {appliedCoupon.map((couponId, index) => {
-                const applied = couponList.find(
-                  (coupon) => coupon.id === couponId,
-                );
-                if (applied) {
-                  return (
-                    <div className="w-full flex justify-between text-sm">
-                      <p key={index}>{applied.name}</p>
-                      <div className="flex">
-                        <p key={index + appliedCoupon.length}>
-                          {`- ${applied.discount}`}
-                        </p>
-                        <div className="ml-2 bg-white text-midBrown rounded-lg p-[2px] border">
-                          <button onClick={() => cancelApplied(applied.id)}>
-                            ✗
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                }
-              })}
-            </div>
-          </div>
-          <div className="flex justify-between items-center mt-6 text-lg font-semibold">
-            <span>結帳金額</span>
-            <span>{total}</span>
-          </div>
-          <Link to="/checkout" className="block mt-6">
-            <button className="cta-primary w-full">結帳</button>
-          </Link>
-        </div>
-      </div>
 
-      <div id="coupon" className="mt-8">
-        <div className="surface-card w-fit overflow-hidden flex flex-wrap gap-0">
-          <input
-            className="w-[200px] p-2 bg-white/60"
-            placeholder="請輸入優惠碼"
-            value={applyCouponCode}
-            onChange={(e) => setApplyCouponCode(e.target.value)}
-          />
-          <button
-            className="cta-primary rounded-none"
-            onClick={() => checkCoupon(applyCouponCode)}
-          >
-            套用
-          </button>
-          <button
-            className="cta-secondary rounded-none"
-            onClick={resetCouponInput}
-          >
-            取消
-          </button>
-        </div>
+          {/* Coupons Area */}
+          <div className="mt-12">
+            <h2 className="text-2xl font-bold font-serif text-ink mb-6">優惠券</h2>
+            
+            {/* Input Area */}
+            <Surface className="flex flex-wrap gap-2 p-4 items-center mb-8 bg-paper/50" variant="glass">
+              <input
+                className="flex-1 p-3 rounded-lg border border-sand/30 bg-white/80 focus:outline-none focus:ring-2 focus:ring-clay/50 transition-all font-mono placeholder:text-ink/30"
+                placeholder="請輸入優惠碼"
+                value={applyCouponCode}
+                onChange={(e) => setApplyCouponCode(e.target.value)}
+              />
+              <button
+                className="px-6 py-3 bg-clay text-paper font-bold rounded-lg hover:bg-clay-deep transition-colors shadow-sm"
+                onClick={() => checkCoupon(applyCouponCode)}
+              >
+                套用
+              </button>
+              <button
+                className="px-6 py-3 bg-white text-ink font-bold rounded-lg hover:bg-sand/20 border border-sand/30 transition-colors"
+                onClick={resetCouponInput}
+              >
+                取消
+              </button>
+            </Surface>
 
-        <div id="avaliable" className="mt-6 surface-card p-4">
-          <table className="w-full max-w-[800px] text-sm">
-            <thead className="w-full">
-              <tr className="w-full text-black/70">
-                <th className="w-1/4 text-left font-semibold py-2">名稱</th>
-                <th className="w-1/5 text-left font-semibold py-2">折扣</th>
-                <th className="w-1/5 text-left font-semibold py-2">到期日</th>
-                <th className="w-fit text-left font-semibold py-2">選擇</th>
-              </tr>
-            </thead>
-            <tbody>
+            {/* Available Coupons List */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {avaliableCoupons.map((coupon) => {
                 if (!coupon.applied) {
                   return (
-                    <tr
-                      className="w-full border-t border-black/10"
-                      key={coupon.id}
-                    >
-                      <td className="w-2/5 text-start py-3">
-                        {coupon.name}
-                      </td>
-                      <td className="w-1/5 py-3">
-                        {coupon.discount}
-                      </td>
-                      <td className="w-1/5 py-3">
-                        {coupon.expirement}
-                      </td>
-                      <td className="w-fit py-3">
-                        <button
-                          className="cta-secondary"
-                          onClick={() => typeCoupon(coupon.code)}
-                        >
-                          選擇
-                        </button>
-                      </td>
-                    </tr>
+                    <Surface key={coupon.id} className="p-4 flex flex-col justify-between gap-4 border border-dashed border-clay/30 hover:border-clay transition-colors group bg-paper/30" variant="flat">
+                        <div>
+                             <h4 className="font-bold text-ink">{coupon.name}</h4>
+                             <p className="text-sm text-ink/60">到期日: {coupon.expirement}</p>
+                        </div>
+                        <div className="flex items-center justify-between mt-2">
+                             <span className="font-mono text-xl font-bold text-clay-deep">-${coupon.discount}</span>
+                             <button
+                                className="px-4 py-1.5 text-sm bg-white border border-clay text-clay-deep rounded-full hover:bg-clay hover:text-white transition-colors"
+                                onClick={() => typeCoupon(coupon.code)}
+                            >
+                                選擇
+                            </button>
+                        </div>
+                    </Surface>
                   );
                 }
               })}
-            </tbody>
-          </table>
+            </div>
+          </div>
+        </div>
+
+        {/* Sticky Summary */}
+        <div className="w-full lg:w-[350px] lg:sticky lg:top-24 h-fit">
+            <Surface className="p-6 space-y-6" variant="glass">
+                <h1 className="font-bold font-serif text-2xl text-clay-deep border-b border-sand/20 pb-4">購買明細</h1>
+                <div className="space-y-3 text-ink/80">
+                    <div className="flex justify-between">
+                    <span>商品原價</span>
+                    <span className="font-mono">{`NT$ ${subtotal}`}</span>
+                    </div>
+                    <div className="flex justify-between text-green-600">
+                    <span>折扣</span>
+                    <span className="font-mono">{`- NT$ ${discount}`}</span>
+                    </div>
+                    <div className="flex justify-between text-clay-deep">
+                    <span>優惠券</span>
+                    <span className="font-mono">{`- NT$ ${couponDiscount}`}</span>
+                    </div>
+                    
+                    {/* Applied Coupons Tags */}
+                    {appliedCoupon.length > 0 && <div className="pt-2 space-y-2 border-t border-sand/20 mt-2">
+                        {appliedCoupon.map((couponId) => {
+                            const applied = couponList.find((c) => c.id === couponId);
+                            if (!applied) return null;
+                            return (
+                                <div key={couponId} className="flex justify-between text-xs bg-clay/10 p-2 rounded-lg text-clay-deep">
+                                    <span>{applied.name}</span>
+                                    <div className="flex items-center gap-2">
+                                        <span className="font-mono">-${applied.discount}</span>
+                                        <button onClick={() => cancelApplied(applied.id)} className="hover:text-red-500 font-bold px-1">✕</button>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>}
+                </div>
+
+                <div className="flex justify-between items-center pt-4 border-t-2 border-dashed border-sand/30 text-xl font-bold text-ink">
+                    <span>結帳金額</span>
+                    <span>NT$ {total}</span>
+                </div>
+                
+                <Link to="/checkout" className="block">
+                    <button className="w-full py-4 bg-clay-deep text-paper font-bold text-lg rounded-xl hover:bg-ink transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1 duration-300">
+                        前往結帳
+                    </button>
+                </Link>
+            </Surface>
         </div>
       </div>
     </div>
   );
 }
 
-export default ShopppingKart;
+export default ShoppingCart;
