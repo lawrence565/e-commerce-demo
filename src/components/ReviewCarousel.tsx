@@ -60,12 +60,68 @@ function ReviewCarousel() {
             ))}
         </CarouselContent>
         <div className="flex justify-center gap-4 mt-8 md:hidden">
-             <CarouselPrevious className="static transform-none" />
-             <CarouselNext className="static transform-none" />
+             <CarouselPrevious className="static transform-none flex items-center justify-center">
+               <svg
+                 xmlns="http://www.w3.org/2000/svg"
+                 width="20"
+                 height="20"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 strokeWidth="2.5"
+                 strokeLinecap="round"
+                 strokeLinejoin="round"
+               >
+                 <polyline points="15 18 9 12 15 6"></polyline>
+               </svg>
+             </CarouselPrevious>
+             <CarouselNext className="static transform-none flex items-center justify-center">
+               <svg
+                 xmlns="http://www.w3.org/2000/svg"
+                 width="20"
+                 height="20"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 strokeWidth="2.5"
+                 strokeLinecap="round"
+                 strokeLinejoin="round"
+               >
+                 <polyline points="9 18 15 12 9 6"></polyline>
+               </svg>
+             </CarouselNext>
         </div>
         <div className="hidden md:block">
-            <CarouselPrevious className="-left-4 bg-white/10 hover:bg-white/20 text-white border-transparent" />
-            <CarouselNext className="-right-4 bg-white/10 hover:bg-white/20 text-white border-transparent" />
+            <CarouselPrevious className="-left-4 bg-white/10 hover:bg-white/20 text-white border-transparent flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </CarouselPrevious>
+            <CarouselNext className="-right-4 bg-white/10 hover:bg-white/20 text-white border-transparent flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </CarouselNext>
         </div>
     </Carousel>
   );
