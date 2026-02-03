@@ -66,7 +66,10 @@ function HeroCarousel(props: {
         {CAROUSEL_CARDS.map((item, index) => (
           <CarouselItem key={index}>
             <div className="p-1">
-              <Card variant="plain" className="relative aspect-[4/3] overflow-hidden rounded-xl">
+              <Card
+                variant="plain"
+                className="relative aspect-[4/3] overflow-hidden rounded-xl"
+              >
                  <img
                     src={item.img}
                     alt={item.title}
@@ -75,9 +78,13 @@ function HeroCarousel(props: {
                   />
                   
                   {/* Glass Overlay for Text */}
-                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent pt-12 text-paper">
-                    <h3 className="text-xl font-bold font-serif mb-1">{item.title}</h3>
-                    <p className="text-sm text-paper/90 line-clamp-2">{item.content}</p>
+                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent pt-12 text-white">
+                    <h3 className="text-xl font-semibold headline-serif mb-1">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-white/80 line-clamp-2">
+                      {item.content}
+                    </p>
                   </div>
               </Card>
             </div>
@@ -85,8 +92,8 @@ function HeroCarousel(props: {
         ))}
       </CarouselContent>
       <div className="hidden md:block">
-        <CarouselPrevious className="left-2 bg-paper/80 hover:bg-paper" />
-        <CarouselNext className="right-2 bg-paper/80 hover:bg-paper" />
+        <CarouselPrevious className="left-2 bg-white/85 hover:bg-white border border-black/10" />
+        <CarouselNext className="right-2 bg-white/85 hover:bg-white border border-black/10" />
       </div>
     </Carousel>
   );
