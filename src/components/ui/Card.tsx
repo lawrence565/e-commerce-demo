@@ -23,9 +23,10 @@ const Card = forwardRef(<T extends ElementType = "div">(
   const Component = as || "div";
   
   const variants = {
-    glass: "bg-white/75 border border-clay/60 backdrop-blur-md shadow-soft",
-    solid: "bg-white border border-clay/20 shadow-crisp",
-    plain: "bg-transparent border-none shadow-none",
+    glass:
+      "bg-white/80 border border-black/10 backdrop-blur-md shadow-[var(--shadow-soft)]",
+    solid: "bg-white border border-black/10 shadow-[var(--shadow-crisp)]",
+    plain: "bg-transparent border border-transparent shadow-none",
   };
 
   return (
