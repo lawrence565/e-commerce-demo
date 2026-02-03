@@ -32,9 +32,9 @@ function ReviewCarousel() {
             loop: true,
         }}
     >
-        <CarouselContent className="-ml-2 md:-ml-4">
+        <CarouselContent>
             {typedReviews.map((review, index) => (
-                <CarouselItem key={index} className="pl-2 md:pl-4 basis-full md:basis-[80%] lg:basis-[70%]">
+                <CarouselItem key={index} className="basis-full">
                     <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10 p-4 text-white">
                         <div className="shrink-0 relative">
                             <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-white/30 p-1">
