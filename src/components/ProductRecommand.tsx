@@ -67,7 +67,7 @@ function ProductRecomanned(props: {
   return (
     <div className="my-8">
       <div className="flex items-center justify-between mb-6 px-1">
-        <h2 className="text-2xl font-bold font-serif text-ink">{title}</h2>
+        <h2 className="text-2xl font-bold headline-serif">{title}</h2>
         <div className="hidden md:flex gap-2">
              {/* Controls are integrated into the carousel below */}
         </div>
@@ -89,9 +89,9 @@ function ProductRecomanned(props: {
                <Link to={`/stores/${product.category}/${product.id}`} className="block h-full">
                   <Card 
                     variant="plain" 
-                    className="h-full group/card hover:bg-white/50 transition-colors p-2 rounded-2xl border border-transparent hover:border-clay/20"
+                    className="h-full group/card hover:bg-white/60 transition-colors p-2 rounded-2xl border border-transparent hover:border-black/10"
                   >
-                    <div className="aspect-square rounded-xl overflow-hidden bg-sand/20 mb-3 relative">
+                    <div className="aspect-square rounded-xl overflow-hidden bg-[#efe7da]/60 mb-3 relative">
                       <img
                         className="w-full h-full object-cover transform transition-transform duration-500 group-hover/card:scale-105"
                         src={getAssetUrl(`${product.category}s/${product.name}.webp`)}
@@ -102,8 +102,8 @@ function ProductRecomanned(props: {
                       />
                     </div>
                     <div>
-                        <h3 className="text-lg font-bold text-ink mb-1 truncate">{product.title}</h3>
-                        <p className="text-sm text-ink/60 line-clamp-2 leading-relaxed">{product.description}</p>
+                        <h3 className="text-lg font-bold text-black mb-1 truncate">{product.title}</h3>
+                        <p className="text-sm text-black/60 line-clamp-2 leading-relaxed">{product.description}</p>
                     </div>
                   </Card>
                </Link>
@@ -112,7 +112,7 @@ function ProductRecomanned(props: {
         </CarouselContent>
         <CarouselPrevious 
           title="Previous" 
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm shadow-md border border-sand/50 text-ink hover:bg-white hover:scale-105 transition-all disabled:opacity-0 disabled:pointer-events-none"
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm shadow-md border border-black/10 text-black hover:bg-white hover:scale-105 transition-all disabled:opacity-0 disabled:pointer-events-none"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="15 18 9 12 15 6"></polyline>
@@ -120,7 +120,7 @@ function ProductRecomanned(props: {
         </CarouselPrevious>
         <CarouselNext 
           title="Next" 
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm shadow-md border border-sand/50 text-ink hover:bg-white hover:scale-105 transition-all disabled:opacity-0 disabled:pointer-events-none"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm shadow-md border border-black/10 text-black hover:bg-white hover:scale-105 transition-all disabled:opacity-0 disabled:pointer-events-none"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="9 18 15 12 9 6"></polyline>
@@ -129,7 +129,7 @@ function ProductRecomanned(props: {
       </Carousel>
 
       <div className="mt-4 flex justify-end px-1">
-         <Link to={`${url}`} onClick={scrollToTop} className="text-sm font-medium text-clay-deep hover:text-ink transition-colors border-b border-clay/30 hover:border-ink pb-0.5">
+         <Link to={`${url}`} onClick={scrollToTop} className="text-sm font-medium text-black/70 hover:text-black transition-colors border-b border-black/20 hover:border-black pb-0.5">
             查看更多
          </Link>
       </div>
