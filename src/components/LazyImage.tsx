@@ -1,6 +1,7 @@
 import {
   useEffect,
   useState,
+  useRef,
   ImgHTMLAttributes,
   type SyntheticEvent,
 } from "react";
@@ -38,15 +39,14 @@ export function LazyImage({
 }: LazyImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   const handleLoad = (event: SyntheticEvent<HTMLImageElement, Event>) => {
     setIsLoaded(true);
     onLoad?.(event);
   };
 
-  const handleError = (
-    event: SyntheticEvent<HTMLImageElement, Event>,
-  ) => {
+  const handleError = (event: SyntheticEvent<HTMLImageElement, Event>) => {
     setHasError(true);
     setIsLoaded(true);
     onError?.(event);
@@ -54,7 +54,7 @@ export function LazyImage({
 
   const paddingTop =
     !fill && width && height ? `${(height / width) * 100}%` : undefined;
-  
+
   // Use getAssetUrl to resolve the path correctly
   const normalizedSrc = src ? getAssetUrl(src) : undefined;
   const processedFallback = fallbackSrc ? getAssetUrl(fallbackSrc) : undefined;
@@ -80,7 +80,18 @@ export function LazyImage({
   useEffect(() => {
     setIsLoaded(false);
     setHasError(false);
-  }, [normalizedSrc]);
+
+    // Check if image is already cached and complete
+    if (imgRef.current && imgRef.current.complete) {
+      if (imgRef.current.naturalWidth === 0) {
+        setHasError(true);
+      } else {
+        setIsLoaded(true);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        onLoad?.({ target: imgRef.current } as any);
+      }
+    }
+  }, [normalizedSrc, onLoad]);
 
   return (
     <div
@@ -95,6 +106,7 @@ export function LazyImage({
         />
       )}
       <img
+        ref={imgRef}
         src={hasError ? processedFallback : normalizedSrc}
         alt={alt || "圖片"}
         loading="lazy"
@@ -130,7 +142,7 @@ export function ProductImage({
 } & Omit<ImgHTMLAttributes<HTMLImageElement>, "src" | "width" | "height">) {
   // src needs to be just the path, LazyImage handles the base URL
   const imagePath = `${category}s/${name}.webp`;
-  
+
   return (
     <LazyImage
       src={imagePath}
