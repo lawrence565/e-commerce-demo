@@ -1,8 +1,25 @@
-export function getPlaceholderUrl(originalUrl: string, width: number = 20): string {
-  const url = new URL(originalUrl, window.location.origin);
-  url.searchParams.set("w", width.toString());
-  url.searchParams.set("q", "10");
-  return url.toString();
+import imageManifest from "../generated/images.json";
+
+interface ResponsiveImage {
+  width: number;
+  height: number;
+  src: string;
+  variants: { src: string; width: number; bytes: number }[];
+  placeholder: string;
+}
+
+// Remote/API image URLs pass through unchanged. Only known local assets have variants.
+export function getResponsiveImage(path: string) {
+  const base = import.meta.env.BASE_URL || "/";
+  const key = (base !== "/" && path.startsWith(base) ? path.slice(base.length) : path)
+    .replace(/^[./]+/, "");
+  const image = (imageManifest as Record<string, ResponsiveImage>)[key];
+  if (!image) return undefined;
+  return {
+    ...image,
+    src: getAssetUrl(image.src),
+    srcSet: image.variants.map((variant) => `${getAssetUrl(variant.src)} ${variant.width}w`).join(", "),
+  };
 }
 
 /**

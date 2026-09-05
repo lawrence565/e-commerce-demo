@@ -5,8 +5,14 @@
   "type": "module",
   "homepage": "https://lawrence565.github.io/e-commerce-demo/",
   "scripts": {
+    "images:generate": "node scripts/generate-images.mjs",
+    "predev": "npm run images:generate",
     "dev": "vite",
+    "prebuild": "npm run images:generate",
     "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "pretest:unit": "npm run images:generate",
+    "test:unit": "vitest run --config vitest.config.ts",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
@@ -50,6 +56,7 @@
     "postcss": "^8.5.6",
     "rollup-plugin-visualizer": "^6.0.5",
     "sass": "^1.97.3",
+    "sharp": "^0.34.5",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
     "vite-plugin-pwa": "^1.2.0",

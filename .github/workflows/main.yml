@@ -13,6 +13,7 @@ permissions:
 env:
   VITE_BASE_URL: "/e-commerce-demo/"
   VITE_IMAGE_PATH: "./"
+  VITE_DATA_MODE: "static"
 
 jobs:
   build:
@@ -34,6 +35,9 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Unit tests
+        run: npm run test:unit
 
       - name: Build
         run: npm run build

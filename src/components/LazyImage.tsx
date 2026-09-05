@@ -5,7 +5,7 @@ import {
   ImgHTMLAttributes,
   type SyntheticEvent,
 } from "react";
-import { getAssetUrl } from "../utils/imageUtils";
+import { getAssetUrl, getResponsiveImage } from "../utils/imageUtils";
 
 type SkeletonAnimationType = "shimmer" | "pulse" | "spin" | "wave";
 
@@ -15,6 +15,7 @@ interface LazyImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   height?: number;
   fill?: boolean;
   skeletonAnimation?: SkeletonAnimationType;
+  placeholderSrc?: string;
 }
 
 /**
@@ -27,7 +28,7 @@ interface LazyImageProps extends ImgHTMLAttributes<HTMLImageElement> {
 export function LazyImage({
   src,
   alt,
-  fallbackSrc = "/placeholder.webp",
+  fallbackSrc = "/placeholder.svg",
   className = "",
   width,
   height,
@@ -35,6 +36,9 @@ export function LazyImage({
   skeletonAnimation = "shimmer",
   onLoad,
   onError,
+  srcSet,
+  sizes = "100vw",
+  placeholderSrc,
   ...props
 }: LazyImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -56,8 +60,10 @@ export function LazyImage({
     !fill && width && height ? `${(height / width) * 100}%` : undefined;
 
   // Use getAssetUrl to resolve the path correctly
-  const normalizedSrc = src ? getAssetUrl(src) : undefined;
+  const responsive = src ? getResponsiveImage(src) : undefined;
+  const normalizedSrc = responsive?.src ?? (src ? getAssetUrl(src) : undefined);
   const processedFallback = fallbackSrc ? getAssetUrl(fallbackSrc) : undefined;
+  const placeholder = placeholderSrc ?? responsive?.placeholder;
 
   const roundedClass = className
     .split(" ")
@@ -83,15 +89,11 @@ export function LazyImage({
 
     // Check if image is already cached and complete
     if (imgRef.current && imgRef.current.complete) {
-      if (imgRef.current.naturalWidth === 0) {
-        setHasError(true);
-      } else {
+      if (imgRef.current.naturalWidth > 0) {
         setIsLoaded(true);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onLoad?.({ target: imgRef.current } as any);
       }
     }
-  }, [normalizedSrc, onLoad]);
+  }, [normalizedSrc]);
 
   return (
     <div
@@ -100,16 +102,26 @@ export function LazyImage({
     >
       {!isLoaded && (
         <div
-          className={`absolute inset-0 ${getSkeletonAnimationClass()}`}
-          style={{ borderRadius: "inherit" }}
+          className={`absolute inset-0 ${placeholder ? "blur-sm scale-105" : getSkeletonAnimationClass()}`}
+          style={{
+            borderRadius: "inherit",
+            backgroundImage: placeholder ? `url("${placeholder}")` : undefined,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
           aria-hidden="true"
         />
       )}
       <img
         ref={imgRef}
         src={hasError ? processedFallback : normalizedSrc}
+        srcSet={hasError ? undefined : (srcSet ?? responsive?.srcSet)}
+        sizes={sizes}
         alt={alt || "圖片"}
         loading="lazy"
+        decoding="async"
+        width={width ?? responsive?.width}
+        height={height ?? responsive?.height}
         onLoad={handleLoad}
         onError={handleError}
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${isLoaded ? "opacity-100" : "opacity-0"} ${className} `}
@@ -147,7 +159,7 @@ export function ProductImage({
     <LazyImage
       src={imagePath}
       alt={alt || name}
-      fallbackSrc="/placeholder.webp"
+      fallbackSrc="/placeholder.svg"
       className={className}
       width={width}
       height={height}

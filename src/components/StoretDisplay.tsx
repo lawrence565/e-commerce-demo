@@ -35,17 +35,8 @@ function StoreDisplay(props: { type: string }) {
   const displayRef = useRef<HTMLDivElement>(null);
   const [pageIndex, setPageIndex] = useState(0);
   const [products, setProducts] = useState<Product[]>([]);
-  const [isDataReady, setIsDataReady] = useState(false);
-  const [pendingImages, setPendingImages] = useState(0);
   const { showSpinner, hideSpinner } = useSpinnerStore();
   const pageSize = 9;
-
-  const getPageImageCount = (index: number, total: number) => {
-    if (total <= 0) return 0;
-    const start = index * pageSize;
-    if (start >= total) return 0;
-    return Math.min(pageSize, total - start);
-  };
 
   const display = products.map((product, index) => {
     return (
@@ -61,10 +52,9 @@ function StoreDisplay(props: { type: string }) {
                   alt={product.title}
                   width={400}
                   height={300}
+                  sizes="(min-width: 1200px) 270px, (min-width: 1024px) 25vw, 45vw"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   skeletonAnimation="wave"
-                  onLoad={() => setPendingImages((prev) => Math.max(prev - 1, 0))}
-                  onError={() => setPendingImages((prev) => Math.max(prev - 1, 0))}
                 />
                 
                 {/* Overlay on hover */}
@@ -100,8 +90,6 @@ function StoreDisplay(props: { type: string }) {
     (async () => {
       try {
         showSpinner();
-        setIsDataReady(false);
-        setPendingImages(0);
         setPageIndex(0);
         let items;
         if (props.type === "gadgets") {
@@ -113,23 +101,22 @@ function StoreDisplay(props: { type: string }) {
         }
         if (!isMounted) return;
         const nextProducts = items ?? [];
-        setPendingImages(getPageImageCount(0, nextProducts.length));
         setProducts(nextProducts);
       } catch (error) {
         console.error("Failed to load products:", error);
         if (!isMounted) return;
-        setPendingImages(0);
         setProducts([]);
       } finally {
         if (isMounted) {
-          setIsDataReady(true);
+          hideSpinner();
         }
       }
     })();
     return () => {
       isMounted = false;
+      hideSpinner();
     };
-  }, [props.type, showSpinner]);
+  }, [props.type, showSpinner, hideSpinner]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -139,31 +126,19 @@ function StoreDisplay(props: { type: string }) {
     if (pageIndex > totalPages - 1) {
       const nextIndex = 0;
       setPageIndex(nextIndex);
-      if (isDataReady) {
-        setPendingImages(getPageImageCount(nextIndex, products.length));
-      }
     }
-  }, [pageIndex, totalPages, isDataReady, products.length]);
-
-  useEffect(() => {
-    if (!isDataReady) return;
-    if (pendingImages === 0) {
-      hideSpinner();
-    }
-  }, [pendingImages, isDataReady, hideSpinner]);
+  }, [pageIndex, totalPages]);
 
   const handlePreviousPage = () => {
     if (pages.length === 0) return;
     const nextIndex = Math.max(pageIndex - 1, 0);
     setPageIndex(nextIndex);
-    setPendingImages(getPageImageCount(nextIndex, products.length));
   };
 
   const handleNextPage = () => {
     if (pages.length === 0) return;
     const nextIndex = Math.min(pageIndex + 1, pages.length - 1);
     setPageIndex(nextIndex);
-    setPendingImages(getPageImageCount(nextIndex, products.length));
   };
 
   return (

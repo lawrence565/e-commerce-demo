@@ -9,7 +9,7 @@ import {
   CarouselPrevious,
 } from "./ui/Carousel";
 import { Card } from "./ui/Card";
-import { getAssetUrl } from "../utils/imageUtils";
+import { LazyImage } from "./LazyImage";
 
 interface Product {
   id: number;
@@ -92,9 +92,11 @@ function ProductRecomanned(props: {
                     className="h-full group/card hover:bg-white/60 transition-colors p-2 rounded-2xl border border-transparent hover:border-black/10"
                   >
                     <div className="aspect-square rounded-xl overflow-hidden bg-[#efe7da]/60 mb-3 relative">
-                      <img
+                      <LazyImage
                         className="w-full h-full object-cover transform transition-transform duration-500 group-hover/card:scale-105"
-                        src={getAssetUrl(`${product.category}s/${product.name}.webp`)}
+                        src={`${product.category}s/${product.name}.webp`}
+                        fill
+                        sizes="(min-width: 1280px) 200px, (min-width: 1024px) 22vw, (min-width: 768px) 30vw, 45vw"
                         alt={product.title}
                         loading="lazy"
                         onLoad={onImageReady}

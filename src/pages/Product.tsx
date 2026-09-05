@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { getSingleProduct, postCart } from "../api/productApi";
 import { useSpinnerStore } from "../store/appStore";
 import ProductRecomanned from "../components/ProductRecommand";
-import products from "../assets/products.json";
 import { useCookies } from "react-cookie";
 import Modal from "../components/Modal";
 import { Product, CartItem } from "../types";
@@ -20,7 +19,6 @@ function ProductPage() {
   const [isProblemModalOpen, setIsProblemModalOpen] = useState(false);
   const { showSpinner, hideSpinner } = useSpinnerStore();
   const [cookie, setCookie] = useCookies(["cart"]);
-  const [isImageLoading, setIsImageLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,22 +31,11 @@ function ProductPage() {
         const data = await getSingleProduct(category, parseInt(itemId));
         if (isMounted && data) {
           setProduct(data);
-          setIsImageLoading(true);
-        }
-        if (!data) {
-          hideSpinner();
         }
       } catch (e) {
         console.log("Here's some problem: " + e);
-        const fallback = products.find((product) => {
-          return product.id === parseInt(itemId);
-        });
-        if (isMounted && fallback) {
-          setProduct(fallback);
-          setIsImageLoading(true);
-        } else {
-          hideSpinner();
-        }
+      } finally {
+        if (isMounted) hideSpinner();
       }
     };
     fetchProduct();
@@ -130,18 +117,6 @@ function ProductPage() {
     setAmount((prev) => Math.max(prev - 1, 1));
   };
 
-  const handleImageLoad = () => {
-    if (isImageLoading) {
-      setIsImageLoading(false);
-    }
-    hideSpinner();
-  };
-
-  const handleImageError = () => {
-    setIsImageLoading(false);
-    hideSpinner();
-  };
-
   const categoryMeta: Record<
     string,
     { title: string; items: string; url: string }
@@ -198,9 +173,10 @@ function ProductPage() {
                 alt={product.title ?? "商品圖片"}
                 width={400}
                 height={300}
+                sizes="(min-width: 1200px) 500px, (min-width: 768px) 45vw, 90vw"
+                loading="eager"
+                fetchPriority="high"
                 skeletonAnimation="wave"
-                onLoad={handleImageLoad}
-                onError={handleImageError}
               />
             )}
           </div>

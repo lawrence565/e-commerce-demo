@@ -1,4 +1,5 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
+import { useStaticData } from "./dataMode";
 
 // 使用環境變數，並提供開發環境預設值
 const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
@@ -13,6 +14,10 @@ export const client = axios.create({
 // Request Interceptor
 client.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
+        // Pages has no backend. Fail immediately so existing local fallbacks can run.
+        if (useStaticData) {
+            throw new AxiosError("Backend operations are unavailable in static mode", "ERR_STATIC_MODE", config);
+        }
         // 從 cookie 讀取 CSRF token (如果後端有實作)
         const csrfToken = document.cookie
             .split("; ")

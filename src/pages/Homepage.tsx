@@ -213,6 +213,7 @@ function Homepage(): ReactElement {
                     <div className="rounded-xl overflow-hidden aspect-[4/3] mb-4 bg-sand/20">
                       <LazyImage
                         src={store.img}
+                        sizes="(min-width: 1200px) 340px, (min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
                         alt={store.name}
                         width={400}
                         height={300}

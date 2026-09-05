@@ -11,6 +11,8 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+public/generated-images/
+src/generated/images.json
 *.local
 
 # Editor directories and files

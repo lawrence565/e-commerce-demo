@@ -1,6 +1,7 @@
 import { client } from "./client";
 import products from "../assets/products.json";
 import { Product, CartItem, Order } from "../types";
+import { useStaticData } from "./dataMode";
 
 interface Responce {
   status: string;
@@ -9,6 +10,8 @@ interface Responce {
 
 // get product
 export const getSingleProduct = async (category: string, id: number) => {
+  const staticProduct = products.find((product) => product.category === category && product.id === id);
+  if (useStaticData) return staticProduct;
   try {
     const data: Responce = await client
       .get<Responce>(`getProduct/${category}/${id}`)
@@ -18,18 +21,13 @@ export const getSingleProduct = async (category: string, id: number) => {
 
     return data.data[0];
   } catch {
-    let data: Product;
-    const responce = products.find((product) => {
-      return product.id === id;
-    });
-    if (responce) {
-      data = responce;
-      return data;
-    }
+    return staticProduct;
   }
 };
 
 export const getProducts = async (category: string) => {
+  const staticProducts = products.filter((product) => product.category === category);
+  if (useStaticData) return staticProducts;
   try {
     const data: Responce = await client
       .get<Responce>(`getProduct/${category}`)
@@ -38,10 +36,7 @@ export const getProducts = async (category: string) => {
       });
     return data.data;
   } catch {
-    const data: Product[] = products.filter((product) => {
-      return product.category === category;
-    });
-    return data;
+    return staticProducts;
   }
 };
 

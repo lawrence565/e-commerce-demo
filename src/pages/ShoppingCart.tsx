@@ -151,6 +151,7 @@ function CartItemRow(props: {
             alt={product.title}
             width={400}
             height={300}
+            sizes="(min-width: 768px) 128px, calc(100vw - 64px)"
             className="w-full h-full object-cover"
             skeletonAnimation="wave"
             onLoad={notifyImageReady}

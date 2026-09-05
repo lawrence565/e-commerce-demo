@@ -1,8 +1,5 @@
 import { useRef, useEffect } from "react";
-import phone_stand from "../assets/phone-stand.png";
-import ornament from "../assets/ornament.png";
-import ratten_bag from "../assets/ratten-bag.png";
-import cork_art from "../assets/cork-art.png";
+import { LazyImage } from "./LazyImage";
 import {
   Carousel,
   CarouselContent,
@@ -18,25 +15,25 @@ const CAROUSEL_CARDS = [
     id: 1,
     title: "木製手機架",
     content: "使用台東漂流木結合原住民雕刻文化打造的特色手機架",
-    img: phone_stand,
+    img: "hero/phone-stand.png",
   },
   {
     id: 2,
     title: "裝飾品",
     content: "精美的裝飾品，適合擺放在任何地方。",
-    img: ornament,
+    img: "hero/ornament.png",
   },
   {
     id: 3,
     title: "籐包",
     content: "手工製作的籐包，既時尚又實用。",
-    img: ratten_bag,
+    img: "hero/ratten-bag.png",
   },
   {
     id: 4,
     title: "軟木藝術品",
     content: "獨特的軟木藝術品，增添藝術氣息。",
-    img: cork_art,
+    img: "hero/cork-art.png",
   },
 ];
 
@@ -68,9 +65,13 @@ function HeroCarousel(props: {
                 variant="plain"
                 className="relative aspect-[4/3] overflow-hidden rounded-xl"
               >
-                <img
+                <LazyImage
                   src={item.img}
                   alt={item.title}
+                  fill
+                  sizes="(min-width: 1200px) 520px, (min-width: 1024px) 45vw, 90vw"
+                  loading={index === 0 ? "eager" : "lazy"}
+                  fetchPriority={index === 0 ? "high" : "low"}
                   className="object-cover w-full h-full transform transition-transform duration-700 hover:scale-105"
                   onLoad={onImageReady}
                 />
